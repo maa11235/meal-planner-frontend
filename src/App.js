@@ -1,22 +1,9 @@
+// src/App.js
 import React, { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useLocation,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import KrogerSuccess from "./KrogerSuccess"; // Import success page component
 
 const API_BASE = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
-
-function KrogerSuccess() {
-  return (
-    <div style={{ padding: "2rem" }}>
-      <h2>Kroger Connected!</h2>
-      <p>Your Kroger account has been successfully linked.</p>
-      <a href="/">Go back to main page</a>
-    </div>
-  );
-}
 
 function MainApp() {
   const [upc, setUpc] = useState("");
@@ -25,15 +12,18 @@ function MainApp() {
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // Redirect browser to backend /login which starts Kroger OAuth
   const handleConnect = () => {
     window.location.href = `${API_BASE}/login`;
   };
 
+  // Send one cart item to backend /cart
   const handleAddToCart = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
 
+    // Basic validation
     if (!upc) {
       setMessage("Please enter a UPC code.");
       setLoading(false);
@@ -45,7 +35,7 @@ function MainApp() {
         {
           upc: upc.trim(),
           quantity: Number(quantity) || 1,
-          modality: modality,
+          modality: modality, // "PICKUP" or "DELIVERY" if supported
         },
       ],
     };
@@ -53,12 +43,15 @@ function MainApp() {
     try {
       const res = await fetch(`${API_BASE}/cart`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // IMPORTANT: sends session cookie to backend
         body: JSON.stringify(payload),
       });
 
       const text = await res.text();
+      // Try parse JSON, otherwise show raw text
       try {
         const json = JSON.parse(text);
         setMessage(JSON.stringify(json, null, 2));
@@ -82,7 +75,10 @@ function MainApp() {
       <h1>Meal Planner — Kroger Integration (Frontend)</h1>
 
       <section style={{ marginBottom: 24 }}>
-        <p>Click below to connect your Kroger account.</p>
+        <p>
+          Click below to connect your Kroger account. After signing in with Kroger,
+          return here and use the Add-to-Cart form.
+        </p>
         <button onClick={handleConnect} style={{ padding: "8px 14px", fontSize: 16 }}>
           Connect to Kroger
         </button>
