@@ -1,27 +1,39 @@
-// src/App.js
 import React, { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 
 const API_BASE = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
-function App() {
+function KrogerSuccess() {
+  return (
+    <div style={{ padding: "2rem" }}>
+      <h2>Kroger Connected!</h2>
+      <p>Your Kroger account has been successfully linked.</p>
+      <a href="/">Go back to main page</a>
+    </div>
+  );
+}
+
+function MainApp() {
   const [upc, setUpc] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [modality, setModality] = useState("PICKUP");
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Redirect browser to backend /login which starts Kroger OAuth
   const handleConnect = () => {
     window.location.href = `${API_BASE}/login`;
   };
 
-  // Send one cart item to backend /cart
   const handleAddToCart = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
 
-    // Basic validation
     if (!upc) {
       setMessage("Please enter a UPC code.");
       setLoading(false);
@@ -33,7 +45,7 @@ function App() {
         {
           upc: upc.trim(),
           quantity: Number(quantity) || 1,
-          modality: modality, // "PICKUP" or "DELIVERY" if supported
+          modality: modality,
         },
       ],
     };
@@ -41,15 +53,12 @@ function App() {
     try {
       const res = await fetch(`${API_BASE}/cart`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // IMPORTANT: sends session cookie to backend
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(payload),
       });
 
       const text = await res.text();
-      // Try parse JSON, otherwise show raw text
       try {
         const json = JSON.parse(text);
         setMessage(JSON.stringify(json, null, 2));
@@ -73,10 +82,7 @@ function App() {
       <h1>Meal Planner — Kroger Integration (Frontend)</h1>
 
       <section style={{ marginBottom: 24 }}>
-        <p>
-          Click below to connect your Kroger account. After signing in with Kroger,
-          return here and use the Add-to-Cart form.
-        </p>
+        <p>Click below to connect your Kroger account.</p>
         <button onClick={handleConnect} style={{ padding: "8px 14px", fontSize: 16 }}>
           Connect to Kroger
         </button>
@@ -141,18 +147,17 @@ function App() {
           {message ?? "No response yet."}
         </pre>
       </section>
-
-      <footer style={{ marginTop: 28, color: "#666" }}>
-        <p style={{ margin: 0 }}>
-          Backend URL: <code>{API_BASE}</code>
-        </p>
-        <p style={{ marginTop: 8 }}>
-          Make sure your backend CORS allows credentials and your fetch uses{" "}
-          <code>credentials: "include"</code>.
-        </p>
-      </footer>
     </div>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainApp />} />
+        <Route path="/kroger/success" element={<KrogerSuccess />} />
+      </Routes>
+    </Router>
+  );
+}
