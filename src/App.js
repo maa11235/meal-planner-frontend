@@ -6,7 +6,7 @@ function App() {
 
   const handleGenerate = async () => {
     try {
-      const response = await fetch("http://localhost:5000/generate-meal-plan", {
+      const response = await fetch("http://techexamprep.com/generate-meal-plan", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
