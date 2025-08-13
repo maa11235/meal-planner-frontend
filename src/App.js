@@ -1,30 +1,37 @@
 import React, { useState } from "react";
 
 function App() {
-  const [mealType, setMealType] = useState("dinner");
+  const [mealType, setMealType] = useState("vegetarian"); // default for type
+  const [mealTime, setMealTime] = useState("dinner"); // default for time
   const [mealPlan, setMealPlan] = useState("");
 
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
+  // Call Kroger login
+  const handleKrogerLogin = () => {
+    window.location.href = `${backendUrl}/login`;
+  };
+
+  // Call /plan-and-cart
   const handleGenerate = async () => {
     try {
-      const response = await fetch(`${backendUrl}/generate-meal-plan`, {
+      const response = await fetch(`${backendUrl}/plan-and-cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ meal_type: mealType }),
+        body: JSON.stringify({
+          time: mealTime, // new dropdown
+          type: mealType, // from text box
+        }),
+        credentials: "include", // important so session cookies are sent
       });
 
       const data = await response.json();
-      setMealPlan(JSON.stringify(data, null, 2)); // pretty-print JSON
+      setMealPlan(JSON.stringify(data, null, 2));
     } catch (error) {
       setMealPlan(`Error: ${error.message}`);
     }
-  };
-
-  const handleKrogerLogin = () => {
-    window.location.href = `${backendUrl}/login`;
   };
 
   return (
@@ -37,15 +44,27 @@ function App() {
       </button>
       <br />
 
+      {/* Meal Type Textbox */}
       <label htmlFor="mealType">Select Meal Type: </label>
-      <select
+      <input
+        type="text"
         id="mealType"
         value={mealType}
         onChange={(e) => setMealType(e.target.value)}
+        style={{ marginBottom: "10px" }}
+      />
+      <br />
+
+      {/* Meal Time Dropdown */}
+      <label htmlFor="mealTime">Select Meal Time: </label>
+      <select
+        id="mealTime"
+        value={mealTime}
+        onChange={(e) => setMealTime(e.target.value)}
       >
-        <option value="dinner">Dinner</option>
-        <option value="lunch">Lunch</option>
         <option value="breakfast">Breakfast</option>
+        <option value="lunch">Lunch</option>
+        <option value="dinner">Dinner</option>
       </select>
 
       <br />
@@ -56,6 +75,7 @@ function App() {
       <br />
       <br />
 
+      {/* Meal Plan Output */}
       <textarea
         value={mealPlan}
         readOnly
@@ -68,3 +88,4 @@ function App() {
 }
 
 export default App;
+
