@@ -2,10 +2,11 @@ import React, { useState } from "react";
 
 function App() {
   const [mealType, setMealType] = useState("dinner");
+  const [mealPlan, setMealPlan] = useState("");
 
   const handleGenerate = async () => {
     try {
-      const response = await fetch("https://api.meal-planner.techexamprep.com/generate-meal-plan", {
+      const response = await fetch("http://localhost:5000/generate-meal-plan", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -14,9 +15,9 @@ function App() {
       });
 
       const data = await response.json();
-      console.log("Meal Plan:", data);
+      setMealPlan(JSON.stringify(data, null, 2)); // pretty-print JSON
     } catch (error) {
-      console.error("Error generating meal plan:", error);
+      setMealPlan(`Error: ${error.message}`);
     }
   };
 
@@ -39,6 +40,17 @@ function App() {
       <br />
 
       <button onClick={handleGenerate}>Generate Meal Plan</button>
+
+      <br />
+      <br />
+
+      <textarea
+        value={mealPlan}
+        readOnly
+        rows={20}
+        cols={80}
+        style={{ whiteSpace: "pre-wrap" }}
+      />
     </div>
   );
 }
