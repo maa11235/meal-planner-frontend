@@ -11,12 +11,16 @@ function MainApp() {
   const [modality, setModality] = useState("PICKUP");
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [mealType, setMealType] = useState("dinner");
+  const [mealPlan, setMealPlan] = useState(null);
+  const [loadingMealPlan, setLoadingMealPlan] = useState(false);
 
   // Redirect browser to backend /login which starts Kroger OAuth
   const handleConnect = () => {
     window.location.href = `${API_BASE}/login`;
   };
 
+  
   // Send one cart item to backend /cart
   const handleAddToCart = async (e) => {
     e.preventDefault();
@@ -29,6 +33,18 @@ function MainApp() {
       setLoading(false);
       return;
     }
+
+    const handleMealPlanFetch = async () => {
+      setLoadingMealPlan(true);
+      try {
+        const data = await fetchMealPlan(mealType);
+        setMealPlan(data);
+      } catch (err) {
+        setMealPlan({ error: err.message });
+      } finally {
+        setLoadingMealPlan(false);
+      }
+    };
 
     const payload = {
       items: [
@@ -128,7 +144,22 @@ function MainApp() {
           </div>
         </form>
       </section>
-
+      <section style={{ marginBottom: 24 }}>
+        <h2>Generate Meal Plan</h2>
+        <div style={{ display: "flex", gap: "8px", marginBottom: "8px" }}>
+          <select value={mealType} onChange={(e) => setMealType(e.target.value)}>
+            <option value="breakfast">Breakfast</option>
+            <option value="lunch">Lunch</option>
+            <option value="dinner">Dinner</option>
+          </select>
+          <button onClick={handleMealPlanFetch} disabled={loadingMealPlan}>
+            {loadingMealPlan ? "Loading…" : "Get Meal Plan"}
+          </button>
+        </div>
+        <pre style={{ background: "#f7f7f7", padding: 12 }}>
+          {mealPlan ? JSON.stringify(mealPlan, null, 2) : "No meal plan yet."}
+        </pre>
+      </section>
       <section>
         <h3>Response</h3>
         <pre
