@@ -4,7 +4,8 @@ function App() {
   const [mealType, setMealType] = useState("vegetarian"); // default for type
   const [mealTime, setMealTime] = useState("dinner"); // default for time
   const [mealPlan, setMealPlan] = useState("");
-
+  
+  const debug_cart = true;
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   // Call Kroger login
@@ -21,8 +22,9 @@ function App() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          time: mealTime, // new dropdown
+          time: mealTime, // from dropdown
           type: mealType, // from text box
+          debug_cart: debug_cart, // if True, don't add items to cart
         }),
         credentials: "include", // important so session cookies are sent
       });
