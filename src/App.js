@@ -101,7 +101,7 @@ function App() {
             <option value="">-- Choose a Store --</option>
             {stores.map((store) => (
               <option key={store.locationId} value={store.locationId}>
-                {store.name} - {store.address}, {store.city}
+                {store.name} - {store.address.addressLine1}, {store.address.city}, {store.address.state} {store.address.zipCode}
               </option>
             ))}
           </select>
