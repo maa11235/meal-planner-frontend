@@ -30,7 +30,7 @@ function App() {
   const handleSearchStores = async () => {
     try {
       const response = await fetch(
-        `${backendUrl}/stores?location=${encodeURIComponent(locationInput)}`,
+        `${backendUrl}/stores?zip=${encodeURIComponent(locationInput)}`,
         {
           method: "GET",
           credentials: "include", // keep session cookies
