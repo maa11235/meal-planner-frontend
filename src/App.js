@@ -6,6 +6,11 @@ function App() {
   const [mealPlan, setMealPlan] = useState("");
   const [isKrogerLoggedIn, setIsKrogerLoggedIn] = useState(false);
 
+  // New state for location search and store selection
+  const [locationInput, setLocationInput] = useState(""); // ZIP or City,State
+  const [stores, setStores] = useState([]); // List of Kroger stores returned from backend
+  const [selectedStore, setSelectedStore] = useState(""); // Kroger locationId chosen by user
+
   const debug_cart = process.env.DEBUG_CART;
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
@@ -21,6 +26,28 @@ function App() {
     window.location.href = `${backendUrl}/login`;
   };
 
+  // Call /stores to search Kroger locations
+  const handleSearchStores = async () => {
+    try {
+      const response = await fetch(`${backendUrl}/stores`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ location: locationInput }),
+        credentials: "include",
+      });
+      const data = await response.json();
+      if (data.error) {
+        alert(data.error);
+      } else {
+        setStores(data.stores || []);
+      }
+    } catch (error) {
+      alert(`Error searching stores: ${error.message}`);
+    }
+  };
+
   // Call /plan-and-cart
   const handleGenerate = async () => {
     try {
@@ -33,6 +60,7 @@ function App() {
           time: mealTime, // from dropdown
           type: mealType, // from text box
           debug_cart: debug_cart, // if True, don't add items to cart
+          location_id: selectedStore, // Pass chosen Kroger store to backend
         }),
         credentials: "include", // important so session cookies are sent
       });
@@ -52,6 +80,35 @@ function App() {
   return (
     <div style={{ padding: "20px", fontFamily: "Arial" }}>
       <h2>Meal Plan Generator</h2>
+
+      {/* Location Search Section */}
+      <h3>Choose Kroger Store Location</h3>
+      <input
+        type="text"
+        placeholder="Enter ZIP or City, State"
+        value={locationInput}
+        onChange={(e) => setLocationInput(e.target.value)}
+      />
+      <button onClick={handleSearchStores}>Search Stores</button>
+
+      {/* Store Dropdown (only shows if stores exist) */}
+      {stores.length > 0 && (
+        <div style={{ marginTop: "10px" }}>
+          <label htmlFor="storeSelect">Select Store: </label>
+          <select
+            id="storeSelect"
+            value={selectedStore}
+            onChange={(e) => setSelectedStore(e.target.value)}
+          >
+            <option value="">-- Choose a Store --</option>
+            {stores.map((store) => (
+              <option key={store.locationId} value={store.locationId}>
+                {store.name} - {store.address}, {store.city}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       {/* Kroger Login Button */}
       <button
@@ -109,5 +166,3 @@ function App() {
 }
 
 export default App;
-
-
