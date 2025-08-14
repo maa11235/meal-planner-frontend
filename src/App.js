@@ -26,17 +26,16 @@ function App() {
     window.location.href = `${backendUrl}/login`;
   };
 
-  // Call /stores to search Kroger locations
+  // Call /stores to search Kroger locations (GET request)
   const handleSearchStores = async () => {
     try {
-      const response = await fetch(`${backendUrl}/stores`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ location: locationInput }),
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${backendUrl}/stores?location=${encodeURIComponent(locationInput)}`,
+        {
+          method: "GET",
+          credentials: "include", // keep session cookies
+        }
+      );
       const data = await response.json();
       if (data.error) {
         alert(data.error);
@@ -68,7 +67,6 @@ function App() {
       const data = await response.json();
       setMealPlan(JSON.stringify(data, null, 2));
 
-      // Optional: ensure Kroger login state is set
       if (!data.error) {
         setIsKrogerLoggedIn(true);
       }
@@ -166,3 +164,4 @@ function App() {
 }
 
 export default App;
+
