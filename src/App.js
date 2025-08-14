@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function App() {
   const [mealType, setMealType] = useState("vegetarian"); // default for type
   const [mealTime, setMealTime] = useState("dinner"); // default for time
   const [mealPlan, setMealPlan] = useState("");
-  
-  const debug_cart = true;
+  const [isKrogerLoggedIn, setIsKrogerLoggedIn] = useState(false);
+
+  const debug_cart = process.env.DEBUG_CART;
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
+  // Detect if user is coming back from Kroger login success
+  useEffect(() => {
+    if (window.location.pathname.includes("/kroger/success")) {
+      setIsKrogerLoggedIn(true);
+    }
+  }, []);
 
   // Call Kroger login
   const handleKrogerLogin = () => {
@@ -31,6 +39,11 @@ function App() {
 
       const data = await response.json();
       setMealPlan(JSON.stringify(data, null, 2));
+
+      // Optional: ensure Kroger login state is set
+      if (!data.error) {
+        setIsKrogerLoggedIn(true);
+      }
     } catch (error) {
       setMealPlan(`Error: ${error.message}`);
     }
@@ -41,7 +54,11 @@ function App() {
       <h2>Meal Plan Generator</h2>
 
       {/* Kroger Login Button */}
-      <button onClick={handleKrogerLogin} style={{ marginBottom: "15px" }}>
+      <button
+        onClick={handleKrogerLogin}
+        style={{ marginBottom: "15px" }}
+        disabled={isKrogerLoggedIn}
+      >
         Login to Kroger
       </button>
       <br />
@@ -72,7 +89,9 @@ function App() {
       <br />
       <br />
 
-      <button onClick={handleGenerate}>Generate Meal Plan</button>
+      <button onClick={handleGenerate} disabled={!isKrogerLoggedIn}>
+        Generate Meal Plan
+      </button>
 
       <br />
       <br />
@@ -88,6 +107,9 @@ function App() {
     </div>
   );
 }
+
+export default App;
+
 
 export default App;
 
