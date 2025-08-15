@@ -40,7 +40,7 @@ function App() {
       if (data.error) {
         alert(data.error);
       } else {
-        setStores(data.stores || []);
+        setStores(Array.isArray(data) ? data : data.stores || []);
       }
     } catch (error) {
       alert(`Error searching stores: ${error.message}`);
