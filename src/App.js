@@ -11,6 +11,9 @@ function App() {
   const [stores, setStores] = useState([]); // List of Kroger stores returned from backend
   const [selectedStore, setSelectedStore] = useState(""); // Kroger locationId chosen by user
 
+  // New state for number of meals
+  const [numMeals, setNumMeals] = useState(4); // default is 4
+
   const debug_cart = process.env.DEBUG_CART;
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
@@ -58,6 +61,7 @@ function App() {
         body: JSON.stringify({
           time: mealTime, // from dropdown
           type: mealType, // from text box
+          num_meals: numMeals, // new field for number of meals
           debug_cart: debug_cart, // if True, don't add items to cart
           location_id: selectedStore, // Pass chosen Kroger store to backend
         }),
@@ -101,7 +105,9 @@ function App() {
             <option value="">-- Choose a Store --</option>
             {stores.map((store) => (
               <option key={store.locationId} value={store.locationId}>
-                {store.name} - {store.address.addressLine1}, {store.address.city}, {store.address.state} {store.address.zipCode}
+                {store.name} - {store.address.addressLine1},{" "}
+                {store.address.city}, {store.address.state}{" "}
+                {store.address.zipCode}
               </option>
             ))}
           </select>
@@ -144,6 +150,23 @@ function App() {
       <br />
       <br />
 
+      {/* Number of Meals Dropdown */}
+      <label htmlFor="numMeals">Select number of meals: </label>
+      <select
+        id="numMeals"
+        value={numMeals}
+        onChange={(e) => setNumMeals(parseInt(e.target.value))}
+      >
+        {[1, 2, 3, 4, 5, 6, 7].map((n) => (
+          <option key={n} value={n}>
+            {n}
+          </option>
+        ))}
+      </select>
+
+      <br />
+      <br />
+
       <button onClick={handleGenerate} disabled={!isKrogerLoggedIn}>
         Generate Meal Plan
       </button>
@@ -164,4 +187,3 @@ function App() {
 }
 
 export default App;
-
