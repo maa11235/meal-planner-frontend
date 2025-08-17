@@ -106,6 +106,7 @@ function App() {
       a.href = url;
       a.download = "meal_plan_report.pdf";
       a.click();
+      console.log("Revoking object URL:", url);
       window.URL.revokeObjectURL(url);
     } catch (error) {
       alert(`Error downloading PDF: ${error.message}`);
