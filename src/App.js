@@ -14,6 +14,9 @@ function App() {
   // New state for number of meals
   const [numMeals, setNumMeals] = useState(4); // default is 4
 
+  // New state for PDF download link
+  const [pdfUrl, setPdfUrl] = useState(null);
+
   const debug_cart = process.env.DEBUG_CART;
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
@@ -73,9 +76,39 @@ function App() {
 
       if (!data.error) {
         setIsKrogerLoggedIn(true);
+
+        // If backend also generated a PDF, store a blob URL for download
+        if (data.pdf) {
+          const pdfResponse = await fetch(`${backendUrl}${data.pdf}`, {
+            method: "GET",
+            credentials: "include",
+          });
+          const blob = await pdfResponse.blob();
+          const url = window.URL.createObjectURL(blob);
+          setPdfUrl(url);
+        }
       }
     } catch (error) {
       setMealPlan(`Error: ${error.message}`);
+    }
+  };
+
+  // Manual PDF download (if you want a separate button)
+  const handleDownloadPdf = async () => {
+    try {
+      const response = await fetch(`${backendUrl}/generate-pdf`, {
+        method: "GET",
+        credentials: "include",
+      });
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "meal_plan_report.pdf";
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      alert(`Error downloading PDF: ${error.message}`);
     }
   };
 
@@ -170,6 +203,20 @@ function App() {
       <button onClick={handleGenerate} disabled={!isKrogerLoggedIn}>
         Generate Meal Plan
       </button>
+
+      {/* Download PDF Report Button (only shows if PDF is available) */}
+      {pdfUrl && (
+        <div style={{ marginTop: "10px" }}>
+          <a href={pdfUrl} download="meal_plan_report.pdf">
+            <button>Download PDF Report</button>
+          </a>
+        </div>
+      )}
+
+      {/* Or always show a button to fetch PDF */}
+      <div style={{ marginTop: "10px" }}>
+        <button onClick={handleDownloadPdf}>Download PDF Report</button>
+      </div>
 
       <br />
       <br />
