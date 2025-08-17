@@ -97,7 +97,10 @@ function App() {
   const handleDownloadPdf = async () => {
     try {
       const response = await fetch(`${backendUrl}/report`, {
-        method: "GET",
+        method: "POST",
+        body: JSON.stringify({
+          data: mealPlan
+        }),
         credentials: "include",
       });
       const blob = await response.blob();
