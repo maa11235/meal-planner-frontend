@@ -17,6 +17,9 @@ function App() {
   // New state for PDF download link
   const [pdfUrl, setPdfUrl] = useState(null);
 
+  // New state for loading spinner
+  const [loading, setLoading] = useState(false);
+
   const debug_cart = process.env.DEBUG_CART;
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
@@ -56,6 +59,7 @@ function App() {
   // Call /plan-and-cart
   const handleGenerate = async () => {
     try {
+      setLoading(true);
       const response = await fetch(`${backendUrl}/plan-and-cart`, {
         method: "POST",
         headers: {
@@ -90,6 +94,8 @@ function App() {
       }
     } catch (error) {
       setMealPlan(`Error: ${error.message}`);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -203,9 +209,29 @@ function App() {
       <br />
       <br />
 
-      <button onClick={handleGenerate} disabled={!isKrogerLoggedIn}>
-        Generate Meal Plan
+      <button
+        onClick={handleGenerate}
+        disabled={!isKrogerLoggedIn || loading}
+      >
+        {loading ? "Generating..." : "Generate Meal Plan"}
       </button>
+
+      {loading && (
+        <div style={{ marginTop: "10px", display: "flex", alignItems: "center" }}>
+          <div
+            style={{
+              border: "4px solid #f3f3f3",
+              borderTop: "4px solid #3498db",
+              borderRadius: "50%",
+              width: "20px",
+              height: "20px",
+              marginRight: "10px",
+              animation: "spin 1s linear infinite",
+            }}
+          />
+          <span>Generating meal plan...</span>
+        </div>
+      )}
 
       {/* Download PDF Report Button (only shows if PDF is available) */}
       {pdfUrl && (
