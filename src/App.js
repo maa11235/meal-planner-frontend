@@ -99,9 +99,7 @@ function App() {
       const response = await fetch(`${backendUrl}/report`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          data: mealPlan
-        }),
+        body: mealPlan,
         credentials: "include",
       });
       const blob = await response.blob();
