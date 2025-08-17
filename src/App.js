@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./App.css";
 
 function App() {
   const [mealType, setMealType] = useState("vegetarian"); // default for type
@@ -217,18 +218,8 @@ function App() {
       </button>
 
       {loading && (
-        <div style={{ marginTop: "10px", display: "flex", alignItems: "center" }}>
-          <div
-            style={{
-              border: "4px solid #f3f3f3",
-              borderTop: "4px solid #3498db",
-              borderRadius: "50%",
-              width: "20px",
-              height: "20px",
-              marginRight: "10px",
-              animation: "spin 1s linear infinite",
-            }}
-          />
+        <div className="spinner-row" role="status" aria-live="polite">
+          <div className="spinner" />
           <span>Generating meal plan...</span>
         </div>
       )}
