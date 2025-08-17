@@ -96,7 +96,7 @@ function App() {
   // Manual PDF download (if you want a separate button)
   const handleDownloadPdf = async () => {
     try {
-      const response = await fetch(`${backendUrl}/generate-pdf`, {
+      const response = await fetch(`${backendUrl}/report`, {
         method: "GET",
         credentials: "include",
       });
