@@ -141,6 +141,17 @@ function App() {
     <div style={{ padding: "20px", fontFamily: "Arial" }}>
       <h2>Meal Plan Generator</h2>
 
+      {/* Kroger Login */}
+      <button
+        onClick={handleKrogerLogin}
+        style={{ marginBottom: "15px" }}
+        disabled={isKrogerLoggedIn}
+      >
+        Login to Kroger
+      </button>
+      <div style={{ marginBottom: "15px" }}>{loginStatusMessage}</div>
+      <br />
+
       {/* Location Search Section */}
       <h3>Choose Kroger Store Location</h3>
       <input
@@ -170,17 +181,6 @@ function App() {
           </select>
         </div>
       )}
-
-      {/* Kroger Login */}
-      <button
-        onClick={handleKrogerLogin}
-        style={{ marginBottom: "15px" }}
-        disabled={isKrogerLoggedIn}
-      >
-        Login to Kroger
-      </button>
-      <div style={{ marginBottom: "15px" }}>{loginStatusMessage}</div>
-      <br />
 
       {/* Meal Type */}
       <label htmlFor="mealType">Select Meal Type: </label>
