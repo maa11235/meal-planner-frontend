@@ -6,6 +6,7 @@ function App() {
   const [mealTime, setMealTime] = useState("dinner"); // default for time
   const [mealPlan, setMealPlan] = useState("");
   const [isKrogerLoggedIn, setIsKrogerLoggedIn] = useState(false);
+  const [loginStatusMessage, setLoginStatusMessage] = useState(""); // NEW
 
   // New state for location search and store selection
   const [locationInput, setLocationInput] = useState(""); // ZIP or City,State
@@ -24,12 +25,28 @@ function App() {
   const debug_cart = process.env.DEBUG_CART;
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
-  // Detect if user is coming back from Kroger login success
+  // 🔄 Always check backend /status for Kroger login
   useEffect(() => {
-    if (window.location.pathname.includes("/kroger/success")) {
-      setIsKrogerLoggedIn(true);
-    }
-  }, []);
+    const checkStatus = async () => {
+      try {
+        const res = await fetch(`${backendUrl}/status`, {
+          method: "GET",
+          credentials: "include",
+        });
+        const data = await res.json();
+        if (data.logged_in) {
+          setIsKrogerLoggedIn(true);
+          setLoginStatusMessage("✅ You are logged in to Kroger.");
+        } else {
+          setIsKrogerLoggedIn(false);
+          setLoginStatusMessage("❌ Not logged in to Kroger.");
+        }
+      } catch (err) {
+        setLoginStatusMessage(`⚠️ Error checking login: ${err.message}`);
+      }
+    };
+    checkStatus();
+  }, [backendUrl]);
 
   // Call Kroger login
   const handleKrogerLogin = () => {
@@ -43,7 +60,7 @@ function App() {
         `${backendUrl}/stores?zip=${encodeURIComponent(locationInput)}`,
         {
           method: "GET",
-          credentials: "include", // keep session cookies
+          credentials: "include",
         }
       );
       const data = await response.json();
@@ -67,13 +84,13 @@ function App() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          time: mealTime, // from dropdown
-          type: mealType, // from text box
-          num_meals: numMeals, // new field for number of meals
-          debug_cart: debug_cart, // if True, don't add items to cart
-          location_id: selectedStore, // Pass chosen Kroger store to backend
+          time: mealTime,
+          type: mealType,
+          num_meals: numMeals,
+          debug_cart: debug_cart,
+          location_id: selectedStore,
         }),
-        credentials: "include", // important so session cookies are sent
+        credentials: "include",
       });
 
       const data = await response.json();
@@ -82,7 +99,6 @@ function App() {
       if (!data.error) {
         setIsKrogerLoggedIn(true);
 
-        // If backend also generated a PDF, store a blob URL for download
         if (data.pdf) {
           const pdfResponse = await fetch(`${backendUrl}${data.pdf}`, {
             method: "GET",
@@ -100,7 +116,6 @@ function App() {
     }
   };
 
-  // Manual PDF download (if you want a separate button)
   const handleDownloadPdf = async () => {
     try {
       const response = await fetch(`${backendUrl}/report`, {
@@ -136,7 +151,6 @@ function App() {
       />
       <button onClick={handleSearchStores}>Search Stores</button>
 
-      {/* Store Dropdown (only shows if stores exist) */}
       {stores.length > 0 && (
         <div style={{ marginTop: "10px" }}>
           <label htmlFor="storeSelect">Select Store: </label>
@@ -157,7 +171,7 @@ function App() {
         </div>
       )}
 
-      {/* Kroger Login Button */}
+      {/* Kroger Login */}
       <button
         onClick={handleKrogerLogin}
         style={{ marginBottom: "15px" }}
@@ -165,9 +179,10 @@ function App() {
       >
         Login to Kroger
       </button>
+      <div style={{ marginBottom: "15px" }}>{loginStatusMessage}</div>
       <br />
 
-      {/* Meal Type Textbox */}
+      {/* Meal Type */}
       <label htmlFor="mealType">Select Meal Type: </label>
       <input
         type="text"
@@ -178,7 +193,7 @@ function App() {
       />
       <br />
 
-      {/* Meal Time Dropdown */}
+      {/* Meal Time */}
       <label htmlFor="mealTime">Select Meal Time: </label>
       <select
         id="mealTime"
@@ -193,7 +208,7 @@ function App() {
       <br />
       <br />
 
-      {/* Number of Meals Dropdown */}
+      {/* Number of Meals */}
       <label htmlFor="numMeals">Select number of meals: </label>
       <select
         id="numMeals"
@@ -210,10 +225,7 @@ function App() {
       <br />
       <br />
 
-      <button
-        onClick={handleGenerate}
-        disabled={!isKrogerLoggedIn || loading}
-      >
+      <button onClick={handleGenerate} disabled={!isKrogerLoggedIn || loading}>
         {loading ? "Generating..." : "Generate Meal Plan"}
       </button>
 
@@ -224,7 +236,6 @@ function App() {
         </div>
       )}
 
-      {/* Download PDF Report Button (only shows if PDF is available) */}
       {pdfUrl && (
         <div style={{ marginTop: "10px" }}>
           <a href={pdfUrl} download="meal_plan_report.pdf">
@@ -233,7 +244,6 @@ function App() {
         </div>
       )}
 
-      {/* Or always show a button to fetch PDF */}
       <div style={{ marginTop: "10px" }}>
         <button onClick={handleDownloadPdf}>Download PDF Report</button>
       </div>
@@ -241,7 +251,6 @@ function App() {
       <br />
       <br />
 
-      {/* Meal Plan Output */}
       <textarea
         value={mealPlan}
         readOnly
