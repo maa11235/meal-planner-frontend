@@ -183,14 +183,16 @@ function App() {
       )}
 
       {/* Meal Type */}
-      <label htmlFor="mealType">Select Meal Type: </label>
-      <input
-        type="text"
-        id="mealType"
-        value={mealType}
-        onChange={(e) => setMealType(e.target.value)}
-        style={{ marginBottom: "10px" }}
-      />
+      <div style={{ marginTop: "10px" }}>
+        <label htmlFor="mealType">Select Meal Type: </label>
+        <input
+          type="text"
+          id="mealType"
+          value={mealType}
+          onChange={(e) => setMealType(e.target.value)}
+          style={{ marginBottom: "10px" }}
+        />
+
       <br />
 
       {/* Meal Time */}
