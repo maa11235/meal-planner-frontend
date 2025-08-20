@@ -192,6 +192,7 @@ function App() {
           onChange={(e) => setMealType(e.target.value)}
           style={{ marginBottom: "10px" }}
         />
+      </div>
 
       <br />
 
