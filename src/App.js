@@ -250,14 +250,6 @@ function App() {
 
       <br />
       <br />
-
-      <textarea
-        value={mealPlan}
-        readOnly
-        rows={20}
-        cols={80}
-        style={{ whiteSpace: "pre-wrap" }}
-      />
     </div>
   );
 }
