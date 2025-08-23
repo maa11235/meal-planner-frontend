@@ -6,7 +6,7 @@ function App() {
   const [mealTime, setMealTime] = useState("dinner"); // default for time
   const [mealPlan, setMealPlan] = useState("");
   const [isKrogerLoggedIn, setIsKrogerLoggedIn] = useState(false);
-  const [loginStatusMessage, setLoginStatusMessage] = useState(""); // NEW
+  const [loginStatusMessage, setLoginStatusMessage] = useState("");
 
   // New state for location search and store selection
   const [locationInput, setLocationInput] = useState(""); // ZIP or City,State
@@ -16,13 +16,8 @@ function App() {
   // New state for number of meals
   const [numMeals, setNumMeals] = useState(4); // default is 4
 
-  // New state for PDF download link
-  const [pdfUrl, setPdfUrl] = useState(null);
-
-  // New state for loading spinner
+  // Loading and status feedback
   const [loading, setLoading] = useState(false);
-
-  // New state for status messages
   const [statusMessage, setStatusMessage] = useState("");
 
   const debug_cart = process.env.DEBUG_CART;
@@ -81,9 +76,7 @@ function App() {
   const handleGenerate = async () => {
     try {
       setLoading(true);
-      setStatusMessage(""); // reset old messages
-      setPdfUrl(null);      // reset PDF
-
+      setStatusMessage(""); // reset old message
       const response = await fetch(`${backendUrl}/plan-and-cart`, {
         method: "POST",
         headers: {
@@ -102,24 +95,17 @@ function App() {
       const data = await response.json();
 
       if (!data.error) {
+        setMealPlan(JSON.stringify(data, null, 2));
         setIsKrogerLoggedIn(true);
         setStatusMessage(
           "✅ The meal plan was successfully generated. Click Download PDF Report to get your meal plan."
         );
-
-        if (data.pdf) {
-          const pdfResponse = await fetch(`${backendUrl}${data.pdf}`, {
-            method: "GET",
-            credentials: "include",
-          });
-          const blob = await pdfResponse.blob();
-          const url = window.URL.createObjectURL(blob);
-          setPdfUrl(url);
-        }
       } else {
+        setMealPlan(JSON.stringify(data, null, 2));
         setStatusMessage("❌ Error creating meal plan: " + data.error);
       }
     } catch (error) {
+      setMealPlan("");
       setStatusMessage("❌ Error creating meal plan: " + error.message);
     } finally {
       setLoading(false);
@@ -140,7 +126,6 @@ function App() {
       a.href = url;
       a.download = "meal_plan_report.pdf";
       a.click();
-      console.log("Revoking object URL:", url);
       window.URL.revokeObjectURL(url);
     } catch (error) {
       alert(`Error downloading PDF: ${error.message}`);
@@ -256,14 +241,23 @@ function App() {
         </div>
       )}
 
-      {/* Show PDF download button if available */}
-      {pdfUrl && (
+      {/* Show Download button only if generation succeeded */}
+      {statusMessage.startsWith("✅") && (
         <div style={{ marginTop: "10px" }}>
-          <a href={pdfUrl} download="meal_plan_report.pdf">
-            <button>Download PDF Report</button>
-          </a>
+          <button onClick={handleDownloadPdf}>Download PDF Report</button>
         </div>
       )}
+
+      <br />
+      <br />
+
+      <textarea
+        value={mealPlan}
+        readOnly
+        rows={20}
+        cols={80}
+        style={{ whiteSpace: "pre-wrap" }}
+      />
     </div>
   );
 }
