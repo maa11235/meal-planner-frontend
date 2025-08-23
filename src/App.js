@@ -22,6 +22,9 @@ function App() {
   // New state for loading spinner
   const [loading, setLoading] = useState(false);
 
+  // New state for status messages
+  const [statusMessage, setStatusMessage] = useState("");
+
   const debug_cart = process.env.DEBUG_CART;
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
@@ -78,6 +81,9 @@ function App() {
   const handleGenerate = async () => {
     try {
       setLoading(true);
+      setStatusMessage(""); // reset old messages
+      setPdfUrl(null);      // reset PDF
+
       const response = await fetch(`${backendUrl}/plan-and-cart`, {
         method: "POST",
         headers: {
@@ -94,10 +100,12 @@ function App() {
       });
 
       const data = await response.json();
-      setMealPlan(JSON.stringify(data, null, 2));
 
       if (!data.error) {
         setIsKrogerLoggedIn(true);
+        setStatusMessage(
+          "✅ The meal plan was successfully generated. Click Download PDF Report to get your meal plan."
+        );
 
         if (data.pdf) {
           const pdfResponse = await fetch(`${backendUrl}${data.pdf}`, {
@@ -108,9 +116,11 @@ function App() {
           const url = window.URL.createObjectURL(blob);
           setPdfUrl(url);
         }
+      } else {
+        setStatusMessage("❌ Error creating meal plan: " + data.error);
       }
     } catch (error) {
-      setMealPlan(`Error: ${error.message}`);
+      setStatusMessage("❌ Error creating meal plan: " + error.message);
     } finally {
       setLoading(false);
     }
@@ -239,6 +249,14 @@ function App() {
         </div>
       )}
 
+      {/* Status message */}
+      {statusMessage && (
+        <div style={{ marginTop: "15px" }}>
+          <p>{statusMessage}</p>
+        </div>
+      )}
+
+      {/* Show PDF download button if available */}
       {pdfUrl && (
         <div style={{ marginTop: "10px" }}>
           <a href={pdfUrl} download="meal_plan_report.pdf">
@@ -246,21 +264,6 @@ function App() {
           </a>
         </div>
       )}
-
-      <div style={{ marginTop: "10px" }}>
-        <button onClick={handleDownloadPdf}>Download PDF Report</button>
-      </div>
-
-      <br />
-      <br />
-
-      <textarea
-        value={mealPlan}
-        readOnly
-        rows={20}
-        cols={80}
-        style={{ whiteSpace: "pre-wrap" }}
-      />
     </div>
   );
 }
