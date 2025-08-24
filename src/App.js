@@ -37,7 +37,7 @@ function App() {
           setLoginStatusMessage("✅ You are logged in to Kroger.");
         } else {
           setIsKrogerLoggedIn(false);
-          setLoginStatusMessage("❌ Not logged in to Kroger.");
+          setLoginStatusMessage("❌ It appears you are not currently logged in to Kroger. click the \"Login to Kroger\" button above to login.");
         }
       } catch (err) {
         setLoginStatusMessage(`⚠️ Error checking login: ${err.message}`);
@@ -134,7 +134,7 @@ function App() {
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial" }}>
-      <h2>Meal Plan Generator</h2>
+      <h2>Welcome to Plan2Pantry</h2>
 
       {/* Kroger Login */}
       <button
