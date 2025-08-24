@@ -18,16 +18,18 @@ import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 function App() {
   const { colorMode, toggleColorMode } = useColorMode();
 
+  const bgColor = colorMode === "light" ? "green.50" : "green.900";
+  const cardColor = colorMode === "light" ? "white" : "gray.800";
+
   return (
     <ChakraProvider>
-      <Flex height="100vh">
+      <Flex height="100vh" bg={bgColor}>
         {/* Sidebar (left) */}
         <Box
           w="300px"
-          bg={colorMode === "light" ? "gray.100" : "gray.900"}
           p={6}
           borderRight="1px solid"
-          borderColor={colorMode === "light" ? "gray.200" : "gray.700"}
+          borderColor={colorMode === "light" ? "green.200" : "green.700"}
         >
           <Flex justify="space-between" align="center" mb={6}>
             <Heading size="md">Meal Planner</Heading>
@@ -40,39 +42,18 @@ function App() {
           </Flex>
 
           <VStack spacing={4} align="stretch">
-            <Box>
+            <Box bg={cardColor} p={3} borderRadius="md" shadow="sm">
               <Text fontSize="sm" mb={1}>
                 Enter Meal Type
               </Text>
               <Input placeholder="e.g. vegetarian" />
             </Box>
 
-            <Box>
+            <Box bg={cardColor} p={3} borderRadius="md" shadow="sm">
               <Text fontSize="sm" mb={1}>
                 Notes / Preferences
               </Text>
               <Textarea placeholder="No seafood, gluten-free, etc." />
             </Box>
 
-            <Button colorScheme="teal" width="full">
-              Generate Plan
-            </Button>
-          </VStack>
-        </Box>
-
-        {/* Main Content (right) */}
-        <Box flex="1" p={8} overflowY="auto">
-          <Heading size="lg" mb={4}>
-            Your Weekly Plan
-          </Heading>
-          <Text color="gray.500">
-            The generated meal plan will appear here once you submit your
-            preferences.
-          </Text>
-        </Box>
-      </Flex>
-    </ChakraProvider>
-  );
-}
-
-export default App;
+            <Button colorScheme="teal" width="full
