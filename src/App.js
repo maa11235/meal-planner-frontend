@@ -89,7 +89,7 @@ function MealPlannerApp() {
               </Text>
             </Box>
           ) : (
-            <Text fontSize="lg" color="white">
+            <Text fontSize="lg" color="black">
               {mealPlan}
             </Text>
           )}
