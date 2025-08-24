@@ -21,6 +21,9 @@ const theme = extendTheme({
   },
 });
 
+// Gradient for Plan2Pantry text
+const planGradient = "linear(to-r, #ff595e, #ffca3a, #8ac926, #1982c4)";
+
 function MealPlannerApp() {
   const [mealPlan, setMealPlan] = useState("");
 
@@ -36,7 +39,7 @@ function MealPlannerApp() {
           <VStack align="stretch" spacing={6}>
             <Heading
               size="lg"
-              bgGradient="linear(to-r, #ff595e, #ffca3a, #8ac926, #1982c4)"
+              bgGradient={planGradient}
               bgClip="text"
               fontFamily="'Dancing Script', cursive"
             >
@@ -59,10 +62,19 @@ function MealPlannerApp() {
               fontFamily="'Dancing Script', cursive"
               color="white"
             >
-              Welcome to <b>Plan2Pantry</b>. The effortless meal planning chef
-              that listens to your input and customizes recipes tailored to meet
-              your desires. It will generate a grocery list and add the
-              ingredients to your grocery cart.
+              Welcome to{" "}
+              <Text
+                as="span"
+                bgGradient={planGradient}
+                bgClip="text"
+                fontWeight="bold"
+              >
+                Plan2Pantry
+              </Text>
+              . The effortless meal planning chef that listens to your input
+              and customizes recipes tailored to meet your desires. It will
+              generate a grocery list and add the ingredients to your grocery
+              cart.
             </Text>
           ) : (
             <Text fontSize="lg" color="white">
