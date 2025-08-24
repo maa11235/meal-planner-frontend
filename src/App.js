@@ -37,7 +37,7 @@ function App() {
           setLoginStatusMessage("✅ You are logged in to Kroger.");
         } else {
           setIsKrogerLoggedIn(false);
-          setLoginStatusMessage("❌ It appears you are not currently logged in to Kroger. click the \"Login to Kroger\" button above to login.");
+          setLoginStatusMessage("❌ It appears you are not currently logged in to Kroger.<br>Click the \"Login to Kroger\" button above to login.");
         }
       } catch (err) {
         setLoginStatusMessage(`⚠️ Error checking login: ${err.message}`);
