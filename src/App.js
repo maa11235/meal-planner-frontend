@@ -27,8 +27,8 @@ const planGradient = "linear(to-r, #ff595e, #ffca3a, #8ac926, #1982c4)";
 function MealPlannerApp() {
   const [mealPlan, setMealPlan] = useState("");
 
-  const handleGeneratePlan = () => {
-    setMealPlan("Your customized meal plan will appear here...");
+  const handleGroceryLogin = () => {
+    setMealPlan("Your grocery store login process will appear here...");
   };
 
   return (
@@ -45,9 +45,17 @@ function MealPlannerApp() {
             >
               Plan2Pantry
             </Heading>
-            <Button colorScheme="teal" onClick={handleGeneratePlan}>
-              Generate Meal Plan
+
+            <Text fontSize="sm" color="white" textAlign="center">
+              To log into any of the following grocery stores: Kroger, Smyths,
+              Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's, Jay C
+              Food, City Market, King Supers, Gerbes, Marianos, and QFC
+            </Text>
+
+            <Button colorScheme="teal" onClick={handleGroceryLogin}>
+              Grocery Store Login
             </Button>
+
             <Button colorScheme="teal" variant="outline">
               View Grocery List
             </Button>
@@ -61,7 +69,7 @@ function MealPlannerApp() {
               <Text
                 fontSize="xl"
                 fontFamily="'Dancing Script', cursive"
-                color="white"
+                color="black"
                 textAlign="center"
               >
                 Welcome to{" "}
