@@ -55,27 +55,39 @@ function MealPlannerApp() {
         </Box>
 
         {/* Main Content */}
-        <Box flex="1" p={10}>
+        <Box flex="1" display="flex" justifyContent="center" alignItems="center">
           {!mealPlan ? (
-            <Text
-              fontSize="xl"
-              fontFamily="'Dancing Script', cursive"
-              color="white"
-            >
-              Welcome to{" "}
+            <Box w="50%">
               <Text
-                as="span"
-                bgGradient={planGradient}
-                bgClip="text"
-                fontWeight="bold"
+                fontSize="xl"
+                fontFamily="'Dancing Script', cursive"
+                color="white"
+                textAlign="center"
               >
-                Plan2Pantry
+                Welcome to{" "}
+                <Text
+                  as="span"
+                  bgGradient={planGradient}
+                  bgClip="text"
+                  fontWeight="bold"
+                >
+                  Plan2Pantry
+                </Text>
+                . The effortless meal planning virtual nutritionist chef that
+                takes your meal requests and customizes recipes tailored to
+                meet your desires.{" "}
+                <Text
+                  as="span"
+                  bgGradient={planGradient}
+                  bgClip="text"
+                  fontWeight="bold"
+                >
+                  Plan2Pantry
+                </Text>{" "}
+                will generate a grocery list and add the ingredients to your
+                grocery cart.
               </Text>
-              . The effortless meal planning chef that listens to your input
-              and customizes recipes tailored to meet your desires. It will
-              generate a grocery list and add the ingredients to your grocery
-              cart.
-            </Text>
+            </Box>
           ) : (
             <Text fontSize="lg" color="white">
               {mealPlan}
