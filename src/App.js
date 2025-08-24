@@ -3,11 +3,13 @@ import React from "react";
 import {
   ChakraProvider,
   Box,
+  Flex,
+  VStack,
   Heading,
   Text,
   Button,
-  VStack,
-  Container,
+  Input,
+  Textarea,
   useColorMode,
   IconButton,
 } from "@chakra-ui/react";
@@ -18,63 +20,57 @@ function App() {
 
   return (
     <ChakraProvider>
-      <Box bg={colorMode === "light" ? "gray.50" : "gray.800"} minH="100vh">
-        {/* Header */}
+      <Flex height="100vh">
+        {/* Sidebar (left) */}
         <Box
-          as="header"
-          bg={colorMode === "light" ? "teal.500" : "teal.600"}
-          color="white"
-          py={4}
-          px={6}
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
+          w="300px"
+          bg={colorMode === "light" ? "gray.100" : "gray.900"}
+          p={6}
+          borderRight="1px solid"
+          borderColor={colorMode === "light" ? "gray.200" : "gray.700"}
         >
-          <Heading size="md">Plan2Pantry</Heading>
-          <IconButton
-            aria-label="Toggle dark mode"
-            icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-            onClick={toggleColorMode}
-            variant="ghost"
-            color="white"
-          />
+          <Flex justify="space-between" align="center" mb={6}>
+            <Heading size="md">Meal Planner</Heading>
+            <IconButton
+              aria-label="Toggle theme"
+              icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+              onClick={toggleColorMode}
+              size="sm"
+            />
+          </Flex>
+
+          <VStack spacing={4} align="stretch">
+            <Box>
+              <Text fontSize="sm" mb={1}>
+                Enter Meal Type
+              </Text>
+              <Input placeholder="e.g. vegetarian" />
+            </Box>
+
+            <Box>
+              <Text fontSize="sm" mb={1}>
+                Notes / Preferences
+              </Text>
+              <Textarea placeholder="No seafood, gluten-free, etc." />
+            </Box>
+
+            <Button colorScheme="teal" width="full">
+              Generate Plan
+            </Button>
+          </VStack>
         </Box>
 
-        {/* Main content */}
-        <Container maxW="md" py={10}>
-          <VStack
-            spacing={6}
-            p={8}
-            bg={colorMode === "light" ? "white" : "gray.700"}
-            boxShadow="lg"
-            rounded="xl"
-          >
-            <Heading size="lg" textAlign="center">
-              Weekly Meal Planner
-            </Heading>
-            <Text textAlign="center" color="gray.500">
-              Click below to generate a personalized meal plan for the week.
-            </Text>
-
-            <Button colorScheme="teal" size="lg" w="full">
-              Generate Meal Plan
-            </Button>
-
-            <Box
-              w="full"
-              p={4}
-              border="1px"
-              borderColor="gray.200"
-              rounded="md"
-              minH="100px"
-            >
-              <Text fontSize="sm" color="gray.400">
-                Meal plan results will appear here...
-              </Text>
-            </Box>
-          </VStack>
-        </Container>
-      </Box>
+        {/* Main Content (right) */}
+        <Box flex="1" p={8} overflowY="auto">
+          <Heading size="lg" mb={4}>
+            Your Weekly Plan
+          </Heading>
+          <Text color="gray.500">
+            The generated meal plan will appear here once you submit your
+            preferences.
+          </Text>
+        </Box>
+      </Flex>
     </ChakraProvider>
   );
 }
