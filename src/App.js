@@ -56,4 +56,27 @@ function App() {
               <Textarea placeholder="No seafood, gluten-free, etc." />
             </Box>
 
-            <Button colorScheme="teal" width="full
+            <Button colorScheme="teal" width="full">
+              Generate Plan
+            </Button>
+          </VStack>
+        </Box>
+
+        {/* Main Content (right) */}
+        <Box flex="1" p={8} overflowY="auto">
+          <Box bg={cardColor} p={6} borderRadius="md" shadow="sm">
+            <Heading size="lg" mb={4}>
+              Your Weekly Plan
+            </Heading>
+            <Text color="gray.500">
+              The generated meal plan will appear here once you submit your
+              preferences.
+            </Text>
+          </Box>
+        </Box>
+      </Flex>
+    </ChakraProvider>
+  );
+}
+
+export default App;
