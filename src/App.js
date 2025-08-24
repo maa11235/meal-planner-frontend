@@ -9,13 +9,13 @@ import {
   extendTheme,
 } from "@chakra-ui/react";
 
-// Theme with green background
+// Theme with dark green background
 const theme = extendTheme({
   styles: {
     global: {
       body: {
-        bg: "#81c784", // Healthy green
-        color: "gray.800",
+        bg: "#2e7d32", // Dark leafy green
+        color: "white",
       },
     },
   },
@@ -34,7 +34,12 @@ function MealPlannerApp() {
         {/* Left Sidebar */}
         <Box w="300px" p={6}>
           <VStack align="stretch" spacing={6}>
-            <Heading size="md" color="white">
+            <Heading
+              size="lg"
+              bgGradient="linear(to-r, #ff595e, #ffca3a, #8ac926, #1982c4)"
+              bgClip="text"
+              fontFamily="'Dancing Script', cursive"
+            >
               Plan2Pantry
             </Heading>
             <Button colorScheme="teal" onClick={handleGeneratePlan}>
@@ -51,7 +56,7 @@ function MealPlannerApp() {
           {!mealPlan ? (
             <Text
               fontSize="xl"
-              fontFamily="'Dancing Script', cursive" // Flowery font
+              fontFamily="'Dancing Script', cursive"
               color="white"
             >
               Welcome to <b>Plan2Pantry</b>. The effortless meal planning chef
@@ -60,7 +65,9 @@ function MealPlannerApp() {
               ingredients to your grocery cart.
             </Text>
           ) : (
-            <Text fontSize="lg">{mealPlan}</Text>
+            <Text fontSize="lg" color="white">
+              {mealPlan}
+            </Text>
           )}
         </Box>
       </Box>
