@@ -46,12 +46,6 @@ function MealPlannerApp() {
               Plan2Pantry
             </Heading>
 
-            <Text fontSize="sm" color="white" textAlign="center">
-              To log into any of the following grocery stores: Kroger, Smyths,
-              Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's, Jay C
-              Food, City Market, King Supers, Gerbes, Marianos, and QFC
-            </Text>
-
             <Button colorScheme="teal" onClick={handleGroceryLogin}>
               Grocery Store Login
             </Button>
@@ -65,12 +59,11 @@ function MealPlannerApp() {
         {/* Main Content */}
         <Box flex="1" display="flex" justifyContent="center" alignItems="center">
           {!mealPlan ? (
-            <Box w="50%">
+            <Box w="50%" textAlign="center">
               <Text
                 fontSize="xl"
                 fontFamily="'Dancing Script', cursive"
-                color="black"
-                textAlign="center"
+                color="white"
               >
                 Welcome to{" "}
                 <Text
@@ -95,6 +88,13 @@ function MealPlannerApp() {
                 will generate a grocery list and add the ingredients to your
                 grocery cart.
               </Text>
+
+              {/* Grocery store list below the intro */}
+              <Text mt={6} fontSize="md" color="white">
+                To log into any of the following grocery stores: Kroger, Smyths,
+                Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's, Jay C
+                Food, City Market, King Supers, Gerbes, Marianos, and QFC
+              </Text>
             </Box>
           ) : (
             <Text fontSize="lg" color="black">
@@ -108,3 +108,4 @@ function MealPlannerApp() {
 }
 
 export default MealPlannerApp;
+
