@@ -1,256 +1,81 @@
-import React, { useState, useEffect } from "react";
-import "./App.css";
+// src/App.js
+import React from "react";
+import {
+  ChakraProvider,
+  Box,
+  Heading,
+  Text,
+  Button,
+  VStack,
+  Container,
+  useColorMode,
+  IconButton,
+} from "@chakra-ui/react";
+import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 
 function App() {
-  const [mealType, setMealType] = useState("vegetarian"); // default for type
-  const [mealTime, setMealTime] = useState("dinner"); // default for time
-  const [mealPlan, setMealPlan] = useState("");
-  const [isKrogerLoggedIn, setIsKrogerLoggedIn] = useState(false);
-  const [loginStatusMessage, setLoginStatusMessage] = useState("");
-
-  // New state for location search and store selection
-  const [locationInput, setLocationInput] = useState(""); // ZIP or City,State
-  const [stores, setStores] = useState([]); // List of Kroger stores returned from backend
-  const [selectedStore, setSelectedStore] = useState(""); // Kroger locationId chosen by user
-
-  // New state for number of meals
-  const [numMeals, setNumMeals] = useState(4); // default is 4
-
-  // Loading and status feedback
-  const [loading, setLoading] = useState(false);
-  const [statusMessage, setStatusMessage] = useState("");
-
-  const debug_cart = process.env.DEBUG_CART;
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
-
-  // 🔄 Always check backend /status for Kroger login
-  useEffect(() => {
-    const checkStatus = async () => {
-      try {
-        const res = await fetch(`${backendUrl}/status`, {
-          method: "GET",
-          credentials: "include",
-        });
-        const data = await res.json();
-        if (data.logged_in) {
-          setIsKrogerLoggedIn(true);
-          setLoginStatusMessage("✅ You are logged in to Kroger.");
-        } else {
-          setIsKrogerLoggedIn(false);
-          setLoginStatusMessage("❌ It appears you are not currently logged in to Kroger.<br>Click the \"Login to Kroger\" button above to login.");
-        }
-      } catch (err) {
-        setLoginStatusMessage(`⚠️ Error checking login: ${err.message}`);
-      }
-    };
-    checkStatus();
-  }, [backendUrl]);
-
-  // Call Kroger login
-  const handleKrogerLogin = () => {
-    window.location.href = `${backendUrl}/login`;
-  };
-
-  // Call /stores to search Kroger locations (GET request)
-  const handleSearchStores = async () => {
-    try {
-      const response = await fetch(
-        `${backendUrl}/stores?zip=${encodeURIComponent(locationInput)}`,
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
-      const data = await response.json();
-      if (data.error) {
-        alert(data.error);
-      } else {
-        setStores(Array.isArray(data) ? data : data.stores || []);
-      }
-    } catch (error) {
-      alert(`Error searching stores: ${error.message}`);
-    }
-  };
-
-  // Call /plan-and-cart
-  const handleGenerate = async () => {
-    try {
-      setLoading(true);
-      setStatusMessage(""); // reset old message
-      const response = await fetch(`${backendUrl}/plan-and-cart`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          time: mealTime,
-          type: mealType,
-          num_meals: numMeals,
-          debug_cart: debug_cart,
-          location_id: selectedStore,
-        }),
-        credentials: "include",
-      });
-
-      const data = await response.json();
-
-      if (!data.error) {
-        setMealPlan(JSON.stringify(data, null, 2));
-        setIsKrogerLoggedIn(true);
-        setStatusMessage(
-          "✅ The meal plan was successfully generated. Click Download PDF Report to get your meal plan."
-        );
-      } else {
-        setMealPlan(JSON.stringify(data, null, 2));
-        setStatusMessage("❌ Error creating meal plan: " + data.error);
-      }
-    } catch (error) {
-      setMealPlan("");
-      setStatusMessage("❌ Error creating meal plan: " + error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDownloadPdf = async () => {
-    try {
-      const response = await fetch(`${backendUrl}/report`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: mealPlan,
-        credentials: "include",
-      });
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "meal_plan_report.pdf";
-      a.click();
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      alert(`Error downloading PDF: ${error.message}`);
-    }
-  };
+  const { colorMode, toggleColorMode } = useColorMode();
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial" }}>
-      <h2>Welcome to Plan2Pantry</h2>
+    <ChakraProvider>
+      <Box bg={colorMode === "light" ? "gray.50" : "gray.800"} minH="100vh">
+        {/* Header */}
+        <Box
+          as="header"
+          bg={colorMode === "light" ? "teal.500" : "teal.600"}
+          color="white"
+          py={4}
+          px={6}
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Heading size="md">Plan2Pantry</Heading>
+          <IconButton
+            aria-label="Toggle dark mode"
+            icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+            onClick={toggleColorMode}
+            variant="ghost"
+            color="white"
+          />
+        </Box>
 
-      {/* Kroger Login */}
-      <button
-        onClick={handleKrogerLogin}
-        style={{ marginBottom: "15px" }}
-        disabled={isKrogerLoggedIn}
-      >
-        Login to Kroger
-      </button>
-      <div style={{ marginBottom: "15px" }}>{loginStatusMessage}</div>
-      <br />
-
-      {/* Location Search Section */}
-      <h3>Choose Kroger Store Location</h3>
-      <input
-        type="text"
-        placeholder="Enter ZIP code"
-        value={locationInput}
-        onChange={(e) => setLocationInput(e.target.value)}
-      />
-      <button onClick={handleSearchStores}>Search Stores</button>
-
-      {stores.length > 0 && (
-        <div style={{ marginTop: "10px" }}>
-          <label htmlFor="storeSelect">Select Store: </label>
-          <select
-            id="storeSelect"
-            value={selectedStore}
-            onChange={(e) => setSelectedStore(e.target.value)}
+        {/* Main content */}
+        <Container maxW="md" py={10}>
+          <VStack
+            spacing={6}
+            p={8}
+            bg={colorMode === "light" ? "white" : "gray.700"}
+            boxShadow="lg"
+            rounded="xl"
           >
-            <option value="">-- Choose a Store --</option>
-            {stores.map((store) => (
-              <option key={store.locationId} value={store.locationId}>
-                {store.name} - {store.address.addressLine1},{" "}
-                {store.address.city}, {store.address.state}{" "}
-                {store.address.zipCode}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
+            <Heading size="lg" textAlign="center">
+              Weekly Meal Planner
+            </Heading>
+            <Text textAlign="center" color="gray.500">
+              Click below to generate a personalized meal plan for the week.
+            </Text>
 
-      {/* Meal Type */}
-      <div style={{ marginTop: "10px" }}>
-        <label htmlFor="mealType">Select Meal Type: </label>
-        <input
-          type="text"
-          id="mealType"
-          value={mealType}
-          onChange={(e) => setMealType(e.target.value)}
-          style={{ marginBottom: "10px" }}
-        />
-      </div>
+            <Button colorScheme="teal" size="lg" w="full">
+              Generate Meal Plan
+            </Button>
 
-      <br />
-
-      {/* Meal Time */}
-      <label htmlFor="mealTime">Select Meal Time: </label>
-      <select
-        id="mealTime"
-        value={mealTime}
-        onChange={(e) => setMealTime(e.target.value)}
-      >
-        <option value="breakfast">Breakfast</option>
-        <option value="lunch">Lunch</option>
-        <option value="dinner">Dinner</option>
-      </select>
-
-      <br />
-      <br />
-
-      {/* Number of Meals */}
-      <label htmlFor="numMeals">Select number of meals: </label>
-      <select
-        id="numMeals"
-        value={numMeals}
-        onChange={(e) => setNumMeals(parseInt(e.target.value))}
-      >
-        {[1, 2, 3, 4, 5, 6, 7].map((n) => (
-          <option key={n} value={n}>
-            {n}
-          </option>
-        ))}
-      </select>
-
-      <br />
-      <br />
-
-      <button onClick={handleGenerate} disabled={!isKrogerLoggedIn || loading}>
-        {loading ? "Generating..." : "Generate Meal Plan"}
-      </button>
-
-      {loading && (
-        <div className="spinner-row" role="status" aria-live="polite">
-          <div className="spinner" />
-          <span>Generating meal plan...</span>
-        </div>
-      )}
-
-      {/* Status message */}
-      {statusMessage && (
-        <div style={{ marginTop: "15px" }}>
-          <p>{statusMessage}</p>
-        </div>
-      )}
-
-      {/* Show Download button only if generation succeeded */}
-      {statusMessage.startsWith("✅") && (
-        <div style={{ marginTop: "10px" }}>
-          <button onClick={handleDownloadPdf}>Download PDF Report</button>
-        </div>
-      )}
-
-      <br />
-      <br />
-    </div>
+            <Box
+              w="full"
+              p={4}
+              border="1px"
+              borderColor="gray.200"
+              rounded="md"
+              minH="100px"
+            >
+              <Text fontSize="sm" color="gray.400">
+                Meal plan results will appear here...
+              </Text>
+            </Box>
+          </VStack>
+        </Container>
+      </Box>
+    </ChakraProvider>
   );
 }
 
