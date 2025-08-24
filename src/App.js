@@ -151,7 +151,7 @@ function App() {
       <h3>Choose Kroger Store Location</h3>
       <input
         type="text"
-        placeholder="Enter ZIP or City, State"
+        placeholder="Enter ZIP code"
         value={locationInput}
         onChange={(e) => setLocationInput(e.target.value)}
       />
