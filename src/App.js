@@ -27,8 +27,8 @@ const planGradient = "linear(to-r, #ff595e, #ffca3a, #8ac926, #1982c4)";
 function MealPlannerApp() {
   const [mealPlan, setMealPlan] = useState("");
 
-  const handleGroceryLogin = () => {
-    setMealPlan("Your grocery store login process will appear here...");
+  const handleGeneratePlan = () => {
+    setMealPlan("Your customized meal plan will appear here...");
   };
 
   return (
@@ -46,12 +46,14 @@ function MealPlannerApp() {
               Plan2Pantry
             </Heading>
 
-            <Button colorScheme="teal" onClick={handleGroceryLogin}>
-              Grocery Store Login
-            </Button>
+            {/* Menu Configuration Label */}
+            <Text fontSize="md" fontWeight="bold" color="black">
+              Menu Configuration
+            </Text>
 
-            <Button colorScheme="teal" variant="outline">
-              View Grocery List
+            {/* Grocery Store Login Button */}
+            <Button colorScheme="teal" onClick={handleGeneratePlan}>
+              Grocery Store Login
             </Button>
           </VStack>
         </Box>
@@ -59,11 +61,12 @@ function MealPlannerApp() {
         {/* Main Content */}
         <Box flex="1" display="flex" justifyContent="center" alignItems="center">
           {!mealPlan ? (
-            <Box w="50%" textAlign="center">
+            <Box w="50%">
               <Text
                 fontSize="xl"
                 fontFamily="'Dancing Script', cursive"
                 color="white"
+                textAlign="center"
               >
                 Welcome to{" "}
                 <Text
@@ -75,8 +78,8 @@ function MealPlannerApp() {
                   Plan2Pantry
                 </Text>
                 . The effortless meal planning virtual nutritionist chef that
-                takes your meal requests and customizes recipes tailored to
-                meet your desires.{" "}
+                takes your meal requests and customizes recipes tailored to meet
+                your desires.{" "}
                 <Text
                   as="span"
                   bgGradient={planGradient}
@@ -89,11 +92,17 @@ function MealPlannerApp() {
                 grocery cart.
               </Text>
 
-              {/* Grocery store list below the intro */}
-              <Text mt={6} fontSize="md" color="white">
+              {/* Grocery Store Info Paragraph */}
+              <Text
+                mt={6}
+                fontSize="md"
+                color="white"
+                textAlign="center"
+                fontFamily="'Dancing Script', cursive"
+              >
                 To log into any of the following grocery stores: Kroger, Smyths,
                 Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's, Jay C
-                Food, City Market, King Supers, Gerbes, Marianos, and QFC
+                Food, City Market, King Supers, Gerbes, Marianos, and QFC.
               </Text>
             </Box>
           ) : (
@@ -108,4 +117,3 @@ function MealPlannerApp() {
 }
 
 export default MealPlannerApp;
-
