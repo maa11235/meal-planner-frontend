@@ -54,7 +54,7 @@ function MealPlannerApp() {
             {/* Grocery Store Login Group Box */}
             <Box bg="#003366" p={4} border="none" borderRadius="md">
               <Text mb={3} fontSize="sm" color="white" textAlign="center">
-                To log into any of the following grocery stores: Kroger, Smyths,
+                To log into any of the following grocery stores: Kroger, Smiths,
                 Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's, Jay C
                 Food, City Market, King Supers, Gerbes, Marianos, and QFC.
               </Text>
@@ -107,7 +107,7 @@ function MealPlannerApp() {
                 textAlign="center"
                 fontFamily="'Dancing Script', cursive"
               >
-                To log into any of the following grocery stores: Kroger, Smyths,
+                To log into any of the following grocery stores: Kroger, Smiths,
                 Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's, Jay C
                 Food, City Market, King Supers, Gerbes, Marianos, and QFC.
               </Text>
