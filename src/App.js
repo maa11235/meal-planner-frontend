@@ -46,20 +46,35 @@ function MealPlannerApp() {
               Plan2Pantry
             </Heading>
 
-            {/* Menu Configuration Label */}
-            <Heading
-              as="h2"
-              size="md"
-              textAlign="center"
-              color="white"
-            >
-              Menu Configuration
-            </Heading>
-
-            {/* Grocery Store Login Button */}
+            {/* Generate Plan Button */}
             <Button colorScheme="teal" onClick={handleGeneratePlan}>
-              Grocery Store Login
+              Generate Meal Plan
             </Button>
+
+            {/* Menu Configuration (centered) */}
+            <Box textAlign="center">
+              <Heading size="md" color="white" mb={2}>
+                Menu Configuration
+              </Heading>
+              {/* Placeholder for future config controls */}
+            </Box>
+
+            {/* Grocery Store Login Group Box */}
+            <Box
+              border="1px solid white"
+              borderRadius="md"
+              p={4}
+              textAlign="center"
+            >
+              <Text fontSize="sm" mb={3}>
+                To log into any of the following grocery stores: Kroger, Smyths,
+                Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph&apos;s,
+                Jay C Food, City Market, King Supers, Gerbes, Marianos, and QFC.
+              </Text>
+              <Button colorScheme="teal" variant="solid">
+                Grocery Store Login
+              </Button>
+            </Box>
           </VStack>
         </Box>
 
@@ -95,19 +110,6 @@ function MealPlannerApp() {
                 </Text>{" "}
                 will generate a grocery list and add the ingredients to your
                 grocery cart.
-              </Text>
-
-              {/* Grocery Store Info Paragraph */}
-              <Text
-                mt={6}
-                fontSize="md"
-                color="white"
-                textAlign="center"
-                fontFamily="'Dancing Script', cursive"
-              >
-                To log into any of the following grocery stores: Kroger, Smyths,
-                Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's, Jay C
-                Food, City Market, King Supers, Gerbes, Marianos, and QFC.
               </Text>
             </Box>
           ) : (
