@@ -47,9 +47,14 @@ function MealPlannerApp() {
             </Heading>
 
             {/* Menu Configuration Label */}
-            <Text fontSize="md" fontWeight="bold" color="black">
+            <Heading
+              as="h2"
+              size="md"
+              textAlign="center"
+              color="white"
+            >
               Menu Configuration
-            </Text>
+            </Heading>
 
             {/* Grocery Store Login Button */}
             <Button colorScheme="teal" onClick={handleGeneratePlan}>
