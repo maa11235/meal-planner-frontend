@@ -57,9 +57,10 @@ function MealPlannerApp() {
             {/* Grocery Store Login Group Box */}
             <Box bg="#003366" p={4} border="none" borderRadius="md">
               <Text mb={3} fontSize="sm" color="white" textAlign="center">
-                To log into any of the following grocery stores: Kroger, Smiths,
-                Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's, Jay C
-                Food, City Market, King Supers, Gerbes, Marianos, and QFC.
+                Whisper your wish, and I shall open the gates to your chosen marketplace!  
+                Log in to Kroger, Smiths, Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's,  
+                Jay C Food, City Market, King Supers, Gerbes, Marianos, or QFC —  
+                and let your pantry be filled with treasures.
               </Text>
               <Button colorScheme="teal" onClick={handleGeneratePlan} w="100%">
                 Grocery Store Login
