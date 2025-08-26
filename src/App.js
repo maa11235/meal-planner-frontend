@@ -7,6 +7,7 @@ import {
   Button,
   Text,
   extendTheme,
+  Link,
 } from "@chakra-ui/react";
 
 // Theme with dark green background
@@ -99,7 +100,7 @@ function MealPlannerApp() {
                 grocery cart.
               </Text>
 
-              {/* Grocery Store Info Paragraph */}
+              {/* Grocery Store Info Paragraph (updated) */}
               <Text
                 mt={6}
                 fontSize="md"
@@ -107,9 +108,17 @@ function MealPlannerApp() {
                 textAlign="center"
                 fontFamily="'Dancing Script', cursive"
               >
-                To log into any of the following grocery stores: Kroger, Smiths,
+                If you haven't already, create an account for Kroger, Smyths,
                 Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's, Jay C
-                Food, City Market, King Supers, Gerbes, Marianos, and QFC.
+                Food, City Market, King Supers, Gerbes, Marianos, or QFC.{" "}
+                <Link
+                  href="https://www.kroger.com"
+                  isExternal
+                  color="yellow.300"
+                  fontWeight="bold"
+                >
+                  Create Account
+                </Link>
               </Text>
             </Box>
           ) : (
