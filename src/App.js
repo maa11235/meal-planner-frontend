@@ -8,6 +8,7 @@ import {
   Text,
   extendTheme,
   Link,
+  Input,
 } from "@chakra-ui/react";
 
 // Theme with dark green background
@@ -62,6 +63,29 @@ function MealPlannerApp() {
               <Button colorScheme="teal" onClick={handleGeneratePlan} w="100%">
                 Grocery Store Login
               </Button>
+            </Box>
+
+            {/* Find a Store & Meal Generator Group Box */}
+            <Box bg="#003366" p={4} border="none" borderRadius="md">
+              <Text mb={3} fontSize="md" color="white" textAlign="center">
+                Find a store near you
+              </Text>
+              <Input
+                placeholder="Enter zip code"
+                mb={4}
+                bg="white"
+                color="black"
+              />
+              <Text mb={3} fontSize="sm" color="white">
+                Write description of meals you would like the genie meal
+                generator to create, i.e., sweets for a diabetic with strawberries,
+                easy to prepare soul food, high protein and fiber, toddler friendly, etc.
+              </Text>
+              <Input
+                placeholder="Unique meal description"
+                bg="white"
+                color="black"
+              />
             </Box>
           </VStack>
         </Box>
