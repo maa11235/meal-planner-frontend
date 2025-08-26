@@ -31,7 +31,7 @@ function MealPlannerApp() {
   const [mealPlan, setMealPlan] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginStatusMessage, setLoginStatusMessage] = useState("");
-  const backendUrl = "http://localhost:5000"; // adjust to your backend URL
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const handleGeneratePlan = () => {
     setMealPlan("Your customized meal plan will appear here...");
