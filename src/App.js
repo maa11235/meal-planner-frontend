@@ -32,6 +32,7 @@ function MealPlannerApp() {
   const [mealPlan, setMealPlan] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginStatusMessage, setLoginStatusMessage] = useState("");
+  const [storeStatusMessage, setStoreStatusMessage] = useState(""); // NEW separate message for store count
   const [zipCode, setZipCode] = useState("");
   const [stores, setStores] = useState([]);
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
@@ -55,12 +56,12 @@ function MealPlannerApp() {
       const data = await res.json();
       if (res.ok) {
         setStores(data);
-        setLoginStatusMessage(`✨ Behold! I found ${data.length} stores near you.`);
+        setStoreStatusMessage(`✨ Behold! I found ${data.length} stores near you.`);
       } else {
-        setLoginStatusMessage(`⚠️ ${data.error || "Failed to fetch stores."}`);
+        setStoreStatusMessage(`⚠️ ${data.error || "Failed to fetch stores."}`);
       }
     } catch (err) {
-      setLoginStatusMessage(`⚠️ Error fetching stores: ${err.message}`);
+      setStoreStatusMessage(`⚠️ Error fetching stores: ${err.message}`);
     }
   };
 
@@ -167,7 +168,7 @@ function MealPlannerApp() {
 
             {/* Find a Store & Meal Generator Group Box */}
             <Box bg="#003366" p={4} border="none" borderRadius="md">
-              <Text mb={3} fontSize="md" color="white" textAlign="right">
+              <Text mb={3} fontSize="md" color="white" textAlign="left">
                 🔮 Seek ye a marketplace near thy dwelling? Reveal your zip code,
                 and I shall conjure its presence!
               </Text>
@@ -183,6 +184,20 @@ function MealPlannerApp() {
                   Search Stores
                 </Button>
               </HStack>
+
+              {/* Dropdown for stores if found */}
+              {stores.length > 0 && (
+                <Select placeholder="Select a store" bg="white" color="black" mb={4}>
+                  {stores.map((store) => (
+                    <option key={store.locationId} value={store.locationId}>
+                      {store.name} - {store.address?.addressLine1},{" "}
+                      {store.address?.city}, {store.address?.state}{" "}
+                      {store.address?.zipCode}
+                    </option>
+                  ))}
+                </Select>
+              )}
+
               <Text mb={3} fontSize="sm" color="white">
                 Speak your wish, and I, the Genie of Meals, shall craft it!
                 Describe the delights you seek — perhaps sweets fit for a
@@ -270,6 +285,19 @@ function MealPlannerApp() {
                   fontFamily="'Dancing Script', cursive"
                 >
                   {loginStatusMessage}
+                </Text>
+              )}
+
+              {/* Store Status Message */}
+              {storeStatusMessage && (
+                <Text
+                  mt={4}
+                  fontSize="md"
+                  color="yellow.300"
+                  textAlign="center"
+                  fontFamily="'Dancing Script', cursive"
+                >
+                  {storeStatusMessage}
                 </Text>
               )}
             </Box>
