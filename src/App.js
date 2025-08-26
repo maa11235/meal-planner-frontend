@@ -24,7 +24,7 @@ const theme = extendTheme({
   },
 });
 
-// Gradient for GenieCart text
+// Gradient for CartGenie text
 const planGradient = "linear(to-r, #ff595e, #ffca3a, #8ac926, #1982c4)";
 
 function MealPlannerApp() {
@@ -40,7 +40,7 @@ function MealPlannerApp() {
         {/* Left Sidebar */}
         <Box w="300px" p={6}>
           <VStack align="stretch" spacing={6}>
-            {/* GenieCart Heading with Emoji */}
+            {/* CartGenie Heading with Emoji */}
             <Heading
               size="lg"
               fontFamily="'Cinzel Decorative', cursive"
@@ -58,13 +58,13 @@ function MealPlannerApp() {
                 fontFamily="'Cinzel Decorative', cursive"
                 fontWeight="extrabold"
               >
-                GenieCart
+                CartGenie
               </Text>
             </Heading>
 
-            {/* Menu Configuration Label */}
+            {/* Your Recipe Wish Label */}
             <Heading as="h2" size="md" textAlign="center" color="white">
-              Menu Configuration
+              Your Wish Shall be Loaded To Your Grocery Cart
             </Heading>
 
             {/* Grocery Store Login Group Box */}
@@ -139,6 +139,7 @@ function MealPlannerApp() {
                 textAlign="center"
               >
                 Welcome, seeker of flavor, to{" "}
+                <span role="img" aria-label="genie">🧞</span>{" "}
                 <Text
                   as="span"
                   bgGradient={planGradient}
@@ -146,7 +147,7 @@ function MealPlannerApp() {
                   fontWeight="bold"
                   fontFamily="'Cinzel Decorative', cursive"
                 >
-                  🧞 GenieCart
+                  CartGenie
                 </Text>
                 . With but a whisper of your desires, I shall summon meals crafted to your heart’s delight.  
                 From the scrolls of my enchanted cookbook, recipes shall appear, tailored to your cravings.  
