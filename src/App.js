@@ -64,7 +64,7 @@ function MealPlannerApp() {
 
             {/* Your Recipe Wish Label */}
             <Heading as="h2" size="md" textAlign="center" color="white">
-              Your Wish Shall be Loaded To Your Grocery Cart
+              Your Wish Shall Be Loaded To Your Grocery Cart
             </Heading>
 
             {/* Grocery Store Login Group Box */}
