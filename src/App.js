@@ -24,7 +24,7 @@ const theme = extendTheme({
   },
 });
 
-// Gradient for Plan2Pantry text
+// Gradient for GenieCart text
 const planGradient = "linear(to-r, #ff595e, #ffca3a, #8ac926, #1982c4)";
 
 function MealPlannerApp() {
@@ -46,7 +46,7 @@ function MealPlannerApp() {
               bgClip="text"
               fontFamily="'Dancing Script', cursive"
             >
-              Plan2Pantry
+              GenieCart
             </Heading>
 
             {/* Menu Configuration Label */}
@@ -92,7 +92,7 @@ function MealPlannerApp() {
 
               {/* Meals Quantity Selector */}
               <Text mt={4} mb={2} fontSize="sm" color="white">
-                How many meals do you wish?
+                How many feasts shall I conjure from my mystical cookbook?
               </Text>
               <Select defaultValue="3" bg="white" color="black" mb={4}>
                 {[1, 2, 3, 4, 5, 6, 7].map((num) => (
@@ -104,7 +104,7 @@ function MealPlannerApp() {
 
               {/* Meal Type Selector */}
               <Text mb={2} fontSize="sm" color="white">
-                Are these meals for breakfast, lunch or dinner?
+                Shall these creations be dawn’s delights, midday marvels, or evening banquets?
               </Text>
               <Select defaultValue="dinner" bg="white" color="black">
                 <option value="breakfast">Breakfast</option>
@@ -132,7 +132,7 @@ function MealPlannerApp() {
                   bgClip="text"
                   fontWeight="bold"
                 >
-                  Plan2Pantry
+                  GenieCart
                 </Text>
                 . The effortless meal planning virtual nutritionist chef that
                 takes your meal requests and customizes recipes tailored to meet
@@ -143,13 +143,13 @@ function MealPlannerApp() {
                   bgClip="text"
                   fontWeight="bold"
                 >
-                  Plan2Pantry
+                  GenieCart
                 </Text>{" "}
                 will generate a grocery list and add the ingredients to your
                 grocery cart.
               </Text>
 
-              {/* Grocery Store Info Paragraph (updated) */}
+              {/* Grocery Store Info Paragraph */}
               <Text
                 mt={6}
                 fontSize="md"
