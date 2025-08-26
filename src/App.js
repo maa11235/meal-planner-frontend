@@ -78,9 +78,10 @@ function MealPlannerApp() {
                 color="black"
               />
               <Text mb={3} fontSize="sm" color="white">
-                Write description of meals you would like the genie meal
-                generator to create, i.e., sweets for a diabetic with strawberries,
-                easy to prepare soul food, high protein and fiber, toddler friendly, etc.
+                Speak your wish, and I, the Genie of Meals, shall craft it!  
+                Describe the delights you seek — perhaps sweets fit for a diabetic with strawberries,  
+                comforting soul food made easy, high-protein feasts full of fiber, or even toddler-friendly treasures.  
+                Your wish is my recipe command!
               </Text>
               <Input
                 placeholder="Unique meal description"
