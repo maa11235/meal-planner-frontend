@@ -42,33 +42,43 @@ function MealPlannerApp() {
     window.location.href = `${backendUrl}/login`;
   };
 
-  // 🔄 Always check backend /status for Kroger login
-  useEffect(() => {
-    const checkStatus = async () => {
-      try {
-        const res = await fetch(`${backendUrl}/status`, {
-          method: "GET",
-          credentials: "include",
-        });
-        const data = await res.json();
+  // 🔄 Check backend /status for Kroger login
+  const checkStatus = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/status`, {
+        method: "GET",
+        credentials: "include",
+      });
+      const data = await res.json();
 
-        if (data.loggedIn) {
-          setIsLoggedIn(true);
-          setLoginStatusMessage(
-            "✨ Ah, master! You are bound to the marketplace. Next, whisper your culinary desires, and I shall weave them into a meal plan!"
-          );
-        } else {
-          setIsLoggedIn(false);
-          setLoginStatusMessage(
-            "⚠️ Alas! You are not yet bound to the marketplace. Press the Grocery Store Login button, and the gates shall open!"
-          );
-        }
-      } catch (err) {
-        setLoginStatusMessage(`⚠️ Error checking login: ${err.message}`);
+      // ✅ Handle both snake_case and camelCase
+      if (data.loggedIn || data.logged_in) {
+        setIsLoggedIn(true);
+        setLoginStatusMessage(
+          "✨ Ah, master! You are bound to the marketplace. Next, whisper your culinary desires, and I shall weave them into a meal plan!"
+        );
+      } else {
+        setIsLoggedIn(false);
+        setLoginStatusMessage(
+          "⚠️ Alas! You are not yet bound to the marketplace. Press the Grocery Store Login button, and the gates shall open!"
+        );
       }
-    };
+    } catch (err) {
+      setLoginStatusMessage(`⚠️ Error checking login: ${err.message}`);
+    }
+  };
+
+  // Run once on mount AND when backendUrl changes
+  useEffect(() => {
     checkStatus();
   }, [backendUrl]);
+
+  // Also check immediately after page reload (post-login redirect)
+  useEffect(() => {
+    if (window.location.href.includes("meal-planner.techexamprep.com")) {
+      checkStatus();
+    }
+  }, []);
 
   return (
     <ChakraProvider theme={theme}>
