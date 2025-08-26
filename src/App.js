@@ -37,6 +37,11 @@ function MealPlannerApp() {
     setMealPlan("Your customized meal plan will appear here...");
   };
 
+  // 🛒 Handle login by redirecting to backend login endpoint
+  const handleLogin = () => {
+    window.location.href = `${backendUrl}/login`;
+  };
+
   // 🔄 Always check backend /status for Kroger login
   useEffect(() => {
     const checkStatus = async () => {
@@ -50,7 +55,7 @@ function MealPlannerApp() {
         if (data.loggedIn) {
           setIsLoggedIn(true);
           setLoginStatusMessage(
-            "✨ Ah, master! You are already bound to the marketplace. Next, whisper your culinary desires, and I shall weave them into a meal plan!"
+            "✨ Ah, master! You are bound to the marketplace. Next, whisper your culinary desires, and I shall weave them into a meal plan!"
           );
         } else {
           setIsLoggedIn(false);
@@ -127,7 +132,7 @@ function MealPlannerApp() {
                 Whisper your wish, and I shall open the gates to your chosen
                 marketplace! Log in and let your pantry be filled with treasures.
               </Text>
-              <Button colorScheme="teal" onClick={handleGeneratePlan} w="100%">
+              <Button colorScheme="teal" onClick={handleLogin} w="100%">
                 Grocery Store Login
               </Button>
             </Box>
