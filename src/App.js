@@ -144,6 +144,13 @@ function MealPlannerApp() {
                 <option value="dinner">Dinner</option>
               </Select>
             </Box>
+
+            {/* New Generate Meal Plan Group Box */}
+            <Box bg="#003366" p={4} border="none" borderRadius="md">
+              <Button colorScheme="yellow" w="100%" onClick={handleGeneratePlan}>
+                Generate Meal Plan
+              </Button>
+            </Box>
           </VStack>
         </Box>
 
