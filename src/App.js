@@ -9,6 +9,7 @@ import {
   extendTheme,
   Link,
   Input,
+  Select,
 } from "@chakra-ui/react";
 
 // Theme with dark green background
@@ -86,6 +87,28 @@ function MealPlannerApp() {
                 bg="white"
                 color="black"
               />
+
+              {/* Meals Quantity Selector */}
+              <Text mt={4} mb={2} fontSize="sm" color="white">
+                How many meals do you wish?
+              </Text>
+              <Select defaultValue="3" bg="white" color="black" mb={4}>
+                {[1, 2, 3, 4, 5, 6, 7].map((num) => (
+                  <option key={num} value={num}>
+                    {num}
+                  </option>
+                ))}
+              </Select>
+
+              {/* Meal Type Selector */}
+              <Text mb={2} fontSize="sm" color="white">
+                Are these meals for breakfast, lunch or dinner?
+              </Text>
+              <Select defaultValue="dinner" bg="white" color="black">
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+              </Select>
             </Box>
           </VStack>
         </Box>
