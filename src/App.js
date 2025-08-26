@@ -10,6 +10,7 @@ import {
   Link,
   Input,
   Select,
+  HStack,
 } from "@chakra-ui/react";
 
 // Theme with dark green background
@@ -31,6 +32,8 @@ function MealPlannerApp() {
   const [mealPlan, setMealPlan] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginStatusMessage, setLoginStatusMessage] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [stores, setStores] = useState([]);
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const handleGeneratePlan = () => {
@@ -42,6 +45,25 @@ function MealPlannerApp() {
     window.location.href = `${backendUrl}/login`;
   };
 
+  // 🔎 Handle Search Stores
+  const handleSearchStores = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/stores?zip=${zipCode}`, {
+        method: "GET",
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setStores(data);
+        setLoginStatusMessage(`✨ Behold! I found ${data.length} stores near you.`);
+      } else {
+        setLoginStatusMessage(`⚠️ ${data.error || "Failed to fetch stores."}`);
+      }
+    } catch (err) {
+      setLoginStatusMessage(`⚠️ Error fetching stores: ${err.message}`);
+    }
+  };
+
   // 🔄 Check backend /status for Kroger login
   const checkStatus = async () => {
     try {
@@ -51,7 +73,6 @@ function MealPlannerApp() {
       });
       const data = await res.json();
 
-      // ✅ Handle both snake_case and camelCase
       if (data.loggedIn || data.logged_in) {
         setIsLoggedIn(true);
         setLoginStatusMessage(
@@ -68,12 +89,10 @@ function MealPlannerApp() {
     }
   };
 
-  // Run once on mount AND when backendUrl changes
   useEffect(() => {
     checkStatus();
   }, [backendUrl]);
 
-  // Also check immediately after page reload (post-login redirect)
   useEffect(() => {
     if (window.location.href.includes("meal-planner.techexamprep.com")) {
       checkStatus();
@@ -86,7 +105,7 @@ function MealPlannerApp() {
         {/* Left Sidebar */}
         <Box w="300px" p={6}>
           <VStack align="stretch" spacing={6}>
-            {/* CartGenie Heading with Emoji */}
+            {/* CartGenie Heading */}
             <Heading
               size="lg"
               fontFamily="'Cinzel Decorative', cursive"
@@ -117,7 +136,6 @@ function MealPlannerApp() {
 
             {/* Grocery Store Login Group Box */}
             <Box bg="#003366" p={4} border="none" borderRadius="md">
-              {/* Moved Create Account Text + Link here */}
               <Text
                 mb={3}
                 fontSize="sm"
@@ -149,15 +167,22 @@ function MealPlannerApp() {
 
             {/* Find a Store & Meal Generator Group Box */}
             <Box bg="#003366" p={4} border="none" borderRadius="md">
-              <Text mb={3} fontSize="md" color="white" textAlign="center">
-                Find a store near you
+              <Text mb={3} fontSize="md" color="white" textAlign="right">
+                🔮 Seek ye a marketplace near thy dwelling? Reveal your zip code,
+                and I shall conjure its presence!
               </Text>
-              <Input
-                placeholder="Enter zip code"
-                mb={4}
-                bg="white"
-                color="black"
-              />
+              <HStack mb={4}>
+                <Input
+                  placeholder="Enter zip code"
+                  value={zipCode}
+                  onChange={(e) => setZipCode(e.target.value)}
+                  bg="white"
+                  color="black"
+                />
+                <Button colorScheme="yellow" onClick={handleSearchStores}>
+                  Search Stores
+                </Button>
+              </HStack>
               <Text mb={3} fontSize="sm" color="white">
                 Speak your wish, and I, the Genie of Meals, shall craft it!
                 Describe the delights you seek — perhaps sweets fit for a
