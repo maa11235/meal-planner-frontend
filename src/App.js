@@ -92,9 +92,7 @@ function MealPlannerApp() {
 
               <Text mb={3} fontSize="sm" color="white" textAlign="center">
                 Whisper your wish, and I shall open the gates to your chosen marketplace!  
-                Log in to Kroger, Smiths, Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's,  
-                Jay C Food, City Market, King Supers, Gerbes, Marianos, or QFC —  
-                and let your pantry be filled with treasures.
+                Log in and let your pantry be filled with treasures.
               </Text>
               <Button colorScheme="teal" onClick={handleGeneratePlan} w="100%">
                 Grocery Store Login
