@@ -40,13 +40,26 @@ function MealPlannerApp() {
         {/* Left Sidebar */}
         <Box w="300px" p={6}>
           <VStack align="stretch" spacing={6}>
+            {/* GenieCart Heading with Emoji */}
             <Heading
               size="lg"
-              bgGradient={planGradient}
-              bgClip="text"
-              fontFamily="'Dancing Script', cursive"
+              fontFamily="'Cinzel Decorative', cursive"
+              fontWeight="bold"
+              color="yellow.300"
+              display="flex"
+              alignItems="center"
+              gap={2}
             >
-              🧞 GenieCart
+              <span role="img" aria-label="genie">🧞</span>
+              <Text
+                as="span"
+                bgGradient={planGradient}
+                bgClip="text"
+                fontFamily="'Cinzel Decorative', cursive"
+                fontWeight="extrabold"
+              >
+                GenieCart
+              </Text>
             </Heading>
 
             {/* Menu Configuration Label */}
@@ -131,6 +144,7 @@ function MealPlannerApp() {
                   bgGradient={planGradient}
                   bgClip="text"
                   fontWeight="bold"
+                  fontFamily="'Cinzel Decorative', cursive"
                 >
                   🧞 GenieCart
                 </Text>
