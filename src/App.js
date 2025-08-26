@@ -46,7 +46,7 @@ function MealPlannerApp() {
               bgClip="text"
               fontFamily="'Dancing Script', cursive"
             >
-              GenieCart
+              🧞 GenieCart
             </Heading>
 
             {/* Menu Configuration Label */}
@@ -125,28 +125,19 @@ function MealPlannerApp() {
                 color="white"
                 textAlign="center"
               >
-                Welcome to{" "}
+                Welcome, seeker of flavor, to{" "}
                 <Text
                   as="span"
                   bgGradient={planGradient}
                   bgClip="text"
                   fontWeight="bold"
                 >
-                  GenieCart
+                  🧞 GenieCart
                 </Text>
-                . The effortless meal planning virtual nutritionist chef that
-                takes your meal requests and customizes recipes tailored to meet
-                your desires.{" "}
-                <Text
-                  as="span"
-                  bgGradient={planGradient}
-                  bgClip="text"
-                  fontWeight="bold"
-                >
-                  GenieCart
-                </Text>{" "}
-                will generate a grocery list and add the ingredients to your
-                grocery cart.
+                . With but a whisper of your desires, I shall summon meals crafted to your heart’s delight.  
+                From the scrolls of my enchanted cookbook, recipes shall appear, tailored to your cravings.  
+                And lo! I shall conjure forth a grocery list and place every needed treasure directly into your cart.  
+                Your wish is my culinary command!
               </Text>
 
               {/* Grocery Store Info Paragraph */}
