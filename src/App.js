@@ -69,6 +69,27 @@ function MealPlannerApp() {
 
             {/* Grocery Store Login Group Box */}
             <Box bg="#003366" p={4} border="none" borderRadius="md">
+              {/* Moved Create Account Text + Link here */}
+              <Text
+                mb={3}
+                fontSize="sm"
+                color="white"
+                textAlign="center"
+                fontFamily="'Dancing Script', cursive"
+              >
+                If you haven't already, create an account for Kroger, Smyths,
+                Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's, Jay C
+                Food, City Market, King Supers, Gerbes, Marianos, or QFC.{" "}
+                <Link
+                  href="https://www.kroger.com"
+                  isExternal
+                  color="yellow.300"
+                  fontWeight="bold"
+                >
+                  Create Account
+                </Link>
+              </Text>
+
               <Text mb={3} fontSize="sm" color="white" textAlign="center">
                 Whisper your wish, and I shall open the gates to your chosen marketplace!  
                 Log in to Kroger, Smiths, Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's,  
@@ -153,27 +174,6 @@ function MealPlannerApp() {
                 From the scrolls of my enchanted cookbook, recipes shall appear, tailored to your cravings.  
                 And lo! I shall conjure forth a grocery list and place every needed treasure directly into your cart.  
                 Your wish is my culinary command!
-              </Text>
-
-              {/* Grocery Store Info Paragraph */}
-              <Text
-                mt={6}
-                fontSize="md"
-                color="white"
-                textAlign="center"
-                fontFamily="'Dancing Script', cursive"
-              >
-                If you haven't already, create an account for Kroger, Smyths,
-                Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's, Jay C
-                Food, City Market, King Supers, Gerbes, Marianos, or QFC.{" "}
-                <Link
-                  href="https://www.kroger.com"
-                  isExternal
-                  color="yellow.300"
-                  fontWeight="bold"
-                >
-                  Create Account
-                </Link>
               </Text>
             </Box>
           ) : (
