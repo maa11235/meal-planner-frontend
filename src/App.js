@@ -179,8 +179,9 @@ function MealPlannerApp() {
                   onChange={(e) => setZipCode(e.target.value)}
                   bg="white"
                   color="black"
+                  flex="2"
                 />
-                <Button colorScheme="yellow" onClick={handleSearchStores}>
+                <Button colorScheme="yellow" onClick={handleSearchStores} flex="1.2">
                   Search Stores
                 </Button>
               </HStack>
