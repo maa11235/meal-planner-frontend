@@ -11,8 +11,9 @@ import {
   Input,
   Select,
   HStack,
-  Checkbox,
 } from "@chakra-ui/react";
+import CheckboxTree from "react-checkbox-tree";
+import "react-checkbox-tree/lib/react-checkbox-tree.css";
 
 // Theme with dark green background
 const theme = extendTheme({
@@ -30,7 +31,7 @@ const theme = extendTheme({
 const planGradient = "linear(to-r, #ff595e, #ffca3a, #8ac926, #1982c4)";
 
 function MealPlannerApp() {
-  const [mealPlan, setMealPlan] = useState(null);
+  const [mealPlan, setMealPlan] = useState(null); // JSON object, not string
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginStatusMessage, setLoginStatusMessage] = useState("");
   const [storeStatusMessage, setStoreStatusMessage] = useState(""); // NEW separate message for store count
@@ -42,6 +43,10 @@ function MealPlannerApp() {
   const [mealDescription, setMealDescription] = useState("");
   const [mealCount, setMealCount] = useState("3");
   const [time, setTime] = useState("dinner");
+
+  // NEW states for react-checkbox-tree
+  const [checked, setChecked] = useState([]);
+  const [expanded, setExpanded] = useState([]);
 
   const handleGeneratePlan = async () => {
     try {
@@ -58,12 +63,14 @@ function MealPlannerApp() {
 
       const data = await res.json();
       if (res.ok) {
-        setMealPlan(data.plan || []);
+        setMealPlan(data); // store JSON, not string
       } else {
-        setMealPlan([{ meal: `⚠️ Error: ${data.error || "Failed to generate plan."}`, ingredients: [] }]);
+        setMealPlan({
+          error: data.error || "Failed to generate plan.",
+        });
       }
     } catch (err) {
-      setMealPlan([{ meal: `⚠️ Error calling backend: ${err.message}`, ingredients: [] }]);
+      setMealPlan({ error: `⚠️ Error calling backend: ${err.message}` });
     }
   };
 
@@ -125,6 +132,30 @@ function MealPlannerApp() {
       checkStatus();
     }
   }, []);
+
+  // 🔄 Convert backend meal plan JSON into tree nodes
+  const buildTreeNodes = (plan) => {
+    if (!plan || !plan.meals) return [];
+
+    return plan.meals.map((meal) => ({
+      value: `meal-${meal.meal_num}`,
+      label: `Meal ${meal.meal_num}: ${meal.name}`,
+      children: [
+        {
+          value: `meal-${meal.meal_num}-instructions`,
+          label: `📜 Instructions: ${meal.instructions}`,
+        },
+        {
+          value: `meal-${meal.meal_num}-ingredients`,
+          label: "🛒 Ingredients",
+          children: meal.ingredients.map((ing, idx) => ({
+            value: `meal-${meal.meal_num}-ingredient-${idx}`,
+            label: `${ing.amount} ${ing.name}`,
+          })),
+        },
+      ],
+    }));
+  };
 
   return (
     <ChakraProvider theme={theme}>
@@ -341,24 +372,19 @@ function MealPlannerApp() {
                 </Text>
               )}
             </Box>
+          ) : mealPlan.error ? (
+            <Text fontSize="lg" color="red.300">
+              {mealPlan.error}
+            </Text>
           ) : (
-            <Box w="60%" bg="white" p={6} borderRadius="md" color="black">
-              <VStack align="start" spacing={4}>
-                {mealPlan.map((meal, idx) => (
-                  <Box key={idx} w="100%">
-                    <Checkbox defaultChecked colorScheme="green" fontWeight="bold">
-                      {meal.meal}
-                    </Checkbox>
-                    <VStack align="start" pl={6} mt={2}>
-                      {meal.ingredients?.map((ingredient, i) => (
-                        <Checkbox key={i} defaultChecked colorScheme="blue">
-                          {ingredient}
-                        </Checkbox>
-                      ))}
-                    </VStack>
-                  </Box>
-                ))}
-              </VStack>
+            <Box w="80%" bg="white" p={4} borderRadius="md">
+              <CheckboxTree
+                nodes={buildTreeNodes(mealPlan)}
+                checked={checked}
+                expanded={expanded}
+                onCheck={(checked) => setChecked(checked)}
+                onExpand={(expanded) => setExpanded(expanded)}
+              />
             </Box>
           )}
         </Box>
