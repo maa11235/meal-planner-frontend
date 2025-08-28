@@ -32,45 +32,43 @@ function MealPlannerApp() {
   const [mealPlan, setMealPlan] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginStatusMessage, setLoginStatusMessage] = useState("");
-  const [storeStatusMessage, setStoreStatusMessage] = useState(""); 
+  const [storeStatusMessage, setStoreStatusMessage] = useState(""); // NEW separate message for store count
   const [zipCode, setZipCode] = useState("");
   const [stores, setStores] = useState([]);
-
-  // NEW states for meal plan inputs
-  const [mealDescription, setMealDescription] = useState(""); 
-  const [mealCount, setMealCount] = useState("3"); 
-  const [mealTime, setMealTime] = useState("dinner"); 
-
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
-  // 🛒 Handle login by redirecting to backend login endpoint
-  const handleLogin = () => {
-    window.location.href = `${backendUrl}/login`;
-  };
+  // NEW states for meal plan request
+  const [mealDescription, setMealDescription] = useState("");
+  const [mealCount, setMealCount] = useState("3");
+  const [time, setTime] = useState("dinner");
 
-  // ✨ Handle Generate Plan (calls backend /plan)
   const handleGeneratePlan = async () => {
     try {
       const res = await fetch(`${backendUrl}/plan`, {
         method: "POST",
-        credentials: "include", // send cookies for session
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          type: mealDescription, 
-          time: mealTime,
-          num_meals: parseInt(mealCount, 10),
+          type: mealDescription,
+          numMeals: parseInt(mealCount, 10),
+          mealTime: time,
         }),
       });
 
       const data = await res.json();
       if (res.ok) {
-        setMealPlan(JSON.stringify(data.plan, null, 2)); // pretty-print JSON plan
+        setMealPlan(JSON.stringify(data.plan, null, 2));
       } else {
         setMealPlan(`⚠️ Error: ${data.error || "Failed to generate plan."}`);
       }
     } catch (err) {
       setMealPlan(`⚠️ Error calling backend: ${err.message}`);
     }
+  };
+
+  // 🛒 Handle login by redirecting to backend login endpoint
+  const handleLogin = () => {
+    window.location.href = `${backendUrl}/login`;
   };
 
   // 🔎 Handle Search Stores
@@ -143,7 +141,9 @@ function MealPlannerApp() {
               alignItems="center"
               gap={2}
             >
-              <span role="img" aria-label="genie">🧞</span>
+              <span role="img" aria-label="genie">
+                🧞
+              </span>
               <Text
                 as="span"
                 bgGradient={planGradient}
@@ -155,15 +155,36 @@ function MealPlannerApp() {
               </Text>
             </Heading>
 
+            {/* Your Recipe Wish Label */}
+            <Heading as="h2" size="md" textAlign="center" color="white">
+              Your Wish Shall Be Loaded To Your Grocery Cart
+            </Heading>
+
             {/* Grocery Store Login Group Box */}
             <Box bg="#003366" p={4} border="none" borderRadius="md">
-              <Text mb={3} fontSize="sm" color="white" textAlign="center" fontFamily="'Dancing Script', cursive">
+              <Text
+                mb={3}
+                fontSize="sm"
+                color="white"
+                textAlign="center"
+                fontFamily="'Dancing Script', cursive"
+              >
                 If you haven't already, create an account for Kroger, Smyths,
                 Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's, Jay C
                 Food, City Market, King Supers, Gerbes, Marianos, or QFC.{" "}
-                <Link href="https://www.kroger.com" isExternal color="yellow.300" fontWeight="bold">
+                <Link
+                  href="https://www.kroger.com"
+                  isExternal
+                  color="yellow.300"
+                  fontWeight="bold"
+                >
                   Create Account
                 </Link>
+              </Text>
+
+              <Text mb={3} fontSize="sm" color="white" textAlign="center">
+                Whisper your wish, and I shall open the gates to your chosen
+                marketplace! Log in and let your pantry be filled with treasures.
               </Text>
               <Button colorScheme="teal" onClick={handleLogin} w="100%">
                 Grocery Store Login
@@ -172,7 +193,44 @@ function MealPlannerApp() {
 
             {/* Find a Store & Meal Generator Group Box */}
             <Box bg="#003366" p={4} border="none" borderRadius="md">
-              {/* Meal description input */}
+              <Text mb={3} fontSize="md" color="white" textAlign="left">
+                🔮 Seek ye a marketplace near thy dwelling? Reveal your zip code,
+                and I shall conjure its presence!
+              </Text>
+              <HStack mb={4}>
+                <Input
+                  placeholder="Enter zip code"
+                  value={zipCode}
+                  onChange={(e) => setZipCode(e.target.value)}
+                  bg="white"
+                  color="black"
+                  flex="2"
+                />
+                <Button colorScheme="yellow" onClick={handleSearchStores} flex="1.2">
+                  Search Stores
+                </Button>
+              </HStack>
+
+              {/* Dropdown for stores if found */}
+              {stores.length > 0 && (
+                <Select placeholder="Select a store" bg="white" color="black" mb={4}>
+                  {stores.map((store) => (
+                    <option key={store.locationId} value={store.locationId}>
+                      {store.name} - {store.address?.addressLine1},{" "}
+                      {store.address?.city}, {store.address?.state}{" "}
+                      {store.address?.zipCode}
+                    </option>
+                  ))}
+                </Select>
+              )}
+
+              <Text mb={3} fontSize="sm" color="white">
+                Speak your wish, and I, the Genie of Meals, shall craft it!
+                Describe the delights you seek — perhaps sweets fit for a
+                diabetic with strawberries, comforting soul food made easy,
+                high-protein feasts full of fiber, or even toddler-friendly
+                treasures. Your wish is my recipe command!
+              </Text>
               <Input
                 placeholder="Unique meal description"
                 bg="white"
@@ -182,25 +240,33 @@ function MealPlannerApp() {
               />
 
               {/* Meals Quantity Selector */}
+              <Text mt={4} mb={2} fontSize="sm" color="white">
+                How many feasts shall I conjure from my mystical cookbook?
+              </Text>
               <Select
                 value={mealCount}
                 onChange={(e) => setMealCount(e.target.value)}
                 bg="white"
                 color="black"
-                mt={4}
+                mb={4}
               >
                 {[1, 2, 3, 4, 5, 6, 7].map((num) => (
-                  <option key={num} value={num}>{num}</option>
+                  <option key={num} value={num}>
+                    {num}
+                  </option>
                 ))}
               </Select>
 
-              {/* Meal Time Selector */}
+              {/* Meal Type Selector */}
+              <Text mb={2} fontSize="sm" color="white">
+                Shall these creations be dawn’s delights, midday marvels, or
+                evening banquets?
+              </Text>
               <Select
-                value={mealTime}
-                onChange={(e) => setMealTime(e.target.value)}
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
                 bg="white"
                 color="black"
-                mt={2}
               >
                 <option value="breakfast">Breakfast</option>
                 <option value="lunch">Lunch</option>
@@ -208,7 +274,7 @@ function MealPlannerApp() {
               </Select>
             </Box>
 
-            {/* Generate Meal Plan */}
+            {/* New Generate Meal Plan Group Box */}
             <Box bg="#003366" p={4} border="none" borderRadius="md">
               <Button colorScheme="yellow" w="100%" onClick={handleGeneratePlan}>
                 Generate Meal Plan
@@ -220,13 +286,64 @@ function MealPlannerApp() {
         {/* Main Content */}
         <Box flex="1" display="flex" justifyContent="center" alignItems="center">
           {!mealPlan ? (
-            <Text fontSize="xl" fontFamily="'Dancing Script', cursive" color="white" textAlign="center">
-              Welcome, seeker of flavor... Your wish is my culinary command!
-            </Text>
-          ) : (
-            <Box w="70%" bg="white" color="black" p={4} borderRadius="md" whiteSpace="pre-wrap">
-              {mealPlan}
+            <Box w="50%">
+              <Text
+                fontSize="xl"
+                fontFamily="'Dancing Script', cursive"
+                color="white"
+                textAlign="center"
+              >
+                Welcome, seeker of flavor, to{" "}
+                <span role="img" aria-label="genie">
+                  🧞
+                </span>{" "}
+                <Text
+                  as="span"
+                  bgGradient={planGradient}
+                  bgClip="text"
+                  fontWeight="bold"
+                  fontFamily="'Cinzel Decorative', cursive"
+                >
+                  CartGenie
+                </Text>
+                . With but a whisper of your desires, I shall summon meals
+                crafted to your heart’s delight. From the scrolls of my enchanted
+                cookbook, recipes shall appear, tailored to your cravings. And
+                lo! I shall conjure forth a grocery list and place every needed
+                treasure directly into your cart. Your wish is my culinary
+                command!
+              </Text>
+
+              {/* Login Status Message */}
+              {loginStatusMessage && (
+                <Text
+                  mt={6}
+                  fontSize="md"
+                  color="yellow.300"
+                  textAlign="center"
+                  fontFamily="'Dancing Script', cursive"
+                >
+                  {loginStatusMessage}
+                </Text>
+              )}
+
+              {/* Store Status Message */}
+              {storeStatusMessage && (
+                <Text
+                  mt={4}
+                  fontSize="md"
+                  color="yellow.300"
+                  textAlign="center"
+                  fontFamily="'Dancing Script', cursive"
+                >
+                  {storeStatusMessage}
+                </Text>
+              )}
             </Box>
+          ) : (
+            <Text fontSize="lg" color="black" whiteSpace="pre-wrap">
+              {mealPlan}
+            </Text>
           )}
         </Box>
       </Box>
