@@ -12,8 +12,8 @@ import {
   Select,
   HStack,
 } from "@chakra-ui/react";
-import CheckboxTree from "react-checkbox-tree";
-import "react-checkbox-tree/lib/react-checkbox-tree.css";
+import Tree from "rc-tree";
+import "rc-tree/assets/index.css";
 
 // Theme with dark green background
 const theme = extendTheme({
@@ -31,7 +31,9 @@ const theme = extendTheme({
 const planGradient = "linear(to-r, #ff595e, #ffca3a, #8ac926, #1982c4)";
 
 function MealPlannerApp() {
-  const [mealPlan, setMealPlan] = useState(null); // JSON object, not string
+  const [mealPlan, setMealPlan] = useState(null); // store JSON
+  const [checkedKeys, setCheckedKeys] = useState([]); // rc-tree checked state
+  const [expandedKeys, setExpandedKeys] = useState([]); // rc-tree expanded state
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginStatusMessage, setLoginStatusMessage] = useState("");
   const [storeStatusMessage, setStoreStatusMessage] = useState(""); // NEW separate message for store count
@@ -43,10 +45,6 @@ function MealPlannerApp() {
   const [mealDescription, setMealDescription] = useState("");
   const [mealCount, setMealCount] = useState("3");
   const [time, setTime] = useState("dinner");
-
-  // NEW states for react-checkbox-tree
-  const [checked, setChecked] = useState([]);
-  const [expanded, setExpanded] = useState([]);
 
   const handleGeneratePlan = async () => {
     try {
@@ -63,11 +61,19 @@ function MealPlannerApp() {
 
       const data = await res.json();
       if (res.ok) {
-        setMealPlan(data); // store JSON, not string
-      } else {
-        setMealPlan({
-          error: data.error || "Failed to generate plan.",
+        setMealPlan(data.plan); // store JSON
+        // Automatically expand all meals and ingredients
+        const allKeys = [];
+        data.plan.meals.forEach((meal) => {
+          allKeys.push(`meal-${meal.meal_num}`);
+          allKeys.push(`meal-${meal.meal_num}-instructions`);
+          meal.ingredients.forEach((_, idx) =>
+            allKeys.push(`meal-${meal.meal_num}-ingredient-${idx}`)
+          );
         });
+        setExpandedKeys(allKeys);
+      } else {
+        setMealPlan({ error: data.error || "Failed to generate plan." });
       }
     } catch (err) {
       setMealPlan({ error: `⚠️ Error calling backend: ${err.message}` });
@@ -133,24 +139,25 @@ function MealPlannerApp() {
     }
   }, []);
 
-  // 🔄 Convert backend meal plan JSON into tree nodes
+  // 🔄 Convert backend meal plan JSON into rc-tree nodes
   const buildTreeNodes = (plan) => {
     if (!plan || !plan.meals) return [];
-
     return plan.meals.map((meal) => ({
-      value: `meal-${meal.meal_num}`,
-      label: `Meal ${meal.meal_num}: ${meal.name}`,
+      key: `meal-${meal.meal_num}`,
+      title: `Meal ${meal.meal_num}: ${meal.name}`,
       children: [
         {
-          value: `meal-${meal.meal_num}-instructions`,
-          label: `📜 Instructions: ${meal.instructions}`,
+          key: `meal-${meal.meal_num}-instructions`,
+          title: `📜 Instructions: ${meal.instructions}`,
+          isLeaf: true,
         },
         {
-          value: `meal-${meal.meal_num}-ingredients`,
-          label: "🛒 Ingredients",
+          key: `meal-${meal.meal_num}-ingredients`,
+          title: "🛒 Ingredients",
           children: meal.ingredients.map((ing, idx) => ({
-            value: `meal-${meal.meal_num}-ingredient-${idx}`,
-            label: `${ing.amount} ${ing.name}`,
+            key: `meal-${meal.meal_num}-ingredient-${idx}`,
+            title: `${ing.amount} ${ing.name}`,
+            isLeaf: true,
           })),
         },
       ],
@@ -378,12 +385,14 @@ function MealPlannerApp() {
             </Text>
           ) : (
             <Box w="80%" bg="white" p={4} borderRadius="md">
-              <CheckboxTree
-                nodes={buildTreeNodes(mealPlan)}
-                checked={checked}
-                expanded={expanded}
-                onCheck={(checked) => setChecked(checked)}
-                onExpand={(expanded) => setExpanded(expanded)}
+              <Tree
+                checkable
+                selectable={false}
+                expandedKeys={expandedKeys}
+                checkedKeys={checkedKeys}
+                onCheck={(keys) => setCheckedKeys(keys)}
+                onExpand={(keys) => setExpandedKeys(keys)}
+                treeData={buildTreeNodes(mealPlan)}
               />
             </Box>
           )}
