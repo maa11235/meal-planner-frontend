@@ -11,6 +11,7 @@ import {
   Input,
   Select,
   HStack,
+  Checkbox,
 } from "@chakra-ui/react";
 
 // Theme with dark green background
@@ -29,7 +30,7 @@ const theme = extendTheme({
 const planGradient = "linear(to-r, #ff595e, #ffca3a, #8ac926, #1982c4)";
 
 function MealPlannerApp() {
-  const [mealPlan, setMealPlan] = useState("");
+  const [mealPlan, setMealPlan] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginStatusMessage, setLoginStatusMessage] = useState("");
   const [storeStatusMessage, setStoreStatusMessage] = useState(""); // NEW separate message for store count
@@ -57,12 +58,12 @@ function MealPlannerApp() {
 
       const data = await res.json();
       if (res.ok) {
-        setMealPlan(JSON.stringify(data.plan, null, 2));
+        setMealPlan(data.plan || []);
       } else {
-        setMealPlan(`⚠️ Error: ${data.error || "Failed to generate plan."}`);
+        setMealPlan([{ meal: `⚠️ Error: ${data.error || "Failed to generate plan."}`, ingredients: [] }]);
       }
     } catch (err) {
-      setMealPlan(`⚠️ Error calling backend: ${err.message}`);
+      setMealPlan([{ meal: `⚠️ Error calling backend: ${err.message}`, ingredients: [] }]);
     }
   };
 
@@ -341,9 +342,24 @@ function MealPlannerApp() {
               )}
             </Box>
           ) : (
-            <Text fontSize="lg" color="black" whiteSpace="pre-wrap">
-              {mealPlan}
-            </Text>
+            <Box w="60%" bg="white" p={6} borderRadius="md" color="black">
+              <VStack align="start" spacing={4}>
+                {mealPlan.map((meal, idx) => (
+                  <Box key={idx} w="100%">
+                    <Checkbox defaultChecked colorScheme="green" fontWeight="bold">
+                      {meal.meal}
+                    </Checkbox>
+                    <VStack align="start" pl={6} mt={2}>
+                      {meal.ingredients?.map((ingredient, i) => (
+                        <Checkbox key={i} defaultChecked colorScheme="blue">
+                          {ingredient}
+                        </Checkbox>
+                      ))}
+                    </VStack>
+                  </Box>
+                ))}
+              </VStack>
+            </Box>
           )}
         </Box>
       </Box>
