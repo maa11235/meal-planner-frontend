@@ -64,15 +64,20 @@ function MealPlannerApp() {
         setMealPlan(data); // store entire response
       
         // Automatically expand all meals and ingredients
-        const allKeys = [];
-        (data.plan || []).forEach((meal) => {   // <-- use data.plan directly
-          allKeys.push(`meal-${meal.meal_num}`);
-          allKeys.push(`meal-${meal.meal_num}-instructions`);
-          meal.ingredients.forEach((_, idx) =>
-            allKeys.push(`meal-${meal.meal_num}-ingredient-${idx}`)
-          );
+        const allExpanded = [];
+        const allChecked = [];
+        (data.plan || []).forEach((meal) => {
+          allExpanded.push(`meal-${meal.meal_num}`);
+          allExpanded.push(`meal-${meal.meal_num}-ingredients`);
+          allChecked.push(`meal-${meal.meal_num}`);
+          allChecked.push(`meal-${meal.meal_num}-ingredients`);
+          meal.ingredients.forEach((_, idx) => {
+            allExpanded.push(`meal-${meal.meal_num}-ingredient-${idx}`);
+            allChecked.push(`meal-${meal.meal_num}-ingredient-${idx}`);
+          });
         });
-        setExpandedKeys(allKeys);
+        setExpandedKeys(allExpanded);
+        setCheckedKeys(allChecked); // ✅ default all boxes checked
       } else {
         setMealPlan({ error: data.error || "Failed to generate plan." });
       }
@@ -147,11 +152,6 @@ function MealPlannerApp() {
       key: `meal-${meal.meal_num}`,
       title: `Meal ${meal.meal_num}: ${meal.name}`,
       children: [
-        {
-          key: `meal-${meal.meal_num}-instructions`,
-          title: `📜 Instructions: ${meal.instructions}`,
-          isLeaf: true,
-        },
         {
           key: `meal-${meal.meal_num}-ingredients`,
           title: "🛒 Ingredients",
