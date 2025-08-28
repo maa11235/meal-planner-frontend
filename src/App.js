@@ -394,6 +394,7 @@ function MealPlannerApp() {
                 onCheck={(keys) => setCheckedKeys(keys)}
                 onExpand={(keys) => setExpandedKeys(keys)}
                 treeData={buildTreeNodes(mealPlan)}
+                style={{ color: "black", fontSize: "16px" }} // ✅ FIX text visibility
               />
             </Box>
           )}
