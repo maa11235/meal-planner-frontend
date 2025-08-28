@@ -61,10 +61,11 @@ function MealPlannerApp() {
 
       const data = await res.json();
       if (res.ok) {
-        setMealPlan(data.plan); // store JSON
+        setMealPlan(data); // store entire response
+      
         // Automatically expand all meals and ingredients
         const allKeys = [];
-        data.plan.meals.forEach((meal) => {
+        (data.plan || []).forEach((meal) => {   // <-- use data.plan directly
           allKeys.push(`meal-${meal.meal_num}`);
           allKeys.push(`meal-${meal.meal_num}-instructions`);
           meal.ingredients.forEach((_, idx) =>
@@ -140,9 +141,9 @@ function MealPlannerApp() {
   }, []);
 
   // 🔄 Convert backend meal plan JSON into rc-tree nodes
-  const buildTreeNodes = (plan) => {
-    if (!plan || !plan.meals) return [];
-    return plan.meals.map((meal) => ({
+  const buildTreeNodes = (planData) => {
+    if (!planData || !planData.plan) return [];
+    return (planData.plan || []).map((meal) => ({
       key: `meal-${meal.meal_num}`,
       title: `Meal ${meal.meal_num}: ${meal.name}`,
       children: [
@@ -154,7 +155,7 @@ function MealPlannerApp() {
         {
           key: `meal-${meal.meal_num}-ingredients`,
           title: "🛒 Ingredients",
-          children: meal.ingredients.map((ing, idx) => ({
+          children: (meal.ingredients || []).map((ing, idx) => ({
             key: `meal-${meal.meal_num}-ingredient-${idx}`,
             title: `${ing.amount} ${ing.name}`,
             isLeaf: true,
