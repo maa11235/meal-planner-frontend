@@ -62,7 +62,7 @@ function MealPlannerApp() {
       const data = await res.json();
       if (res.ok) {
         setMealPlan(data); // store entire response
-      
+
         // Automatically expand all meals and ingredients
         const allExpanded = [];
         const allChecked = [];
@@ -324,68 +324,64 @@ function MealPlannerApp() {
         </Box>
 
         {/* Main Content */}
-        <Box flex="1" display="flex" justifyContent="center" alignItems="center">
-          {!mealPlan ? (
-            <Box w="50%">
+        <Box flex="1" display="flex" flexDirection="column" alignItems="center" p={6}>
+          <Box w="60%">
+            <Text
+              fontSize="xl"
+              fontFamily="'Dancing Script', cursive"
+              color="white"
+              textAlign="center"
+            >
+              Welcome, seeker of flavor, to{" "}
+              <span role="img" aria-label="genie">
+                🧞
+              </span>{" "}
               <Text
-                fontSize="xl"
-                fontFamily="'Dancing Script', cursive"
-                color="white"
-                textAlign="center"
+                as="span"
+                bgGradient={planGradient}
+                bgClip="text"
+                fontWeight="bold"
+                fontFamily="'Cinzel Decorative', cursive"
               >
-                Welcome, seeker of flavor, to{" "}
-                <span role="img" aria-label="genie">
-                  🧞
-                </span>{" "}
-                <Text
-                  as="span"
-                  bgGradient={planGradient}
-                  bgClip="text"
-                  fontWeight="bold"
-                  fontFamily="'Cinzel Decorative', cursive"
-                >
-                  CartGenie
-                </Text>
-                . With but a whisper of your desires, I shall summon meals
-                crafted to your heart’s delight. From the scrolls of my enchanted
-                cookbook, recipes shall appear, tailored to your cravings. And
-                lo! I shall conjure forth a grocery list and place every needed
-                treasure directly into your cart. Your wish is my culinary
-                command!
+                CartGenie
               </Text>
-
-              {/* Login Status Message */}
-              {loginStatusMessage && (
-                <Text
-                  mt={6}
-                  fontSize="md"
-                  color="yellow.300"
-                  textAlign="center"
-                  fontFamily="'Dancing Script', cursive"
-                >
-                  {loginStatusMessage}
-                </Text>
-              )}
-
-              {/* Store Status Message */}
-              {storeStatusMessage && (
-                <Text
-                  mt={4}
-                  fontSize="md"
-                  color="yellow.300"
-                  textAlign="center"
-                  fontFamily="'Dancing Script', cursive"
-                >
-                  {storeStatusMessage}
-                </Text>
-              )}
-            </Box>
-          ) : mealPlan.error ? (
-            <Text fontSize="lg" color="red.300">
-              {mealPlan.error}
+              . With but a whisper of your desires, I shall summon meals crafted
+              to your heart’s delight. From the scrolls of my enchanted cookbook,
+              recipes shall appear, tailored to your cravings. And lo! I shall
+              conjure forth a grocery list and place every needed treasure
+              directly into your cart. Your wish is my culinary command!
             </Text>
-          ) : (
-            <Box w="80%" bg="white" p={4} borderRadius="md">
+
+            {/* Login Status Message */}
+            {loginStatusMessage && (
+              <Text
+                mt={6}
+                fontSize="md"
+                color="yellow.300"
+                textAlign="center"
+                fontFamily="'Dancing Script', cursive"
+              >
+                {loginStatusMessage}
+              </Text>
+            )}
+
+            {/* Store Status Message */}
+            {storeStatusMessage && (
+              <Text
+                mt={4}
+                fontSize="md"
+                color="yellow.300"
+                textAlign="center"
+                fontFamily="'Dancing Script', cursive"
+              >
+                {storeStatusMessage}
+              </Text>
+            )}
+          </Box>
+
+          {/* Meal Plan Tree BELOW the labels */}
+          {mealPlan && !mealPlan.error && (
+            <Box w="40%" bg="white" p={4} borderRadius="md" mt={6}>
               <Tree
                 checkable
                 selectable={false}
@@ -394,9 +390,16 @@ function MealPlannerApp() {
                 onCheck={(keys) => setCheckedKeys(keys)}
                 onExpand={(keys) => setExpandedKeys(keys)}
                 treeData={buildTreeNodes(mealPlan)}
-                style={{ color: "black", fontSize: "16px" }} // ✅ FIX text visibility
+                style={{ color: "black", fontSize: "16px" }}
               />
             </Box>
+          )}
+
+          {/* Error message */}
+          {mealPlan && mealPlan.error && (
+            <Text fontSize="lg" color="red.300" mt={6}>
+              {mealPlan.error}
+            </Text>
           )}
         </Box>
       </Box>
