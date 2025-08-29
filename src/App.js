@@ -209,7 +209,7 @@ function MealPlannerApp() {
                 textAlign="center"
                 fontFamily="'Dancing Script', cursive"
               >
-                If you haven't already, create an account for Kroger, Smyths,
+                If you haven't already, create an account for Kroger, Smiths,
                 Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's, Jay C
                 Food, City Market, King Supers, Gerbes, Marianos, or QFC.{" "}
                 <Link
