@@ -53,9 +53,9 @@ function MealPlannerApp() {
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          meal_type: mealDescription,
+          type: mealDescription,
           num_meals: parseInt(mealCount, 10),
-          meal_time: time,
+          time: time,
         }),
       });
 
