@@ -151,7 +151,7 @@ function MealPlannerApp() {
     }
   }, []);
 
-  // 🔄 Convert backend meal plan JSON into rc-tree nodes
+  // 🔄 Convert backend meal plan JSON into rc-tree nodes (NO instructions in Tree)
   const buildTreeNodes = (planData) => {
     if (!planData || !planData.plan) return [];
     return (planData.plan || []).map((meal) => ({
@@ -171,7 +171,7 @@ function MealPlannerApp() {
     }));
   };
 
-  // ✨ Build JSON with only checked ingredients
+  // ✨ Build JSON with only checked ingredients (✅ keep instructions in payload)
   const buildCheckedPlan = () => {
     if (!mealPlan || !mealPlan.plan) return { meals: [] };
     const meals = mealPlan.plan.map((meal) => {
@@ -181,6 +181,7 @@ function MealPlannerApp() {
       return {
         meal_num: meal.meal_num,
         name: meal.name,
+        instructions: meal.instructions || "", // ✅ include instructions in payload
         ingredients: includedIngredients,
       };
     });
@@ -517,14 +518,4 @@ function MealPlannerApp() {
 
           {/* Error message */}
           {mealPlan && mealPlan.error && (
-            <Text fontSize="lg" color="red.300" mt={6}>
-              {mealPlan.error}
-            </Text>
-          )}
-        </Box>
-      </Box>
-    </ChakraProvider>
-  );
-}
-
-export default MealPlannerApp;
+            <Text fontSize
