@@ -199,7 +199,12 @@ function MealPlannerApp() {
       if (!res.ok) {
         setCartMessage(`⚠️ Upload failed: ${data.error || "Unknown error"}`);
       } else {
-        setCartMessage("🧞✨ Thy chosen ingredients have flown, as if by magic, into thy cart!");
+        setCartMessage(
+          "🧞✨ Thy chosen ingredients have flown, as if by magic, into thy cart! " +
+          "Rejoice, noble master, for your pantry now awaits its bounty. " +
+          "Shouldst thou desire a full scroll of these enchanted provisions, " +
+          "press the 'Create Report' button and I shall conjure a complete tome for thee."
+        );
       }
     } catch (err) {
       setCartMessage(`⚠️ Error uploading to cart: ${err.message}`);
@@ -457,15 +462,20 @@ function MealPlannerApp() {
 
               {/* 🆕 Cart Genie Message */}
               {cartMessage && (
-                <Text
-                  mt={3}
-                  fontSize="md"
-                  color="yellow.300"
-                  textAlign="center"
-                  fontFamily="'Dancing Script', cursive"
-                >
-                  {cartMessage}
-                </Text>
+                <>
+                  <Text
+                    mt={3}
+                    fontSize="md"
+                    color="yellow.300"
+                    textAlign="center"
+                    fontFamily="'Dancing Script', cursive"
+                  >
+                    {cartMessage}
+                  </Text>
+                  <Button mt={3} colorScheme="yellow">
+                    Create Report
+                  </Button>
+                </>
               )}
             </>
           )}
@@ -483,3 +493,4 @@ function MealPlannerApp() {
 }
 
 export default MealPlannerApp;
+
