@@ -46,8 +46,9 @@ function MealPlannerApp() {
   const [mealCount, setMealCount] = useState("3");
   const [time, setTime] = useState("dinner");
 
-  // 🆕 state for upload-to-cart message
+  // 🆕 state for upload-to-cart message & payload
   const [cartMessage, setCartMessage] = useState("");
+  const [cartResponse, setCartResponse] = useState(null); // store /cart response for /report
 
   const handleGeneratePlan = async () => {
     try {
@@ -66,6 +67,7 @@ function MealPlannerApp() {
       if (res.ok) {
         setMealPlan(data); // store entire response
         setCartMessage(""); // clear any previous cart message
+        setCartResponse(null); // reset report data
 
         // Automatically expand all meals and ingredients
         const allExpanded = [];
@@ -199,15 +201,48 @@ function MealPlannerApp() {
       if (!res.ok) {
         setCartMessage(`⚠️ Upload failed: ${data.error || "Unknown error"}`);
       } else {
+        setCartResponse(data); // store response for /report
         setCartMessage(
           "🧞✨ Thy chosen ingredients have flown, as if by magic, into thy cart! " +
-          "Rejoice, noble master, for your pantry now awaits its bounty. " +
-          "Shouldst thou desire a full scroll of these enchanted provisions, " +
-          "press the 'Create Report' button and I shall conjure a complete tome for thee."
+            "Rejoice, noble master, for your pantry now awaits its bounty. " +
+            "Shouldst thou desire a full scroll of these enchanted provisions, " +
+            "press the 'Create Report' button and I shall conjure a complete tome for thee."
         );
       }
     } catch (err) {
       setCartMessage(`⚠️ Error uploading to cart: ${err.message}`);
+    }
+  };
+
+  // 📝 Handle Create Report
+  const handleCreateReport = async () => {
+    if (!cartResponse) {
+      setCartMessage("⚠️ No cart data available to generate a report.");
+      return;
+    }
+    try {
+      const res = await fetch(`${backendUrl}/report`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(cartResponse),
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        setCartMessage(`⚠️ Report failed: ${errData.error || "Unknown error"}`);
+      } else {
+        // Download PDF from blob
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "meal_plan_report.pdf";
+        link.click();
+        window.URL.revokeObjectURL(url);
+      }
+    } catch (err) {
+      setCartMessage(`⚠️ Error generating report: ${err.message}`);
     }
   };
 
@@ -472,7 +507,7 @@ function MealPlannerApp() {
                   >
                     {cartMessage}
                   </Text>
-                  <Button mt={3} colorScheme="yellow">
+                  <Button mt={3} colorScheme="yellow" onClick={handleCreateReport}>
                     Create Report
                   </Button>
                 </>
@@ -493,4 +528,3 @@ function MealPlannerApp() {
 }
 
 export default MealPlannerApp;
-
