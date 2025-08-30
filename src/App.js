@@ -165,6 +165,43 @@ function MealPlannerApp() {
     }));
   };
 
+  // ✨ Build JSON with only checked ingredients
+  const buildCheckedPlan = () => {
+    if (!mealPlan || !mealPlan.plan) return { meals: [] };
+    const meals = mealPlan.plan.map((meal) => {
+      const includedIngredients = (meal.ingredients || []).filter((_, idx) =>
+        checkedKeys.includes(`meal-${meal.meal_num}-ingredient-${idx}`)
+      );
+      return {
+        meal_num: meal.meal_num,
+        name: meal.name,
+        ingredients: includedIngredients,
+      };
+    });
+    return { meals, meal_type: time };
+  };
+
+  // 🚀 Upload checked items to /cart
+  const handleUploadToCart = async () => {
+    const payload = buildCheckedPlan();
+    try {
+      const res = await fetch(`${backendUrl}/cart`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(`⚠️ Upload failed: ${data.error || "Unknown error"}`);
+      } else {
+        alert("✨ Ingredients uploaded to cart successfully!");
+      }
+    } catch (err) {
+      alert(`⚠️ Error uploading to cart: ${err.message}`);
+    }
+  };
+
   return (
     <ChakraProvider theme={theme}>
       <Box display="flex" minH="100vh">
@@ -395,18 +432,29 @@ function MealPlannerApp() {
 
           {/* Meal Plan Tree BELOW the labels */}
           {mealPlan && !mealPlan.error && (
-            <Box w="40%" bg="white" p={4} borderRadius="md" mt={4}>
-              <Tree
-                checkable
-                selectable={false}
-                expandedKeys={expandedKeys}
-                checkedKeys={checkedKeys}
-                onCheck={(keys) => setCheckedKeys(keys)}
-                onExpand={(keys) => setExpandedKeys(keys)}
-                treeData={buildTreeNodes(mealPlan)}
-                style={{ color: "black", fontSize: "16px" }}
-              />
-            </Box>
+            <>
+              <Box w="40%" bg="white" p={4} borderRadius="md" mt={4}>
+                <Tree
+                  checkable
+                  selectable={false}
+                  expandedKeys={expandedKeys}
+                  checkedKeys={checkedKeys}
+                  onCheck={(keys) => setCheckedKeys(keys)}
+                  onExpand={(keys) => setExpandedKeys(keys)}
+                  treeData={buildTreeNodes(mealPlan)}
+                  style={{ color: "black", fontSize: "16px" }}
+                />
+              </Box>
+
+              {/* Upload to Cart Button */}
+              <Button
+                mt={4}
+                colorScheme="teal"
+                onClick={handleUploadToCart}
+              >
+                Upload to Cart
+              </Button>
+            </>
           )}
 
           {/* Error message */}
