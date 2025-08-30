@@ -49,6 +49,7 @@ function MealPlannerApp() {
   // 🆕 state for upload-to-cart message & payload
   const [cartMessage, setCartMessage] = useState("");
   const [cartResponse, setCartResponse] = useState(null); // store /cart response for /report
+  const [lastCartPayload, setLastCartPayload] = useState(null); // 🆕 store the exact payload (with instructions) sent to /cart
 
   const handleGeneratePlan = async () => {
     try {
@@ -68,6 +69,7 @@ function MealPlannerApp() {
         setMealPlan(data); // store entire response
         setCartMessage(""); // clear any previous cart message
         setCartResponse(null); // reset report data
+        setLastCartPayload(null); // reset saved payload
 
         // Automatically expand all meals and ingredients
         const allExpanded = [];
@@ -151,7 +153,7 @@ function MealPlannerApp() {
     }
   }, []);
 
-  // 🔄 Convert backend meal plan JSON into rc-tree nodes (NO instructions in Tree)
+  // 🔄 Convert backend meal plan JSON into rc-tree nodes
   const buildTreeNodes = (planData) => {
     if (!planData || !planData.plan) return [];
     return (planData.plan || []).map((meal) => ({
@@ -171,7 +173,7 @@ function MealPlannerApp() {
     }));
   };
 
-  // ✨ Build JSON with only checked ingredients (✅ keep instructions in payload)
+  // ✨ Build JSON with only checked ingredients, but include instructions in payload
   const buildCheckedPlan = () => {
     if (!mealPlan || !mealPlan.plan) return { meals: [] };
     const meals = mealPlan.plan.map((meal) => {
@@ -181,7 +183,7 @@ function MealPlannerApp() {
       return {
         meal_num: meal.meal_num,
         name: meal.name,
-        instructions: meal.instructions || "", // ✅ include instructions in payload
+        instructions: meal.instructions, // ✅ include instructions in payload
         ingredients: includedIngredients,
       };
     });
@@ -191,6 +193,7 @@ function MealPlannerApp() {
   // 🚀 Upload checked items to /cart
   const handleUploadToCart = async () => {
     const payload = buildCheckedPlan();
+    setLastCartPayload(payload); // ✅ remember exactly what we sent (with instructions)
     try {
       const res = await fetch(`${backendUrl}/cart`, {
         method: "POST",
@@ -222,11 +225,17 @@ function MealPlannerApp() {
       return;
     }
     try {
+      // ✅ Ensure instructions are included in the JSON body sent to /report
+      const reportBody =
+        lastCartPayload
+          ? { ...cartResponse, meals: lastCartPayload.meals, meal_type: lastCartPayload.meal_type }
+          : cartResponse;
+
       const res = await fetch(`${backendUrl}/report`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(cartResponse),
+        body: JSON.stringify(reportBody),
       });
 
       if (!res.ok) {
@@ -518,4 +527,14 @@ function MealPlannerApp() {
 
           {/* Error message */}
           {mealPlan && mealPlan.error && (
-            <Text fontSize
+            <Text fontSize="lg" color="red.300" mt={6}>
+              {mealPlan.error}
+            </Text>
+          )}
+        </Box>
+      </Box>
+    </ChakraProvider>
+  );
+}
+
+export default MealPlannerApp;
