@@ -46,6 +46,9 @@ function MealPlannerApp() {
   const [mealCount, setMealCount] = useState("3");
   const [time, setTime] = useState("dinner");
 
+  // 🆕 state for upload-to-cart message
+  const [cartMessage, setCartMessage] = useState("");
+
   const handleGeneratePlan = async () => {
     try {
       const res = await fetch(`${backendUrl}/plan`, {
@@ -62,6 +65,7 @@ function MealPlannerApp() {
       const data = await res.json();
       if (res.ok) {
         setMealPlan(data); // store entire response
+        setCartMessage(""); // clear any previous cart message
 
         // Automatically expand all meals and ingredients
         const allExpanded = [];
@@ -193,12 +197,12 @@ function MealPlannerApp() {
       });
       const data = await res.json();
       if (!res.ok) {
-        alert(`⚠️ Upload failed: ${data.error || "Unknown error"}`);
+        setCartMessage(`⚠️ Upload failed: ${data.error || "Unknown error"}`);
       } else {
-        alert("✨ Ingredients uploaded to cart successfully!");
+        setCartMessage("🧞✨ Thy chosen ingredients have flown, as if by magic, into thy cart!");
       }
     } catch (err) {
-      alert(`⚠️ Error uploading to cart: ${err.message}`);
+      setCartMessage(`⚠️ Error uploading to cart: ${err.message}`);
     }
   };
 
@@ -447,13 +451,22 @@ function MealPlannerApp() {
               </Box>
 
               {/* Upload to Cart Button */}
-              <Button
-                mt={4}
-                colorScheme="teal"
-                onClick={handleUploadToCart}
-              >
+              <Button mt={4} colorScheme="teal" onClick={handleUploadToCart}>
                 Upload to Cart
               </Button>
+
+              {/* 🆕 Cart Genie Message */}
+              {cartMessage && (
+                <Text
+                  mt={3}
+                  fontSize="md"
+                  color="yellow.300"
+                  textAlign="center"
+                  fontFamily="'Dancing Script', cursive"
+                >
+                  {cartMessage}
+                </Text>
+              )}
             </>
           )}
 
