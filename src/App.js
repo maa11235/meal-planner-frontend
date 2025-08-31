@@ -220,16 +220,23 @@ function MealPlannerApp() {
 
   // 📝 Handle Create Report
   const handleCreateReport = async () => {
-    if (!cartResponse) {
-      setCartMessage("⚠️ No cart data available to generate a report.");
+    // Use mealPlan for a full report (all ingredients), but still require cartResponse (so the user has uploaded)
+    if (!cartResponse || !mealPlan) {
+      setCartMessage("⚠️ No cart data or meal plan available to generate a report.");
       return;
     }
     try {
-      // ✅ Ensure instructions are included in the JSON body sent to /report
-      const reportBody =
-        lastCartPayload
-          ? { ...cartResponse, meals: lastCartPayload.meals, meal_type: lastCartPayload.meal_type }
-          : cartResponse;
+      // Build a reportBody that includes the backend's cart response plus the full mealPlan (all ingredients)
+      const reportBody = {
+        ...cartResponse,
+        meals: (mealPlan.plan || []).map((meal) => ({
+          meal_num: meal.meal_num,
+          name: meal.name,
+          instructions: meal.instructions,
+          ingredients: meal.ingredients || [],
+        })),
+        meal_type: time,
+      };
 
       const res = await fetch(`${backendUrl}/report`, {
         method: "POST",
