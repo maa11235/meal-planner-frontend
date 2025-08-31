@@ -284,8 +284,8 @@ function MealPlannerApp() {
   };
 
   // 🆕 determine whether to show left panel (mobile only)
-  const showLeftPanel = !isMobile || (isMobile && (!mealPlan && !loadingPlan));
-  const showMainPanel = !isMobile || (isMobile && mealPlan);
+  const showLeftPanel = !isMobile || (isMobile && (!mealPlan || loadingPlan));
+  const showMainPanel = !isMobile || (isMobile && mealPlan && !loadingPlan);
 
   return (
     <ChakraProvider theme={theme}>
