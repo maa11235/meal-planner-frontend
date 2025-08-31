@@ -520,7 +520,14 @@ function MealPlannerApp() {
 
             {mealPlan && !mealPlan.error && (
               <>
-                <Box w="40%" bg="white" p={4} borderRadius="md" mt={4}>
+                <Box
+                  w={{ base: "100%", md: "40%" }}   // full width on mobile, 40% on desktop
+                  bg="white"
+                  p={4}
+                  borderRadius="md"
+                  mt={4}
+                  alignSelf={{ base: "flex-start", md: "center" }} // left align on mobile
+                >
                   <Tree
                     checkable
                     selectable={false}
@@ -529,7 +536,7 @@ function MealPlannerApp() {
                     onCheck={(keys) => setCheckedKeys(keys)}
                     onExpand={(keys) => setExpandedKeys(keys)}
                     treeData={buildTreeNodes(mealPlan)}
-                    style={{ color: "black", fontSize: "16px" }}
+                    style={{ color: "black", fontSize: "16px", wordWrap: "break-word" }}
                   />
                 </Box>
 
