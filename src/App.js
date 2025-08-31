@@ -352,6 +352,17 @@ function MealPlannerApp() {
                 <Button colorScheme="teal" onClick={handleLogin} w="100%">
                   Grocery Store Login
                 </Button>
+                {isMobile && loginStatusMessage && (
+                  <Text
+                    mt={3}
+                    fontSize="sm"
+                    color="yellow.300"
+                    textAlign="center"
+                    fontFamily="'Dancing Script', cursive"
+                  >
+                    {loginStatusMessage}
+                  </Text>
+                )}
               </Box>
 
               {/* Find a Store & Meal Generator Group Box */}
