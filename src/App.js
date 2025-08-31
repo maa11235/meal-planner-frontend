@@ -16,19 +16,6 @@ import {
 import Tree from "rc-tree";
 import "rc-tree/assets/index.css";
 
-// Custom hook to detect mobile devices
-const useIsMobile = () => {
-  const [isMobile, setIsMobile] = React.useState(window.innerWidth <= 768);
- 
-  React.useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
- 
-  return isMobile;
-};
-
 // Theme with dark green background
 const theme = extendTheme({
   styles: {
@@ -44,9 +31,18 @@ const theme = extendTheme({
 // Gradient for CartGenie text
 const planGradient = "linear(to-r, #ff595e, #ffca3a, #8ac926, #1982c4)";
 
+// 🆕 Custom hook to detect mobile
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  return isMobile;
+}
+
 function MealPlannerApp() {
-  const isMobile = useIsMobile();
-  const [showMainPanelOnMobile, setShowMainPanelOnMobile] = useState(false);
   const [mealPlan, setMealPlan] = useState(null); // store JSON
   const [checkedKeys, setCheckedKeys] = useState([]); // rc-tree checked state
   const [expandedKeys, setExpandedKeys] = useState([]); // rc-tree expanded state
@@ -68,7 +64,10 @@ function MealPlannerApp() {
   const [lastCartPayload, setLastCartPayload] = useState(null); // 🆕 store the exact payload (with instructions) sent to /cart
   const [loadingPlan, setLoadingPlan] = useState(false);
   const [loadingCart, setLoadingCart] = useState(false);
-  
+
+  // 🆕 detect mobile
+  const isMobile = useIsMobile();
+
   const handleGeneratePlan = async () => {
     try {
       setLoadingPlan(true);
@@ -109,9 +108,6 @@ function MealPlannerApp() {
         setMealPlan({ error: data.error || "Failed to generate plan." });
       }
       setLoadingPlan(false);
-      if (isMobile) {
-        setShowMainPanelOnMobile(true);
-      }
     } catch (err) {
       setMealPlan({ error: `⚠️ Error calling backend: ${err.message}` });
       setLoadingPlan(false);
@@ -247,13 +243,11 @@ function MealPlannerApp() {
 
   // 📝 Handle Create Report
   const handleCreateReport = async () => {
-    // Use mealPlan for a full report (all ingredients), but still require cartResponse (so the user has uploaded)
     if (!cartResponse || !mealPlan) {
       setCartMessage("⚠️ No cart data or meal plan available to generate a report.");
       return;
     }
     try {
-      // Build a reportBody that includes the backend's cart response plus the full mealPlan (all ingredients)
       const reportBody = {
         ...cartResponse,
         meals: (mealPlan.plan || []).map((meal) => ({
@@ -276,7 +270,6 @@ function MealPlannerApp() {
         const errData = await res.json();
         setCartMessage(`⚠️ Report failed: ${errData.error || "Unknown error"}`);
       } else {
-        // Download PDF from blob
         const blob = await res.blob();
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
@@ -290,11 +283,15 @@ function MealPlannerApp() {
     }
   };
 
+  // 🆕 determine whether to show left panel (mobile only)
+  const showLeftPanel = !isMobile || (isMobile && (!mealPlan && !loadingPlan));
+  const showMainPanel = !isMobile || (isMobile && mealPlan);
+
   return (
     <ChakraProvider theme={theme}>
       <Box display="flex" minH="100vh">
         {/* Left Sidebar */}
-        {(!isMobile || (isMobile && !showMainPanelOnMobile)) && (
+        {showLeftPanel && (
           <Box w="300px" p={6}>
             <VStack align="stretch" spacing={6}>
               {/* CartGenie Heading */}
@@ -377,7 +374,6 @@ function MealPlannerApp() {
                   </Button>
                 </HStack>
 
-                {/* Dropdown for stores if found */}
                 {stores.length > 0 && (
                   <Select placeholder="Select a store" bg="white" color="black" mb={4}>
                     {stores.map((store) => (
@@ -405,7 +401,6 @@ function MealPlannerApp() {
                   onChange={(e) => setMealDescription(e.target.value)}
                 />
 
-                {/* Meals Quantity Selector */}
                 <Text mt={4} mb={2} fontSize="sm" color="white">
                   How many feasts shall I conjure from my mystical cookbook?
                 </Text>
@@ -423,7 +418,6 @@ function MealPlannerApp() {
                   ))}
                 </Select>
 
-                {/* Meal Type Selector */}
                 <Text mb={2} fontSize="sm" color="white">
                   Shall these creations be dawn’s delights, midday marvels, or
                   evening banquets?
@@ -457,7 +451,7 @@ function MealPlannerApp() {
         )}
 
         {/* Main Content */}
-        {(!isMobile || (isMobile && showMainPanelOnMobile)) && (
+        {showMainPanel && (
           <Box flex="1" display="flex" flexDirection="column" alignItems="center" p={6}>
             <Box w="60%">
               <Text
@@ -486,7 +480,6 @@ function MealPlannerApp() {
                 directly into your cart. Your wish is my culinary command!
               </Text>
 
-              {/* Login Status Message */}
               {loginStatusMessage && (
                 <Text
                   mt={6}
@@ -499,7 +492,6 @@ function MealPlannerApp() {
                 </Text>
               )}
 
-              {/* Store Status Message */}
               {storeStatusMessage && (
                 <Text
                   mt={4}
@@ -513,7 +505,6 @@ function MealPlannerApp() {
               )}
             </Box>
 
-            {/* Genie instruction above tree */}
             {mealPlan && !mealPlan.error && (
               <Text
                 mt={4}
@@ -527,7 +518,6 @@ function MealPlannerApp() {
               </Text>
             )}
 
-            {/* Meal Plan Tree BELOW the labels */}
             {mealPlan && !mealPlan.error && (
               <>
                 <Box w="40%" bg="white" p={4} borderRadius="md" mt={4}>
@@ -543,7 +533,6 @@ function MealPlannerApp() {
                   />
                 </Box>
 
-                {/* Upload to Cart Button */}
                 <Button mt={4} colorScheme="teal" onClick={handleUploadToCart}>
                   Upload to Cart
                 </Button>
@@ -553,7 +542,6 @@ function MealPlannerApp() {
                     <span>Summoning your cart...</span>
                   </div>
                 )}
-                {/* 🆕 Cart Genie Message */}
                 {cartMessage && (
                   <>
                     <Text
@@ -573,15 +561,14 @@ function MealPlannerApp() {
               </>
             )}
 
-            {/* Error message */}
             {mealPlan && mealPlan.error && (
               <Text fontSize="lg" color="red.300" mt={6}>
                 {mealPlan.error}
               </Text>
             )}
           </Box>
-        </Box>
-      )}
+        )}
+      </Box>
     </ChakraProvider>
   );
 }
