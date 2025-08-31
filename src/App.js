@@ -50,9 +50,12 @@ function MealPlannerApp() {
   const [cartMessage, setCartMessage] = useState("");
   const [cartResponse, setCartResponse] = useState(null); // store /cart response for /report
   const [lastCartPayload, setLastCartPayload] = useState(null); // 🆕 store the exact payload (with instructions) sent to /cart
-
+  const [loadingPlan, setLoadingPlan] = useState(false);
+  const [loadingCart, setLoadingCart] = useState(false);
+  
   const handleGeneratePlan = async () => {
     try {
+      setLoadingPlan(true);
       const res = await fetch(`${backendUrl}/plan`, {
         method: "POST",
         credentials: "include",
@@ -89,8 +92,10 @@ function MealPlannerApp() {
       } else {
         setMealPlan({ error: data.error || "Failed to generate plan." });
       }
+      setLoadingPlan(false);
     } catch (err) {
       setMealPlan({ error: `⚠️ Error calling backend: ${err.message}` });
+      setLoadingPlan(false);
     }
   };
 
@@ -192,6 +197,7 @@ function MealPlannerApp() {
 
   // 🚀 Upload checked items to /cart
   const handleUploadToCart = async () => {
+    setLoadingCart(true);
     const payload = buildCheckedPlan();
     setLastCartPayload(payload); // ✅ remember exactly what we sent (with instructions)
     try {
@@ -213,8 +219,10 @@ function MealPlannerApp() {
             "press the 'Create Report' button and I shall conjure a complete tome for thee."
         );
       }
+      setLoadingCart(false);
     } catch (err) {
       setCartMessage(`⚠️ Error uploading to cart: ${err.message}`);
+      setLoadingCart(false);
     }
   };
 
@@ -417,6 +425,12 @@ function MealPlannerApp() {
               <Button colorScheme="yellow" w="100%" onClick={handleGeneratePlan}>
                 Generate Meal Plan
               </Button>
+              {loadingPlan && (
+                <div className="spinner-row">
+                  <div className="spinner"></div>
+                  <span>Conjuring meals...</span>
+                </div>
+              )}
             </Box>
           </VStack>
         </Box>
@@ -511,7 +525,15 @@ function MealPlannerApp() {
               <Button mt={4} colorScheme="teal" onClick={handleUploadToCart}>
                 Upload to Cart
               </Button>
-
+              <Button mt={4} colorScheme="teal" onClick={handleUploadToCart}>
+                Upload to Cart
+              </Button>
+              {loadingCart && (
+                <div className="spinner-row">
+                  <div className="spinner"></div>
+                  <span>Summoning your cart...</span>
+                </div>
+              )}
               {/* 🆕 Cart Genie Message */}
               {cartMessage && (
                 <>
