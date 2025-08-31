@@ -292,7 +292,7 @@ function MealPlannerApp() {
       <Box display="flex" minH="100vh">
         {/* Left Sidebar */}
         {showLeftPanel && (
-          <Box w="300px" p={6}>
+          <Box w={{ base: "100%", md: "300px" }} p={6}>
             <VStack align="stretch" spacing={6}>
               {/* CartGenie Heading */}
               <Heading
