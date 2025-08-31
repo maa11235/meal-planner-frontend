@@ -16,6 +16,19 @@ import {
 import Tree from "rc-tree";
 import "rc-tree/assets/index.css";
 
+// Custom hook to detect mobile devices
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = React.useState(window.innerWidth <= 768);
+ 
+  React.useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+ 
+  return isMobile;
+};
+
 // Theme with dark green background
 const theme = extendTheme({
   styles: {
@@ -32,6 +45,8 @@ const theme = extendTheme({
 const planGradient = "linear(to-r, #ff595e, #ffca3a, #8ac926, #1982c4)";
 
 function MealPlannerApp() {
+  const isMobile = useIsMobile();
+  const [showMainPanelOnMobile, setShowMainPanelOnMobile] = useState(false);
   const [mealPlan, setMealPlan] = useState(null); // store JSON
   const [checkedKeys, setCheckedKeys] = useState([]); // rc-tree checked state
   const [expandedKeys, setExpandedKeys] = useState([]); // rc-tree expanded state
@@ -94,6 +109,9 @@ function MealPlannerApp() {
         setMealPlan({ error: data.error || "Failed to generate plan." });
       }
       setLoadingPlan(false);
+      if (isMobile) {
+        setShowMainPanelOnMobile(true);
+      }
     } catch (err) {
       setMealPlan({ error: `⚠️ Error calling backend: ${err.message}` });
       setLoadingPlan(false);
@@ -276,290 +294,294 @@ function MealPlannerApp() {
     <ChakraProvider theme={theme}>
       <Box display="flex" minH="100vh">
         {/* Left Sidebar */}
-        <Box w="300px" p={6}>
-          <VStack align="stretch" spacing={6}>
-            {/* CartGenie Heading */}
-            <Heading
-              size="lg"
-              fontFamily="'Cinzel Decorative', cursive"
-              fontWeight="bold"
-              color="yellow.300"
-              display="flex"
-              alignItems="center"
-              gap={2}
-            >
-              <span role="img" aria-label="genie">
-                🧞
-              </span>
-              <Text
-                as="span"
-                bgGradient={planGradient}
-                bgClip="text"
+        {(!isMobile || (isMobile && !showMainPanelOnMobile)) && (
+          <Box w="300px" p={6}>
+            <VStack align="stretch" spacing={6}>
+              {/* CartGenie Heading */}
+              <Heading
+                size="lg"
                 fontFamily="'Cinzel Decorative', cursive"
-                fontWeight="extrabold"
+                fontWeight="bold"
+                color="yellow.300"
+                display="flex"
+                alignItems="center"
+                gap={2}
               >
-                CartGenie
-              </Text>
-            </Heading>
-
-            {/* Your Recipe Wish Label */}
-            <Heading as="h2" size="md" textAlign="center" color="white">
-              Your Wish Shall Be Loaded To Your Grocery Cart
-            </Heading>
-
-            {/* Grocery Store Login Group Box */}
-            <Box bg="#003366" p={4} border="none" borderRadius="md">
-              <Text
-                mb={3}
-                fontSize="sm"
-                color="white"
-                textAlign="center"
-                fontFamily="'Dancing Script', cursive"
-              >
-                If you haven't already, create an account for Kroger, Smiths,
-                Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's, Jay C
-                Food, City Market, King Supers, Gerbes, Marianos, or QFC.{" "}
-                <Link
-                  href="https://www.kroger.com"
-                  isExternal
-                  color="yellow.300"
-                  fontWeight="bold"
+                <span role="img" aria-label="genie">
+                  🧞
+                </span>
+                <Text
+                  as="span"
+                  bgGradient={planGradient}
+                  bgClip="text"
+                  fontFamily="'Cinzel Decorative', cursive"
+                  fontWeight="extrabold"
                 >
-                  Create Account
-                </Link>
-              </Text>
+                  CartGenie
+                </Text>
+              </Heading>
 
-              <Text mb={3} fontSize="sm" color="white" textAlign="center">
-                Whisper your wish, and I shall open the gates to your chosen
-                marketplace! Log in and let your pantry be filled with treasures.
-              </Text>
-              <Button colorScheme="teal" onClick={handleLogin} w="100%">
-                Grocery Store Login
-              </Button>
-            </Box>
+              {/* Your Recipe Wish Label */}
+              <Heading as="h2" size="md" textAlign="center" color="white">
+                Your Wish Shall Be Loaded To Your Grocery Cart
+              </Heading>
 
-            {/* Find a Store & Meal Generator Group Box */}
-            <Box bg="#003366" p={4} border="none" borderRadius="md">
-              <Text mb={3} fontSize="md" color="white" textAlign="left">
-                🔮 Seek ye a marketplace near thy dwelling? Reveal your zip code,
-                and I shall conjure its presence!
-              </Text>
-              <HStack mb={4}>
+              {/* Grocery Store Login Group Box */}
+              <Box bg="#003366" p={4} border="none" borderRadius="md">
+                <Text
+                  mb={3}
+                  fontSize="sm"
+                  color="white"
+                  textAlign="center"
+                  fontFamily="'Dancing Script', cursive"
+                >
+                  If you haven't already, create an account for Kroger, Smiths,
+                  Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's, Jay C
+                  Food, City Market, King Supers, Gerbes, Marianos, or QFC.{" "}
+                  <Link
+                    href="https://www.kroger.com"
+                    isExternal
+                    color="yellow.300"
+                    fontWeight="bold"
+                  >
+                    Create Account
+                  </Link>
+                </Text>
+
+                <Text mb={3} fontSize="sm" color="white" textAlign="center">
+                  Whisper your wish, and I shall open the gates to your chosen
+                  marketplace! Log in and let your pantry be filled with treasures.
+                </Text>
+                <Button colorScheme="teal" onClick={handleLogin} w="100%">
+                  Grocery Store Login
+                </Button>
+              </Box>
+
+              {/* Find a Store & Meal Generator Group Box */}
+              <Box bg="#003366" p={4} border="none" borderRadius="md">
+                <Text mb={3} fontSize="md" color="white" textAlign="left">
+                  🔮 Seek ye a marketplace near thy dwelling? Reveal your zip code,
+                  and I shall conjure its presence!
+                </Text>
+                <HStack mb={4}>
+                  <Input
+                    placeholder="Enter zip code"
+                    value={zipCode}
+                    onChange={(e) => setZipCode(e.target.value)}
+                    bg="white"
+                    color="black"
+                    flex="2"
+                  />
+                  <Button colorScheme="yellow" onClick={handleSearchStores} flex="1.2">
+                    Search Stores
+                  </Button>
+                </HStack>
+
+                {/* Dropdown for stores if found */}
+                {stores.length > 0 && (
+                  <Select placeholder="Select a store" bg="white" color="black" mb={4}>
+                    {stores.map((store) => (
+                      <option key={store.locationId} value={store.locationId}>
+                        {store.name} - {store.address?.addressLine1},{" "}
+                        {store.address?.city}, {store.address?.state}{" "}
+                        {store.address?.zipCode}
+                      </option>
+                    ))}
+                  </Select>
+                )}
+
+                <Text mb={3} fontSize="sm" color="white">
+                  Speak your wish, and I, the Genie of Meals, shall craft it!
+                  Describe the delights you seek — perhaps sweets fit for a
+                  diabetic with strawberries, comforting soul food made easy,
+                  high-protein feasts full of fiber, or even toddler-friendly
+                  treasures. Your wish is my recipe command!
+                </Text>
                 <Input
-                  placeholder="Enter zip code"
-                  value={zipCode}
-                  onChange={(e) => setZipCode(e.target.value)}
+                  placeholder="Unique meal description"
                   bg="white"
                   color="black"
-                  flex="2"
+                  value={mealDescription}
+                  onChange={(e) => setMealDescription(e.target.value)}
                 />
-                <Button colorScheme="yellow" onClick={handleSearchStores} flex="1.2">
-                  Search Stores
-                </Button>
-              </HStack>
 
-              {/* Dropdown for stores if found */}
-              {stores.length > 0 && (
-                <Select placeholder="Select a store" bg="white" color="black" mb={4}>
-                  {stores.map((store) => (
-                    <option key={store.locationId} value={store.locationId}>
-                      {store.name} - {store.address?.addressLine1},{" "}
-                      {store.address?.city}, {store.address?.state}{" "}
-                      {store.address?.zipCode}
+                {/* Meals Quantity Selector */}
+                <Text mt={4} mb={2} fontSize="sm" color="white">
+                  How many feasts shall I conjure from my mystical cookbook?
+                </Text>
+                <Select
+                  value={mealCount}
+                  onChange={(e) => setMealCount(e.target.value)}
+                  bg="white"
+                  color="black"
+                  mb={4}
+                >
+                  {[1, 2, 3, 4, 5, 6, 7].map((num) => (
+                    <option key={num} value={num}>
+                      {num}
                     </option>
                   ))}
                 </Select>
-              )}
 
-              <Text mb={3} fontSize="sm" color="white">
-                Speak your wish, and I, the Genie of Meals, shall craft it!
-                Describe the delights you seek — perhaps sweets fit for a
-                diabetic with strawberries, comforting soul food made easy,
-                high-protein feasts full of fiber, or even toddler-friendly
-                treasures. Your wish is my recipe command!
-              </Text>
-              <Input
-                placeholder="Unique meal description"
-                bg="white"
-                color="black"
-                value={mealDescription}
-                onChange={(e) => setMealDescription(e.target.value)}
-              />
+                {/* Meal Type Selector */}
+                <Text mb={2} fontSize="sm" color="white">
+                  Shall these creations be dawn’s delights, midday marvels, or
+                  evening banquets?
+                </Text>
+                <Select
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  bg="white"
+                  color="black"
+                >
+                  <option value="breakfast">Breakfast</option>
+                  <option value="lunch">Lunch</option>
+                  <option value="dinner">Dinner</option>
+                </Select>
+              </Box>
 
-              {/* Meals Quantity Selector */}
-              <Text mt={4} mb={2} fontSize="sm" color="white">
-                How many feasts shall I conjure from my mystical cookbook?
-              </Text>
-              <Select
-                value={mealCount}
-                onChange={(e) => setMealCount(e.target.value)}
-                bg="white"
-                color="black"
-                mb={4}
-              >
-                {[1, 2, 3, 4, 5, 6, 7].map((num) => (
-                  <option key={num} value={num}>
-                    {num}
-                  </option>
-                ))}
-              </Select>
-
-              {/* Meal Type Selector */}
-              <Text mb={2} fontSize="sm" color="white">
-                Shall these creations be dawn’s delights, midday marvels, or
-                evening banquets?
-              </Text>
-              <Select
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
-                bg="white"
-                color="black"
-              >
-                <option value="breakfast">Breakfast</option>
-                <option value="lunch">Lunch</option>
-                <option value="dinner">Dinner</option>
-              </Select>
-            </Box>
-
-            {/* New Generate Meal Plan Group Box */}
-            <Box bg="#003366" p={4} border="none" borderRadius="md">
-              <Button colorScheme="yellow" w="100%" onClick={handleGeneratePlan}>
-                Generate Meal Plan
-              </Button>
-              {loadingPlan && (
-                <div className="spinner-row">
-                  <div className="spinner"></div>
-                  <span>Conjuring meals...</span>
-                </div>
-              )}
-            </Box>
-          </VStack>
-        </Box>
+              {/* New Generate Meal Plan Group Box */}
+              <Box bg="#003366" p={4} border="none" borderRadius="md">
+                <Button colorScheme="yellow" w="100%" onClick={handleGeneratePlan}>
+                  Generate Meal Plan
+                </Button>
+                {loadingPlan && (
+                  <div className="spinner-row">
+                    <div className="spinner"></div>
+                    <span>Conjuring meals...</span>
+                  </div>
+                )}
+              </Box>
+            </VStack>
+          </Box>
+        )}
 
         {/* Main Content */}
-        <Box flex="1" display="flex" flexDirection="column" alignItems="center" p={6}>
-          <Box w="60%">
-            <Text
-              fontSize="xl"
-              fontFamily="'Dancing Script', cursive"
-              color="white"
-              textAlign="center"
-            >
-              Welcome, seeker of flavor, to{" "}
-              <span role="img" aria-label="genie">
-                🧞
-              </span>{" "}
+        {(!isMobile || (isMobile && showMainPanelOnMobile)) && (
+          <Box flex="1" display="flex" flexDirection="column" alignItems="center" p={6}>
+            <Box w="60%">
               <Text
-                as="span"
-                bgGradient={planGradient}
-                bgClip="text"
-                fontWeight="bold"
-                fontFamily="'Cinzel Decorative', cursive"
-              >
-                CartGenie
-              </Text>
-              . With but a whisper of your desires, I shall summon meals crafted
-              to your heart’s delight. From the scrolls of my enchanted cookbook,
-              recipes shall appear, tailored to your cravings. And lo! I shall
-              conjure forth a grocery list and place every needed treasure
-              directly into your cart. Your wish is my culinary command!
-            </Text>
-
-            {/* Login Status Message */}
-            {loginStatusMessage && (
-              <Text
-                mt={6}
-                fontSize="md"
-                color="yellow.300"
-                textAlign="center"
+                fontSize="xl"
                 fontFamily="'Dancing Script', cursive"
+                color="white"
+                textAlign="center"
               >
-                {loginStatusMessage}
+                Welcome, seeker of flavor, to{" "}
+                <span role="img" aria-label="genie">
+                  🧞
+                </span>{" "}
+                <Text
+                  as="span"
+                  bgGradient={planGradient}
+                  bgClip="text"
+                  fontWeight="bold"
+                  fontFamily="'Cinzel Decorative', cursive"
+                >
+                  CartGenie
+                </Text>
+                . With but a whisper of your desires, I shall summon meals crafted
+                to your heart’s delight. From the scrolls of my enchanted cookbook,
+                recipes shall appear, tailored to your cravings. And lo! I shall
+                conjure forth a grocery list and place every needed treasure
+                directly into your cart. Your wish is my culinary command!
               </Text>
-            )}
 
-            {/* Store Status Message */}
-            {storeStatusMessage && (
+              {/* Login Status Message */}
+              {loginStatusMessage && (
+                <Text
+                  mt={6}
+                  fontSize="md"
+                  color="yellow.300"
+                  textAlign="center"
+                  fontFamily="'Dancing Script', cursive"
+                >
+                  {loginStatusMessage}
+                </Text>
+              )}
+
+              {/* Store Status Message */}
+              {storeStatusMessage && (
+                <Text
+                  mt={4}
+                  fontSize="md"
+                  color="yellow.300"
+                  textAlign="center"
+                  fontFamily="'Dancing Script', cursive"
+                >
+                  {storeStatusMessage}
+                </Text>
+              )}
+            </Box>
+
+            {/* Genie instruction above tree */}
+            {mealPlan && !mealPlan.error && (
               <Text
                 mt={4}
                 fontSize="md"
-                color="yellow.300"
+                color="yellow.200"
                 textAlign="center"
                 fontFamily="'Dancing Script', cursive"
               >
-                {storeStatusMessage}
+                ✨ Now, master! Mark the ingredients ye desire in thy cart,  
+                and uncheck those treasures already resting within thy pantry.
+              </Text>
+            )}
+
+            {/* Meal Plan Tree BELOW the labels */}
+            {mealPlan && !mealPlan.error && (
+              <>
+                <Box w="40%" bg="white" p={4} borderRadius="md" mt={4}>
+                  <Tree
+                    checkable
+                    selectable={false}
+                    expandedKeys={expandedKeys}
+                    checkedKeys={checkedKeys}
+                    onCheck={(keys) => setCheckedKeys(keys)}
+                    onExpand={(keys) => setExpandedKeys(keys)}
+                    treeData={buildTreeNodes(mealPlan)}
+                    style={{ color: "black", fontSize: "16px" }}
+                  />
+                </Box>
+
+                {/* Upload to Cart Button */}
+                <Button mt={4} colorScheme="teal" onClick={handleUploadToCart}>
+                  Upload to Cart
+                </Button>
+                {loadingCart && (
+                  <div className="spinner-row">
+                    <div className="spinner"></div>
+                    <span>Summoning your cart...</span>
+                  </div>
+                )}
+                {/* 🆕 Cart Genie Message */}
+                {cartMessage && (
+                  <>
+                    <Text
+                      mt={3}
+                      fontSize="md"
+                      color="yellow.300"
+                      textAlign="center"
+                      fontFamily="'Dancing Script', cursive"
+                    >
+                      {cartMessage}
+                    </Text>
+                    <Button mt={3} colorScheme="yellow" onClick={handleCreateReport}>
+                      Create Report
+                    </Button>
+                  </>
+                )}
+              </>
+            )}
+
+            {/* Error message */}
+            {mealPlan && mealPlan.error && (
+              <Text fontSize="lg" color="red.300" mt={6}>
+                {mealPlan.error}
               </Text>
             )}
           </Box>
-
-          {/* Genie instruction above tree */}
-          {mealPlan && !mealPlan.error && (
-            <Text
-              mt={4}
-              fontSize="md"
-              color="yellow.200"
-              textAlign="center"
-              fontFamily="'Dancing Script', cursive"
-            >
-              ✨ Now, master! Mark the ingredients ye desire in thy cart,  
-              and uncheck those treasures already resting within thy pantry.
-            </Text>
-          )}
-
-          {/* Meal Plan Tree BELOW the labels */}
-          {mealPlan && !mealPlan.error && (
-            <>
-              <Box w="40%" bg="white" p={4} borderRadius="md" mt={4}>
-                <Tree
-                  checkable
-                  selectable={false}
-                  expandedKeys={expandedKeys}
-                  checkedKeys={checkedKeys}
-                  onCheck={(keys) => setCheckedKeys(keys)}
-                  onExpand={(keys) => setExpandedKeys(keys)}
-                  treeData={buildTreeNodes(mealPlan)}
-                  style={{ color: "black", fontSize: "16px" }}
-                />
-              </Box>
-
-              {/* Upload to Cart Button */}
-              <Button mt={4} colorScheme="teal" onClick={handleUploadToCart}>
-                Upload to Cart
-              </Button>
-              {loadingCart && (
-                <div className="spinner-row">
-                  <div className="spinner"></div>
-                  <span>Summoning your cart...</span>
-                </div>
-              )}
-              {/* 🆕 Cart Genie Message */}
-              {cartMessage && (
-                <>
-                  <Text
-                    mt={3}
-                    fontSize="md"
-                    color="yellow.300"
-                    textAlign="center"
-                    fontFamily="'Dancing Script', cursive"
-                  >
-                    {cartMessage}
-                  </Text>
-                  <Button mt={3} colorScheme="yellow" onClick={handleCreateReport}>
-                    Create Report
-                  </Button>
-                </>
-              )}
-            </>
-          )}
-
-          {/* Error message */}
-          {mealPlan && mealPlan.error && (
-            <Text fontSize="lg" color="red.300" mt={6}>
-              {mealPlan.error}
-            </Text>
-          )}
         </Box>
-      </Box>
+      )}
     </ChakraProvider>
   );
 }
