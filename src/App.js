@@ -168,7 +168,7 @@ function MealPlannerApp() {
   }, [backendUrl]);
 
   useEffect(() => {
-    if (window.location.href.includes("meal-planner.techexamprep.com")) {
+    if (window.location.href.includes("grocerycartgenie.com")) {
       checkStatus();
     }
   }, []);
