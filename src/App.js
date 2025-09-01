@@ -516,7 +516,13 @@ function MealPlannerApp() {
             </Box>
 
             {mealPlan && !mealPlan.error && (
-              <Text mb={3} fontSize="md" color="white" textAlign="left">
+              <Text
+                mt={4}
+                fontSize="md"
+                color="yellow.300"
+                textAlign="center"
+                fontFamily="'Dancing Script', cursive"
+              >
                 ✨ Now, master! Mark the ingredients ye desire in thy cart,  
                 and uncheck those treasures already resting within thy pantry.
               </Text>
