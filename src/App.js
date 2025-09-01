@@ -314,7 +314,7 @@ function MealPlannerApp() {
                   fontFamily="'Cinzel Decorative', cursive"
                   fontWeight="extrabold"
                 >
-                  CartGenie
+                  GroceryCartGenie
                 </Text>
               </Heading>
 
