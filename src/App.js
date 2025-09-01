@@ -490,8 +490,7 @@ function MealPlannerApp() {
                 conjure forth a grocery list and place every needed treasure
                 directly into your cart. Your wish is my culinary command!
               </Text>
-
-              {loginStatusMessage && (
+              {!isMobile && loginStatusMessage && (
                 <Text
                   mt={6}
                   fontSize="md"
@@ -503,7 +502,7 @@ function MealPlannerApp() {
                 </Text>
               )}
 
-              {storeStatusMessage && (
+              {!isMobile && storeStatusMessage && (
                 <Text
                   mt={4}
                   fontSize="md"
