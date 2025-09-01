@@ -345,7 +345,7 @@ function MealPlannerApp() {
                   </Link>
                 </Text>
 
-                <Text mb={3} fontSize="sm" color="white" textAlign="center">
+                <Text mb={3} fontSize="md" color="white" textAlign="left">
                   Whisper your wish, and I shall open the gates to your chosen
                   marketplace! Log in and let your pantry be filled with treasures.
                 </Text>
@@ -397,7 +397,7 @@ function MealPlannerApp() {
                   </Select>
                 )}
 
-                <Text mb={3} fontSize="sm" color="white">
+                <Text mb={3} fontSize="md" color="white" textAlign="left">
                   Speak your wish, and I, the Genie of Meals, shall craft it!
                   Describe the delights you seek — perhaps sweets fit for a
                   diabetic with strawberries, comforting soul food made easy,
@@ -412,7 +412,7 @@ function MealPlannerApp() {
                   onChange={(e) => setMealDescription(e.target.value)}
                 />
 
-                <Text mt={4} mb={2} fontSize="sm" color="white">
+                <Text mb={3} fontSize="md" color="white" textAlign="left">
                   How many feasts shall I conjure from my mystical cookbook?
                 </Text>
                 <Select
@@ -429,7 +429,7 @@ function MealPlannerApp() {
                   ))}
                 </Select>
 
-                <Text mb={2} fontSize="sm" color="white">
+                <Text mb={3} fontSize="md" color="white" textAlign="left">
                   Shall these creations be dawn’s delights, midday marvels, or
                   evening banquets?
                 </Text>
@@ -516,13 +516,7 @@ function MealPlannerApp() {
             </Box>
 
             {mealPlan && !mealPlan.error && (
-              <Text
-                mt={4}
-                fontSize="md"
-                color="yellow.200"
-                textAlign="center"
-                fontFamily="'Dancing Script', cursive"
-              >
+              <Text mb={3} fontSize="md" color="white" textAlign="left">
                 ✨ Now, master! Mark the ingredients ye desire in thy cart,  
                 and uncheck those treasures already resting within thy pantry.
               </Text>
