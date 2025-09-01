@@ -482,7 +482,7 @@ function MealPlannerApp() {
                   fontWeight="bold"
                   fontFamily="'Cinzel Decorative', cursive"
                 >
-                  CartGenie
+                  GroceryCartGenie
                 </Text>
                 . With but a whisper of your desires, I shall summon meals crafted
                 to your heart’s delight. From the scrolls of my enchanted cookbook,
