@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import Tree from "rc-tree";
 import "rc-tree/assets/index.css";
+import FeedbackForm from "./components/FeedbackForm";
 
 // Theme with dark green background
 const theme = extendTheme({
@@ -482,6 +483,8 @@ function MealPlannerApp() {
               >
                 Feedback
               </Link>
+              {/* Feedback modal trigger */}
+              <FeedbackForm />
             </Box>
             <Box w="60%">
               <Text
