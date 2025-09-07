@@ -463,6 +463,7 @@ function MealPlannerApp() {
 
         {/* Main Content */}
         {showMainPanel && (
+          <Box flex="1" display="flex" flexDirection="column" alignItems="center" p={6} position="relative">
             <Box position="absolute" top={4} right={6} textAlign="right" maxW="500px">
               <Text
                 fontSize="sm"
