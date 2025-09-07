@@ -463,7 +463,25 @@ function MealPlannerApp() {
 
         {/* Main Content */}
         {showMainPanel && (
-          <Box flex="1" display="flex" flexDirection="column" alignItems="center" p={6}>
+          <Box flex="1" display="flex" flexDirection="column" alignItems="center" p={6} position="relative">
+            {/* 🧞 Feedback link in the upper right */}
+            <Box position="absolute" top={4} right={6} textAlign="right">
+              <Text
+                fontSize="sm"
+                color="yellow.300"
+                fontFamily="'Dancing Script', cursive"
+              >
+                ✨ O wise master, help us weave stronger spells into the GroceryCartGenie!
+              </Text>
+              <Link
+                href="https://example.com/feedback"
+                isExternal
+                color="cyan.200"
+                fontWeight="bold"
+              >
+                Feedback
+              </Link>
+            </Box>
             <Box w="60%">
               <Text
                 fontSize="xl"
