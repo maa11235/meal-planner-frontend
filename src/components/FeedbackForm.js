@@ -86,7 +86,7 @@ export default function FeedbackForm() {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg="white" color="black">
           <ModalHeader>Submit Feedback</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
