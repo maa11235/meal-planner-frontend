@@ -463,13 +463,13 @@ function MealPlannerApp() {
 
         {/* Main Content */}
         {showMainPanel && (
-          <Box flex="1" display="flex" flexDirection="column" alignItems="center" p={6} position="relative">
-            {/* 🧞 Feedback link in the upper right */}
-            <Box position="absolute" top={4} right={6} textAlign="right">
+            <Box position="absolute" top={4} right={6} textAlign="right" maxW="500px">
               <Text
                 fontSize="sm"
                 color="yellow.300"
                 fontFamily="'Dancing Script', cursive"
+                whiteSpace="normal"
+                wordBreak="break-word"
               >
                 ✨ O wise master, help us weave stronger spells into the GroceryCartGenie!
               </Text>
