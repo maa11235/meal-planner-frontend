@@ -26,10 +26,11 @@ export default function FeedbackForm() {
   const [rating, setRating] = useState("3");
   const [category, setCategory] = useState("Bug");
   const [comments, setComments] = useState("");
-
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  
   const handleSubmit = async () => {
     try {
-      const response = await fetch("/feedback", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/feedback`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
