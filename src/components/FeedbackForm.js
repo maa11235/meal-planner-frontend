@@ -113,7 +113,7 @@ export default function FeedbackForm() {
               >
                 <option value="Bug">Bug</option>
                 <option value="Feature Request">Feature Request</option>
-                <option value="UX">UX</option>
+                <option value="UX">User Experience</option>
                 <option value="Other">Other</option>
               </Select>
             </FormControl>
