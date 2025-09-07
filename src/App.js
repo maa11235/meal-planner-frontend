@@ -475,14 +475,6 @@ function MealPlannerApp() {
               >
                 ✨ O wise master, help us weave stronger spells into the GroceryCartGenie!
               </Text>
-              <Link
-                href="https://example.com/feedback"
-                isExternal
-                color="cyan.200"
-                fontWeight="bold"
-              >
-                Feedback
-              </Link>
               {/* Feedback modal trigger */}
               <FeedbackForm />
             </Box>
