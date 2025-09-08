@@ -38,6 +38,7 @@ export default function FeedbackForm() {
           category,
           comments,
         }),
+        credentials: "include",
       });
 
       const result = await response.json();
