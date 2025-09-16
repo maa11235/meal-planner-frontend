@@ -402,7 +402,7 @@ function MealPlannerApp() {
                   Sweets fit for a diabetic?
                   Comforting soul food made easy?
                   High-protein feasts full of fiber?
-                  Toddler-friendly treasures?\n
+                  Toddler-friendly treasures?
                   Your wish is my recipe command!
                 </Text>
                 <Input
@@ -431,8 +431,8 @@ function MealPlannerApp() {
                 </Select>
     
                 <Text mb={3} fontSize="md" color="white" textAlign="left">
-                  Shall these creations be dawn’s delights, midday marvels, or
-                  evening banquets?
+                  Shall these creations be dawn’s delights, midday marvels,
+                  evening banquets, snacks or desserts?
                 </Text>
                 <Select
                   value={time}
