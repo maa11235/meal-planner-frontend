@@ -399,8 +399,8 @@ function MealPlannerApp() {
                 )}
     
                 <Text mb={3} fontSize="md" color="white" textAlign="left">
-                  Shall these creations be dawn’s delights, midday marvels,
-                  evening banquets, snacks or desserts?
+                  Shall these creations be for breakfast, lunch,
+                  dinner, snacks or desserts?
                 </Text>
                 <Select
                   value={time}
