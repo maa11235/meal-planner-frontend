@@ -566,6 +566,18 @@ function MealPlannerApp() {
                     treeData={buildTreeNodes(mealPlan)}
                     style={{ color: "black", fontSize: "16px", wordWrap: "break-word" }}
                   />
+
+                  {/* 🆕 Meal instructions below the tree */}
+                  {(mealPlan.plan || []).map((meal) => (
+                    <Box key={`meal-instructions-${meal.meal_num}`} mt={4}>
+                      <Text fontWeight="bold" color="black">
+                        {meal.name}
+                      </Text>
+                      <Text fontSize="sm" color="gray.700" whiteSpace="pre-wrap">
+                        {meal.instructions}
+                      </Text>
+                    </Box>
+                  ))}
                 </Box>
     
                 <Button mt={4} colorScheme="teal" onClick={handleUploadToCart}>
