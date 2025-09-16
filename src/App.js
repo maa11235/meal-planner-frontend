@@ -285,6 +285,7 @@ function MealPlannerApp() {
   };
 
   // 🆕 determine whether to show left panel (mobile only)
+  // 🆕 determine whether to show left panel (mobile only)
   const showLeftPanel = !isMobile || (isMobile && (!mealPlan || loadingPlan));
   const showMainPanel = !isMobile || (isMobile && mealPlan && !loadingPlan);
 
@@ -398,6 +399,24 @@ function MealPlannerApp() {
                 )}
     
                 <Text mb={3} fontSize="md" color="white" textAlign="left">
+                  Shall these creations be dawn’s delights, midday marvels,
+                  evening banquets, snacks or desserts?
+                </Text>
+                <Select
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  bg="white"
+                  color="black"
+                  mb={4}
+                >
+                  <option value="breakfast">Breakfast</option>
+                  <option value="lunch">Lunch</option>
+                  <option value="dinner">Dinner</option>
+                  <option value="snack">Snack</option>
+                  <option value="dessert">Dessert</option>
+                </Select>
+
+                <Text mb={3} fontSize="md" color="white" textAlign="left">
                   Describe the delights you seek —
                   Sweets fit for a diabetic?
                   Comforting soul food made easy?
@@ -428,23 +447,6 @@ function MealPlannerApp() {
                       {num}
                     </option>
                   ))}
-                </Select>
-    
-                <Text mb={3} fontSize="md" color="white" textAlign="left">
-                  Shall these creations be dawn’s delights, midday marvels,
-                  evening banquets, snacks or desserts?
-                </Text>
-                <Select
-                  value={time}
-                  onChange={(e) => setTime(e.target.value)}
-                  bg="white"
-                  color="black"
-                >
-                  <option value="breakfast">Breakfast</option>
-                  <option value="lunch">Lunch</option>
-                  <option value="dinner">Dinner</option>
-                  <option value="snack">Snack</option>
-                  <option value="dessert">Dessert</option>
                 </Select>
               </Box>
     
