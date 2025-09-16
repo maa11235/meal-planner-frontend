@@ -401,7 +401,7 @@ function MealPlannerApp() {
                   Describe the delights you seek — perhaps:
                   Sweets fit for a diabetic?
                   Comforting soul food made easy?
-                  High-protein feasts full of fiber? or even 
+                  High-protein feasts full of fiber?
                   Toddler-friendly treasures? 
                   Your wish is my recipe command!
                 </Text>
