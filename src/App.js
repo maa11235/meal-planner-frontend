@@ -420,7 +420,7 @@ function MealPlannerApp() {
                   <br /> Toddler-friendly treasures
                   <br /> Sweets fit for a diabetic
                   <br /> West African entrees
-                  <br /> Meals by [insert famous chef]
+                  <br /> Meals by [famous chef]
                   <br /> Your wish is my recipe command!
                 </Text>
                 <Input
