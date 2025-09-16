@@ -418,11 +418,12 @@ function MealPlannerApp() {
 
                 <Text mb={3} fontSize="md" color="white" textAlign="left">
                   Describe the delights you seek —
+                  For example: {"\n"}
+                  Toddler-friendly treasures?
                   Sweets fit for a diabetic?
                   Comforting soul food made easy?
                   High-protein feasts full of fiber?
-                  Toddler-friendly treasures?
-                  Your wish is my recipe command!
+                  {"\n"}Your wish is my recipe command!
                 </Text>
                 <Input
                   placeholder="Unique meal description"
