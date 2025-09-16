@@ -419,8 +419,8 @@ function MealPlannerApp() {
                   Describe the delights you seek — For example:
                   <br /> Toddler-friendly treasures
                   <br /> Sweets fit for a diabetic
-                  <br /> Comforting soul food made easy
-                  <br /> High-protein feasts full of fiber
+                  <br /> West African entrees
+                  <br /> Meals by [insert famous chef]
                   <br /> Your wish is my recipe command!
                 </Text>
                 <Input
