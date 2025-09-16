@@ -347,8 +347,7 @@ function MealPlannerApp() {
                 </Text>
     
                 <Text mb={3} fontSize="md" color="white" textAlign="left">
-                  Whisper your wish, and I shall open the gates to your chosen
-                  marketplace! Log in and let your pantry be filled with treasures.
+                  Log in and let your pantry be filled with treasures.
                 </Text>
                 <Button colorScheme="teal" onClick={handleLogin} w="100%">
                   Grocery Store Login
@@ -369,7 +368,7 @@ function MealPlannerApp() {
               {/* Find a Store & Meal Generator Group Box */}
               <Box bg="#003366" p={4} border="none" borderRadius="md">
                 <Text mb={3} fontSize="md" color="white" textAlign="left">
-                  🔮 Seek ye a marketplace near thy dwelling? Reveal your zip code,
+                  🔮 Reveal your zip code,
                   and I shall conjure its presence!
                 </Text>
                 <HStack mb={4}>
@@ -399,11 +398,12 @@ function MealPlannerApp() {
                 )}
     
                 <Text mb={3} fontSize="md" color="white" textAlign="left">
-                  Speak your wish, and I, the Genie of Meals, shall craft it!
-                  Describe the delights you seek — perhaps sweets fit for a
-                  diabetic with strawberries, comforting soul food made easy,
-                  high-protein feasts full of fiber, or even toddler-friendly
-                  treasures. Your wish is my recipe command!
+                  Describe the delights you seek — perhaps:
+                  Sweets fit for a diabetic?
+                  Comforting soul food made easy?
+                  High-protein feasts full of fiber? or even 
+                  Toddler-friendly treasures? 
+                  Your wish is my recipe command!
                 </Text>
                 <Input
                   placeholder="Unique meal description"
