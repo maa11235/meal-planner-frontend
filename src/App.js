@@ -415,15 +415,13 @@ function MealPlannerApp() {
                   <option value="snack">Snack</option>
                   <option value="dessert">Dessert</option>
                 </Select>
-
                 <Text mb={3} fontSize="md" color="white" textAlign="left">
-                  Describe the delights you seek —
-                  For example:
-                   {"\n"}Toddler-friendly treasures?
-                   {"\n"}Sweets fit for a diabetic?
-                   {"\n"}Comforting soul food made easy?
-                   {"\n"}High-protein feasts full of fiber?
-                  {"\n"}Your wish is my recipe command!
+                  Describe the delights you seek — For example:
+                  <br /> Toddler-friendly treasures?
+                  <br /> Sweets fit for a diabetic?
+                  <br /> Comforting soul food made easy?
+                  <br /> High-protein feasts full of fiber?
+                  <br /> Your wish is my recipe command!
                 </Text>
                 <Input
                   placeholder="Unique meal description"
