@@ -16,6 +16,7 @@ import {
 import Tree from "rc-tree";
 import "rc-tree/assets/index.css";
 import FeedbackForm from "./components/FeedbackForm";
+import PrivacyNotice from "./components/PrivacyNotice";
 
 // Theme with dark green background
 const theme = extendTheme({
@@ -616,6 +617,7 @@ function MealPlannerApp() {
             )}
           </Box>
         )}
+        <PrivacyNotice />
       </Box>
     </ChakraProvider>
   );
