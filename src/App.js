@@ -469,21 +469,6 @@ function MealPlannerApp() {
         {/* Main Content */}
         {showMainPanel && (
           <Box flex="1" display="flex" flexDirection="column" alignItems="center" p={6} position="relative" minH="0">
-            {!isMobile && (
-              <Box position="absolute" top={4} right={6} textAlign="center" maxW="250px">
-                <Text
-                  fontSize="sm"
-                  color="yellow.300"
-                  fontFamily="'Dancing Script', cursive"
-                  whiteSpace="normal"
-                  wordBreak="break-word"
-                >
-                  ✨ O wise master, help us weave stronger spells into the GroceryCartGenie!
-                </Text>
-                {/* Feedback modal trigger */}
-                <FeedbackForm />
-              </Box>
-            )}
             <Box w="60%">
               <Text
                 fontSize="xl"
