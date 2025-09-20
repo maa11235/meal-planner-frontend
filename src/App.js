@@ -615,9 +615,9 @@ function MealPlannerApp() {
                 {mealPlan.error}
               </Text>
             )}
+            <PrivacyNotice />
           </Box>
         )}
-        <PrivacyNotice />
       </Box>
     </ChakraProvider>
   );
