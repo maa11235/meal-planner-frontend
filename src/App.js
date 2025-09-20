@@ -468,7 +468,7 @@ function MealPlannerApp() {
     
         {/* Main Content */}
         {showMainPanel && (
-          <Box flex="1" display="flex" flexDirection="column" alignItems="center" p={6} position="relative">
+          <Box flex="1" display="flex" flexDirection="column" alignItems="center" p={6} position="relative" minH="0">
             {!isMobile && (
               <Box position="absolute" top={4} right={6} textAlign="center" maxW="250px">
                 <Text
@@ -615,7 +615,7 @@ function MealPlannerApp() {
                 {mealPlan.error}
               </Text>
             )}
-            <Box mt={6} textAlign="center">
+            <Box mt="auto" textAlign="center">
               <Link href="#" color="yellow.300" fontWeight="bold">
                 privacy
               </Link>
