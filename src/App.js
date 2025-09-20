@@ -17,6 +17,7 @@ import Tree from "rc-tree";
 import "rc-tree/assets/index.css";
 import FeedbackForm from "./components/FeedbackForm";
 import PrivacyNotice from "./components/PrivacyNotice";
+import { BrowserRouter as Router, Routes, Route, Link as RouterLink } from "react-router-dom";
 
 // Theme with dark green background
 const theme = extendTheme({
@@ -286,7 +287,6 @@ function MealPlannerApp() {
   };
 
   // 🆕 determine whether to show left panel (mobile only)
-  // 🆕 determine whether to show left panel (mobile only)
   const showLeftPanel = !isMobile || (isMobile && (!mealPlan || loadingPlan));
   const showMainPanel = !isMobile || (isMobile && mealPlan && !loadingPlan);
 
@@ -320,12 +320,12 @@ function MealPlannerApp() {
                   GroceryCartGenie
                 </Text>
               </Heading>
-    
+
               {/* Your Recipe Wish Label */}
               <Heading as="h2" size="md" textAlign="center" color="white">
                 Your Wish Shall Be Loaded To Your Grocery Cart
               </Heading>
-    
+
               {/* Grocery Store Login Group Box */}
               <Box bg="#003366" p={4} border="none" borderRadius="md">
                 <Text
@@ -347,7 +347,7 @@ function MealPlannerApp() {
                     Create Account
                   </Link>
                 </Text>
-    
+
                 <Text mb={3} fontSize="md" color="white" textAlign="left">
                   Log in and let your pantry be filled with treasures.
                 </Text>
@@ -366,7 +366,7 @@ function MealPlannerApp() {
                   </Text>
                 )}
               </Box>
-    
+
               {/* Find a Store & Meal Generator Group Box */}
               <Box bg="#003366" p={4} border="none" borderRadius="md">
                 <Text mb={3} fontSize="md" color="white" textAlign="left">
@@ -386,7 +386,7 @@ function MealPlannerApp() {
                     Find Stores
                   </Button>
                 </HStack>
-    
+
                 {stores.length > 0 && (
                   <Select placeholder="Select a store" bg="white" color="black" mb={4}>
                     {stores.map((store) => (
@@ -398,7 +398,7 @@ function MealPlannerApp() {
                     ))}
                   </Select>
                 )}
-    
+
                 <Text mb={3} fontSize="md" color="white" textAlign="left">
                   Shall these creations be for breakfast, lunch,
                   dinner, snacks or desserts?
@@ -431,7 +431,7 @@ function MealPlannerApp() {
                   value={mealDescription}
                   onChange={(e) => setMealDescription(e.target.value)}
                 />
-    
+
                 <Text mb={3} fontSize="md" color="white" textAlign="left">
                   How many feasts shall I conjure from my mystical cookbook?
                 </Text>
@@ -449,7 +449,7 @@ function MealPlannerApp() {
                   ))}
                 </Select>
               </Box>
-    
+
               {/* New Generate Meal Plan Group Box */}
               <Box bg="#003366" p={4} border="none" borderRadius="md">
                 <Button colorScheme="yellow" w="100%" onClick={handleGeneratePlan}>
@@ -465,7 +465,7 @@ function MealPlannerApp() {
             </VStack>
           </Box>
         )}
-    
+
         {/* Main Content */}
         {showMainPanel && (
           <Box flex="1" display="flex" flexDirection="column" alignItems="center" p={6} position="relative" minH="0">
@@ -521,7 +521,7 @@ function MealPlannerApp() {
                   {loginStatusMessage}
                 </Text>
               )}
-    
+
               {!isMobile && storeStatusMessage && (
                 <Text
                   mt={4}
@@ -534,7 +534,7 @@ function MealPlannerApp() {
                 </Text>
               )}
             </Box>
-    
+
             {mealPlan && !mealPlan.error && (
               <Text
                 mt={4}
@@ -547,7 +547,7 @@ function MealPlannerApp() {
                 and uncheck those treasures already resting within thy pantry.
               </Text>
             )}
-    
+
             {mealPlan && !mealPlan.error && (
               <>
                 <Box
@@ -581,7 +581,7 @@ function MealPlannerApp() {
                     </Box>
                   ))}
                 </Box>
-    
+
                 <Button mt={4} colorScheme="teal" onClick={handleUploadToCart}>
                   Upload to Cart
                 </Button>
@@ -609,16 +609,19 @@ function MealPlannerApp() {
                 )}
               </>
             )}
-    
+
             {mealPlan && mealPlan.error && (
               <Text fontSize="lg" color="red.300" mt={6}>
                 {mealPlan.error}
               </Text>
             )}
             <Box mt="auto" textAlign="center">
-              <Link href="#" color="yellow.300" fontWeight="bold">
-                privacy
-              </Link>
+              {/* Updated privacy link */}
+              <RouterLink to="/privacy">
+                <Text as="span" color="yellow.300" fontWeight="bold" cursor="pointer">
+                  privacy
+                </Text>
+              </RouterLink>
             </Box>
           </Box>
         )}
@@ -627,4 +630,14 @@ function MealPlannerApp() {
   );
 }
 
-export default MealPlannerApp;
+// Wrap the app with Router
+export default function AppWrapper() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<MealPlannerApp />} />
+        <Route path="/privacy" element={<PrivacyNotice />} />
+      </Routes>
+    </Router>
+  );
+}
