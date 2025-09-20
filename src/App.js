@@ -615,7 +615,7 @@ function MealPlannerApp() {
                 {mealPlan.error}
               </Text>
             )}
-            <PrivacyNotice />
+            {/* <PrivacyNotice /> */}
           </Box>
         )}
       </Box>
