@@ -45,6 +45,7 @@ function useIsMobile() {
 }
 
 function MealPlannerApp() {
+  const [showPrivacy, setShowPrivacy] = useState(false);
   const [mealPlan, setMealPlan] = useState(null); // store JSON
   const [checkedKeys, setCheckedKeys] = useState([]); // rc-tree checked state
   const [expandedKeys, setExpandedKeys] = useState([]); // rc-tree expanded state
@@ -292,7 +293,10 @@ function MealPlannerApp() {
 
   return (
     <ChakraProvider theme={theme}>
-      <Box display="flex" minH="100vh">
+      <Box display="flex" minH="100vh" flexDirection="column">
+        {showPrivacy ? (
+          <PrivacyNotice />
+        ) : (
         {/* Left Sidebar */}
         {showLeftPanel && (
           <Box w={{ base: "100%", md: "325px" }} p={6}>
@@ -618,7 +622,16 @@ function MealPlannerApp() {
             {/* <PrivacyNotice /> */}
           </Box>
         )}
-      </Box>
+      )}
+      {/* Footer with Privacy link */}
+      {!showPrivacy && (
+        <Box textAlign="center" mt="auto" mb={4}>
+          <Link color="yellow.300" onClick={() => setShowPrivacy(true)}>
+            Privacy
+          </Link>
+        </Box>
+      )}
+    </Box>
     </ChakraProvider>
   );
 }
