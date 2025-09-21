@@ -301,7 +301,7 @@ function MealPlannerApp() {
               {/* CartGenie Heading */}
               <Heading
                 size="lg"
-                fontFamily: "sans-serif"
+                fontFamily="sans-serif"
                 fontWeight="bold"
                 color="yellow.300"
                 display="flex"
@@ -333,7 +333,7 @@ function MealPlannerApp() {
                   fontSize="sm"
                   color="white"
                   textAlign="center"
-                  fontFamily: "sans-serif"
+                  fontFamily="sans-serif"
                 >
                   If you haven't already, create an account for Kroger, Smiths,
                   Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's, Jay C
@@ -360,7 +360,7 @@ function MealPlannerApp() {
                     fontSize="sm"
                     color="yellow.300"
                     textAlign="center"
-                    fontFamily="'Dancing Script', cursive"
+                    fontFamily="sans-serif"
                   >
                     {loginStatusMessage}
                   </Text>
@@ -472,7 +472,7 @@ function MealPlannerApp() {
             <Box w="60%">
               <Text
                 fontSize="xl"
-                fontFamily="'Dancing Script', cursive"
+                fontFamily="sans-serif"
                 color="black"
                 textAlign="center"
               >
@@ -484,7 +484,7 @@ function MealPlannerApp() {
                   as="span"
                   color="#003366"
                   fontWeight="bold"
-                  fontFamily="'Cinzel Decorative', cursive"
+                  fontFamily="sans-serif"
                 >
                   GroceryCartGenie
                 </Text>
@@ -525,7 +525,7 @@ function MealPlannerApp() {
                 fontSize="md"
                 color="yellow.300"
                 textAlign="center"
-                fontFamily="'Dancing Script', cursive"
+                fontFamily="sans-serif"
               >
                 ✨ Now, master! Mark the ingredients ye desire in thy cart,  
                 and uncheck those treasures already resting within thy pantry.
@@ -582,7 +582,7 @@ function MealPlannerApp() {
                       fontSize="md"
                       color="yellow.300"
                       textAlign="center"
-                      fontFamily="'Dancing Script', cursive"
+                      fontFamily="sans-serif"
                     >
                       {cartMessage}
                     </Text>
