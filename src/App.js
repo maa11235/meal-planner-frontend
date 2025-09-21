@@ -154,12 +154,12 @@ function MealPlannerApp() {
       if (data.loggedIn || data.logged_in) {
         setIsLoggedIn(true);
         setLoginStatusMessage(
-          "✨ Ah, master! You are bound to the marketplace. Next, whisper your culinary desires, and I shall weave them into a meal plan!"
+          "✨ You are bound to the marketplace!"
         );
       } else {
         setIsLoggedIn(false);
         setLoginStatusMessage(
-          "⚠️ Alas! You are not yet bound to the marketplace. Press the Grocery Store Login button, and the gates shall open!"
+          "⚠️ To login, press the Grocery Store Login button!"
         );
       }
     } catch (err) {
@@ -496,16 +496,15 @@ function MealPlannerApp() {
               </Text>
               {!isMobile && loginStatusMessage && (
                 <Text
-                  mt={6}
-                  fontSize="md"
-                  color="black"
+                  mt={3}
+                  fontSize="sm"
+                  color="white"
                   textAlign="center"
                   fontFamily="sans-serif"
                 >
                   {loginStatusMessage}
                 </Text>
               )}
-
               {!isMobile && storeStatusMessage && (
                 <Text
                   mt={4}
