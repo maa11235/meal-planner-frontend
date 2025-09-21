@@ -350,7 +350,7 @@ function MealPlannerApp() {
                 <Text mb={3} fontSize="md" color="white" textAlign="left">
                   Log in and let your pantry be filled with treasures.
                 </Text>
-                <Button colorScheme="teal" onClick={handleLogin} w="100%">
+                <Button colorScheme="yellow" onClick={handleLogin} w="100%">
                   Grocery Store Login
                 </Button>
                 {isMobile && loginStatusMessage && (
