@@ -341,7 +341,7 @@ function MealPlannerApp() {
                   <Link
                     href="https://www.kroger.com"
                     isExternal
-                    color="black"
+                    color="yellow.300"
                     fontWeight="bold"
                   >
                     Create Account
