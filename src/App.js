@@ -314,7 +314,7 @@ function MealPlannerApp() {
                 <Text
                   as="span"
                   color="#003366"
-                  fontFamily: "sans-serif"
+                  fontFamily="sans-serif"
                   fontWeight="bold"
                 >
                   GroceryCartGenie
