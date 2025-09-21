@@ -505,6 +505,17 @@ function MealPlannerApp() {
                   {loginStatusMessage}
                 </Text>
               )}
+              {isMobile && loginStatusMessage && (
+               <Text
+                 mt={3}
+                 fontSize="sm"
+                 color="black"
+                 textAlign="center"
+                 fontFamily="sans-serif"
+               >
+                 {loginStatusMessage}
+               </Text>
+              )}
               {!isMobile && storeStatusMessage && (
                 <Text
                   mt={4}
