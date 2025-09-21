@@ -322,7 +322,7 @@ function MealPlannerApp() {
               </Heading>
 
               {/* Your Recipe Wish Label */}
-              <Heading as="h2" size="md" textAlign="center" color="white">
+              <Heading as="h2" size="md" textAlign="center" color="black">
                 Your Wish Shall Be Loaded To Your Grocery Cart
               </Heading>
 
@@ -473,7 +473,7 @@ function MealPlannerApp() {
               <Text
                 fontSize="xl"
                 fontFamily="'Dancing Script', cursive"
-                color="white"
+                color="black"
                 textAlign="center"
               >
                 Welcome, seeker of flavor, to{" "}
