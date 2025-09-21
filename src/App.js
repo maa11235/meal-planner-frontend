@@ -378,8 +378,8 @@ function MealPlannerApp() {
               {/* Find a Store & Meal Generator Group Box */}
               <Box bg="#003366" p={4} border="none" borderRadius="md">
                 <Text mb={3} fontSize="md" color="white" textAlign="left">
-                  🔮 Reveal your zip code,
-                  and I shall conjure its presence!
+                  🔮 Enter your zip code,
+                  to find a store near you!
                 </Text>
                 <HStack mb={4}>
                   <Input
