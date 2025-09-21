@@ -24,8 +24,8 @@ const theme = extendTheme({
   styles: {
     global: {
       body: {
-        bg: "#2e7d32", // Dark leafy green
-        color: "white",
+        bg: "#FFFAFA", // snow
+        color: "black",
       },
     },
   },
