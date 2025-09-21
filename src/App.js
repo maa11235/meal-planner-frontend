@@ -482,7 +482,6 @@ function MealPlannerApp() {
                 <Text
                   as="span"
                   color="#003366"
-                  bgClip="text"
                   fontWeight="bold"
                   fontFamily="'Cinzel Decorative', cursive"
                 >
