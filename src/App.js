@@ -408,8 +408,8 @@ function MealPlannerApp() {
                 )}
 
                 <Text mb={3} fontSize="md" color="white" textAlign="left">
-                  Shall these creations be for breakfast, lunch,
-                  dinner, snacks or desserts?
+                  Choose a meal type: breakfast, lunch,
+                  dinner, snacks or desserts.
                 </Text>
                 <Select
                   value={time}
