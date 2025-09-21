@@ -313,9 +313,8 @@ function MealPlannerApp() {
                 <Text
                   as="span"
                   color="#003366"
-                  bgClip="text"
                   fontFamily="'Cinzel Decorative', cursive"
-                  fontWeight="extrabold"
+                  fontWeight="bold"
                 >
                   GroceryCartGenie
                 </Text>
