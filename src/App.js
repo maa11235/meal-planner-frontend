@@ -494,27 +494,16 @@ function MealPlannerApp() {
                 conjure forth a grocery list and place every needed treasure
                 directly into your cart. Your wish is my culinary command!
               </Text>
-              {!isMobile && loginStatusMessage && (
+              {loginStatusMessage && (
                 <Text
                   mt={3}
                   fontSize="sm"
-                  color="white"
+                  color="black"
                   textAlign="center"
                   fontFamily="sans-serif"
                 >
                   {loginStatusMessage}
                 </Text>
-              )}
-              {isMobile && loginStatusMessage && (
-               <Text
-                 mt={3}
-                 fontSize="sm"
-                 color="black"
-                 textAlign="center"
-                 fontFamily="sans-serif"
-               >
-                 {loginStatusMessage}
-               </Text>
               )}
               {!isMobile && storeStatusMessage && (
                 <Text
