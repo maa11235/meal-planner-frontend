@@ -312,7 +312,7 @@ function MealPlannerApp() {
                 </span>
                 <Text
                   as="span"
-                  bgGradient={planGradient}
+                  color="#003366"
                   bgClip="text"
                   fontFamily="'Cinzel Decorative', cursive"
                   fontWeight="extrabold"
@@ -482,7 +482,7 @@ function MealPlannerApp() {
                 </span>{" "}
                 <Text
                   as="span"
-                  bgGradient={planGradient}
+                  color="#003366"
                   bgClip="text"
                   fontWeight="bold"
                   fontFamily="'Cinzel Decorative', cursive"
