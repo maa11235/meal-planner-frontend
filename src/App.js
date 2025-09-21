@@ -26,7 +26,7 @@ const theme = extendTheme({
       body: {
         bg: "#FFFAFA", // snow
         color: "black",
-        fontFamily: "'Dancing Script', cursive"
+        fontFamily: "sans-serif"
       },
     },
   },
