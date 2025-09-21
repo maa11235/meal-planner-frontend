@@ -301,7 +301,7 @@ function MealPlannerApp() {
               {/* CartGenie Heading */}
               <Heading
                 size="lg"
-                fontFamily="'Cinzel Decorative', cursive"
+                fontFamily: "sans-serif"
                 fontWeight="bold"
                 color="yellow.300"
                 display="flex"
@@ -314,7 +314,7 @@ function MealPlannerApp() {
                 <Text
                   as="span"
                   color="#003366"
-                  fontFamily="'Cinzel Decorative', cursive"
+                  fontFamily: "sans-serif"
                   fontWeight="bold"
                 >
                   GroceryCartGenie
@@ -333,7 +333,7 @@ function MealPlannerApp() {
                   fontSize="sm"
                   color="white"
                   textAlign="center"
-                  fontFamily="'Dancing Script', cursive"
+                  fontFamily: "sans-serif"
                 >
                   If you haven't already, create an account for Kroger, Smiths,
                   Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's, Jay C
