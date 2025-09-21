@@ -154,12 +154,12 @@ function MealPlannerApp() {
       if (data.loggedIn || data.logged_in) {
         setIsLoggedIn(true);
         setLoginStatusMessage(
-          "✨ You are bound to the marketplace!"
+          "✨ You are logged-in to the marketplace!"
         );
       } else {
         setIsLoggedIn(false);
         setLoginStatusMessage(
-          "⚠️ To login, press the Grocery Store Login button!"
+          "⚠️ You are not logged-in, to login press the Grocery Store Login button!"
         );
       }
     } catch (err) {
