@@ -378,7 +378,7 @@ function MealPlannerApp() {
                     placeholder="Enter zip code"
                     value={zipCode}
                     onChange={(e) => setZipCode(e.target.value)}
-                    bg="white"
+                    bg="#EBF4FA"
                     color="black"
                     flex="2"
                   />
@@ -388,7 +388,7 @@ function MealPlannerApp() {
                 </HStack>
 
                 {stores.length > 0 && (
-                  <Select placeholder="Select a store" bg="white" color="black" mb={4}>
+                  <Select placeholder="Select a store" bg="#EBF4FA" color="black" mb={4}>
                     {stores.map((store) => (
                       <option key={store.locationId} value={store.locationId}>
                         {store.name} - {store.address?.addressLine1},{" "}
@@ -406,7 +406,7 @@ function MealPlannerApp() {
                 <Select
                   value={time}
                   onChange={(e) => setTime(e.target.value)}
-                  bg="white"
+                  bg="#EBF4FA"
                   color="black"
                   mb={4}
                 >
@@ -426,7 +426,7 @@ function MealPlannerApp() {
                 </Text>
                 <Input
                   placeholder="Unique meal description"
-                  bg="white"
+                  bg="#EBF4FA"
                   color="black"
                   value={mealDescription}
                   onChange={(e) => setMealDescription(e.target.value)}
@@ -438,7 +438,7 @@ function MealPlannerApp() {
                 <Select
                   value={mealCount}
                   onChange={(e) => setMealCount(e.target.value)}
-                  bg="white"
+                  bg="#EBF4FA"
                   color="black"
                   mb={4}
                 >
@@ -536,7 +536,7 @@ function MealPlannerApp() {
               <>
                 <Box
                   w={{ base: "100%", md: "40%" }}   // full width on mobile, 40% on desktop
-                  bg="white"
+                  bg="#EBF4FA"
                   p={4}
                   borderRadius="md"
                   mt={4}
