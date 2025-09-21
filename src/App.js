@@ -303,7 +303,7 @@ function MealPlannerApp() {
                 size="lg"
                 fontFamily="sans-serif"
                 fontWeight="bold"
-                color="yellow.300"
+                color="black"
                 display="flex"
                 alignItems="center"
                 gap={2}
@@ -341,7 +341,7 @@ function MealPlannerApp() {
                   <Link
                     href="https://www.kroger.com"
                     isExternal
-                    color="yellow.300"
+                    color="black"
                     fontWeight="bold"
                   >
                     Create Account
@@ -358,7 +358,7 @@ function MealPlannerApp() {
                   <Text
                     mt={3}
                     fontSize="sm"
-                    color="yellow.300"
+                    color="black"
                     textAlign="center"
                     fontFamily="sans-serif"
                   >
@@ -498,9 +498,9 @@ function MealPlannerApp() {
                 <Text
                   mt={6}
                   fontSize="md"
-                  color="yellow.300"
+                  color="black"
                   textAlign="center"
-                  fontFamily="'Dancing Script', cursive"
+                  fontFamily="sans-serif"
                 >
                   {loginStatusMessage}
                 </Text>
@@ -510,9 +510,9 @@ function MealPlannerApp() {
                 <Text
                   mt={4}
                   fontSize="md"
-                  color="yellow.300"
+                  color="black"
                   textAlign="center"
-                  fontFamily="'Dancing Script', cursive"
+                  fontFamily="sans-serif"
                 >
                   {storeStatusMessage}
                 </Text>
@@ -523,7 +523,7 @@ function MealPlannerApp() {
               <Text
                 mt={4}
                 fontSize="md"
-                color="yellow.300"
+                color="black"
                 textAlign="center"
                 fontFamily="sans-serif"
               >
@@ -580,7 +580,7 @@ function MealPlannerApp() {
                     <Text
                       mt={3}
                       fontSize="md"
-                      color="yellow.300"
+                      color="black"
                       textAlign="center"
                       fontFamily="sans-serif"
                     >
@@ -602,7 +602,7 @@ function MealPlannerApp() {
             <Box mt="auto" textAlign="center">
               {/* Updated privacy link */}
               <RouterLink to="/privacy">
-                <Text as="span" color="yellow.300" fontWeight="bold" cursor="pointer">
+                <Text as="span" color="black" fontWeight="bold" cursor="pointer">
                   privacy
                 </Text>
               </RouterLink>
