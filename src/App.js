@@ -566,7 +566,7 @@ function MealPlannerApp() {
                   ))}
                 </Box>
 
-                <Button mt={4} colorScheme="teal" onClick={handleUploadToCart}>
+                <Button mt={4} colorScheme="yellow" onClick={handleUploadToCart}>
                   Upload to Cart
                 </Button>
                 {loadingCart && (
