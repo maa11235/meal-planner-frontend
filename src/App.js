@@ -488,17 +488,6 @@ function MealPlannerApp() {
                 .<br />Make any meal request you would like and unique recipes will be provided for you.
                 Each ingredient you select from the recipes will be added to your grocery list.
               </Text>
-              {!isMobile && storeStatusMessage && (
-                <Text
-                  mt={4}
-                  fontSize="md"
-                  color="black"
-                  textAlign="center"
-                  fontFamily="sans-serif"
-                >
-                  {storeStatusMessage}
-                </Text>
-              )}
             </Box>
 
             {mealPlan && !mealPlan.error && (
