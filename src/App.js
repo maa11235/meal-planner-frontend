@@ -346,6 +346,7 @@ function MealPlannerApp() {
                   >
                     Create Account
                   </Link>
+                  <br />
                 </Text>
                       
                 <Button colorScheme="yellow" onClick={handleLogin} w="100%">
@@ -419,7 +420,6 @@ function MealPlannerApp() {
                   <br /> Sweets fit for a diabetic
                   <br /> West African entrees
                   <br /> Meals by [famous chef]
-                  <br /> Your wish is my recipe command!
                 </Text>
                 <Input
                   placeholder="Unique meal description"
