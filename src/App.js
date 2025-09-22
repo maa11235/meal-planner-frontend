@@ -362,17 +362,6 @@ function MealPlannerApp() {
                     {loginStatusMessage}
                   </Text>
                 )}
-                {isMobile && loginStatusMessage && (
-                  <Text
-                    mt={3}
-                    fontSize="sm"
-                    color="black"
-                    textAlign="center"
-                    fontFamily="sans-serif"
-                  >
-                    {loginStatusMessage}
-                  </Text>
-                )}
               </Box>
 
               {/* Find a Store & Meal Generator Group Box */}
