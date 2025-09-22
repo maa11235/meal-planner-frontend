@@ -473,7 +473,7 @@ function MealPlannerApp() {
                 color="black"
                 textAlign="center"
               >
-                Welcome, seeker of flavor, to{" "}
+                Welcome, to{" "}
                 <span role="img" aria-label="genie">
                   🧞
                 </span>{" "}
@@ -485,11 +485,8 @@ function MealPlannerApp() {
                 >
                   GroceryCartGenie
                 </Text>
-                . With but a whisper of your desires, I shall summon meals crafted
-                to your heart’s delight. From the scrolls of my enchanted cookbook,
-                recipes shall appear, tailored to your cravings. And lo! I shall
-                conjure forth a grocery list and place every needed treasure
-                directly into your cart. Your wish is my culinary command!
+                . Choose meals of any type and recipes will be created.
+                Each ingredient will be added to your grocery list.
               </Text>
               {!isMobile && storeStatusMessage && (
                 <Text
