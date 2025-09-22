@@ -485,8 +485,8 @@ function MealPlannerApp() {
                 >
                   GroceryCartGenie
                 </Text>
-                . Choose meals of any type and recipes will be created.
-                Each ingredient will be added to your grocery list.
+                .<br />Make any meal request and unique recipes will becreated persoanlly for you.
+                Each ingredient of the recipe will be added to your grocery list.
               </Text>
               {!isMobile && storeStatusMessage && (
                 <Text
