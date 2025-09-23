@@ -498,8 +498,8 @@ function MealPlannerApp() {
                 textAlign="center"
                 fontFamily="sans-serif"
               >
-                ✨ Now, master! Mark the ingredients ye desire in thy cart,  
-                and uncheck those treasures already resting within thy pantry.
+                ✨ Now, mark the ingredients you want in your cart,  
+                and uncheck the ingredients already in your pantry.
               </Text>
             )}
 
