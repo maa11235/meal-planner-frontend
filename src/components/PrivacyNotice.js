@@ -4,7 +4,7 @@ import { Box, Heading, Text, VStack } from "@chakra-ui/react";
 
 export default function PrivacyNotice() {
   return (
-    <Box p={6} minH="100vh" bg="#2e7d32" color="white">
+    <Box p={6} minH="100vh" bg="#BF4FA" color="black">
       <VStack align="start" spacing={4}>
         <Heading size="lg">Privacy Information</Heading>
 
