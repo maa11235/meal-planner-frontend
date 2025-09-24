@@ -20,12 +20,12 @@ export default function PrivacyNotice() {
         <br />Tokens expire in ~1 hour, and we do not store long-term refresh tokens.</Text>
 
         <Heading size="md">Data Storage</Heading>
-        <Text>Your Kroger access token is stored securely (encrypted).</Text>
-        <Text>Feedback you provide is stored and linked to your session ID.</Text>
+        <Text>Your Kroger access token is stored securely (encrypted).
+        <br />Feedback you provide is stored and linked to your session ID.</Text>
 
         <Heading size="md">Data Retention</Heading>
-        <Text>Tokens expire automatically.</Text>
-        <Text>Feedback may be kept indefinitely to help us improve the app.</Text>
+        <Text>Tokens expire automatically.
+        <br />Feedback may be kept indefinitely to help us improve the app.</Text>
       </VStack>
     </Box>
   );
