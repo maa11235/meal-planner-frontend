@@ -14,10 +14,10 @@ export default function PrivacyNotice() {
         </Text>
 
         <Heading size="md">Kroger Login</Heading>
-        <Text>We use Kroger’s official login system (OAuth).</Text>
-        <Text>We never see your Kroger password.</Text>
-        <Text>With your permission, we can add items to your Kroger cart.</Text>
-        <Text>Tokens expire in ~1 hour, and we do not store long-term refresh tokens.</Text>
+        <Text>We use Kroger’s official login system (OAuth).
+        <br />We never see your Kroger password.
+        <br />With your permission, we can add items to your Kroger cart.
+        <br />Tokens expire in ~1 hour, and we do not store long-term refresh tokens.</Text>
 
         <Heading size="md">Data Storage</Heading>
         <Text>Your Kroger access token is stored securely (encrypted).</Text>
