@@ -8,22 +8,22 @@ export default function PrivacyNotice() {
       <VStack align="start" spacing={4}>
         <Heading size="lg">Privacy Information</Heading>
 
-        <Heading size="md">Cookies & Sessions</Heading>
+        <Heading size="md" mb={1}>Cookies & Sessions</Heading>
         <Text>
           We use a secure session cookie to keep you logged in. It does not store personal data.
         </Text>
 
-        <Heading size="md">Kroger Login</Heading>
+        <Heading size="md" mb={1}>Kroger Login</Heading>
         <Text>We use Kroger’s official login system (OAuth).
         <br />We never see your Kroger password.
         <br />With your permission, we can add items to your Kroger cart.
         <br />Tokens expire in ~1 hour, and we do not store long-term refresh tokens.</Text>
 
-        <Heading size="md">Data Storage</Heading>
+        <Heading size="md" mb={1}>Data Storage</Heading>
         <Text>Your Kroger access token is stored securely (encrypted).
         <br />Feedback you provide is stored and linked to your session ID.</Text>
 
-        <Heading size="md">Data Retention</Heading>
+        <Heading size="md" mb={1}>Data Retention</Heading>
         <Text>Tokens expire automatically.
         <br />Feedback may be kept indefinitely to help us improve the app.</Text>
       </VStack>
