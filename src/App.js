@@ -574,7 +574,7 @@ function MealPlannerApp() {
               {/* Updated privacy link */}
               <RouterLink to="/privacy">
                 <Text as="span" color="black" fontWeight="bold" cursor="pointer">
-                  privacy
+                  Privacy
                 </Text>
               </RouterLink>
             </Box>
