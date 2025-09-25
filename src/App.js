@@ -68,6 +68,7 @@ function MealPlannerApp() {
   const [lastCartPayload, setLastCartPayload] = useState(null); // 🆕 store the exact payload (with instructions) sent to /cart
   const [loadingPlan, setLoadingPlan] = useState(false);
   const [loadingCart, setLoadingCart] = useState(false);
+  const [pricedPlan, setPricedPlan] = useState(null); // 🆕 store enriched plan with prices
 
   // 🆕 detect mobile
   const isMobile = useIsMobile();
@@ -93,10 +94,20 @@ function MealPlannerApp() {
         setCartResponse(null); // reset report data
         setLastCartPayload(null); // reset saved payload
 
-        // Automatically expand all meals and ingredients
+        // 🔎 Call backend /price-check to enrich ingredients with price & brand
+        const priceRes = await fetch(`${backendUrl}/price-check`, {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        const priced = await priceRes.json();
+        setPricedPlan(priced); // store enriched plan
+
+        // Automatically expand all meals and ingredients (using priced plan)
         const allExpanded = [];
         const allChecked = [];
-        (data.plan || []).forEach((meal) => {
+        (priced.plan || []).forEach((meal) => {
           allExpanded.push(`meal-${meal.meal_num}`);
           allExpanded.push(`meal-${meal.meal_num}-ingredients`);
           allChecked.push(`meal-${meal.meal_num}`);
@@ -107,7 +118,7 @@ function MealPlannerApp() {
           });
         });
         setExpandedKeys(allExpanded);
-        setCheckedKeys(allChecked); // ✅ default all boxes checked
+        setCheckedKeys(allChecked);
       } else {
         setMealPlan({ error: data.error || "Failed to generate plan." });
       }
@@ -187,11 +198,15 @@ function MealPlannerApp() {
         {
           key: `meal-${meal.meal_num}-ingredients`,
           title: "🛒 Ingredients",
-          children: (meal.ingredients || []).map((ing, idx) => ({
-            key: `meal-${meal.meal_num}-ingredient-${idx}`,
-            title: `${ing.amount} ${ing.name}`,
-            isLeaf: true,
-          })),
+          children: (meal.ingredients || []).map((ing, idx) => {
+            const price = ing.price ? `$${ing.price}` : "N/A";
+            const brand = ing.brand || "Unknown";
+            return {
+              key: `meal-${meal.meal_num}-ingredient-${idx}`,
+              title: `${ing.amount} ${ing.name} (${brand}, ${price})`,
+              isLeaf: true,
+            };
+          }),
         },
       ],
     }));
@@ -199,15 +214,16 @@ function MealPlannerApp() {
 
   // ✨ Build JSON with only checked ingredients, but include instructions in payload
   const buildCheckedPlan = () => {
-    if (!mealPlan || !mealPlan.plan) return { meals: [] };
-    const meals = mealPlan.plan.map((meal) => {
+    const sourcePlan = pricedPlan || mealPlan;
+    if (!sourcePlan || !sourcePlan.plan) return { meals: [] };
+    const meals = sourcePlan.plan.map((meal) => {
       const includedIngredients = (meal.ingredients || []).filter((_, idx) =>
         checkedKeys.includes(`meal-${meal.meal_num}-ingredient-${idx}`)
       );
       return {
         meal_num: meal.meal_num,
         name: meal.name,
-        instructions: meal.instructions, // ✅ include instructions in payload
+        instructions: meal.instructions,
         ingredients: includedIngredients,
       };
     });
@@ -506,12 +522,12 @@ function MealPlannerApp() {
             {mealPlan && !mealPlan.error && (
               <>
                 <Box
-                  w={{ base: "100%", md: "40%" }}   // full width on mobile, 40% on desktop
+                  w={{ base: "100%", md: "40%" }}
                   bg="#EBF4FA"
                   p={4}
                   borderRadius="md"
                   mt={4}
-                  alignSelf={{ base: "flex-start", md: "center" }} // left align on mobile
+                  alignSelf={{ base: "flex-start", md: "center" }}
                 >
                   <Tree
                     checkable
@@ -520,7 +536,7 @@ function MealPlannerApp() {
                     checkedKeys={checkedKeys}
                     onCheck={(keys) => setCheckedKeys(keys)}
                     onExpand={(keys) => setExpandedKeys(keys)}
-                    treeData={buildTreeNodes(mealPlan)}
+                    treeData={buildTreeNodes(pricedPlan || mealPlan)}
                     style={{ color: "black", fontSize: "16px", wordWrap: "break-word" }}
                   />
 
