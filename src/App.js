@@ -73,61 +73,86 @@ function MealPlannerApp() {
   // 🆕 detect mobile
   const isMobile = useIsMobile();
 
-  const handleGeneratePlan = async () => {
+const handleGeneratePlan = async () => {
+  setLoadingPlan(true);
+  setMealPlan(null);
+  setLastCartPayload(null); // reset saved payload
+  setPricedPlan(null); // reset enriched plan
+
+  try {
+    const res = await fetch(`${backendUrl}/plan-and-cart?skip_cart=true`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ type: time }),
+    });
+    const data = await res.json();
+
+    if (!res.ok || data.error) {
+      setMealPlan({ error: data.error || "Failed to generate plan." });
+      setLoadingPlan(false);
+      return;
+    }
+
+    // 1️⃣ Save the raw GPT plan immediately
+    setMealPlan(data);
+
+    // 2️⃣ Initialize expand/checked keys from the raw plan
+    const initExpanded = [];
+    const initChecked = [];
+    (data.plan || []).forEach((meal) => {
+      initExpanded.push(`meal-${meal.meal_num}`);
+      initExpanded.push(`meal-${meal.meal_num}-ingredients`);
+      initChecked.push(`meal-${meal.meal_num}`);
+      initChecked.push(`meal-${meal.meal_num}-ingredients`);
+      meal.ingredients.forEach((_, idx) => {
+        initExpanded.push(`meal-${meal.meal_num}-ingredient-${idx}`);
+        initChecked.push(`meal-${meal.meal_num}-ingredient-${idx}`);
+      });
+    });
+    setExpandedKeys(initExpanded);
+    setCheckedKeys(initChecked);
+
+    // 3️⃣ Fetch priced/enriched plan in background
     try {
-      setLoadingPlan(true);
-      const res = await fetch(`${backendUrl}/plan`, {
+      const priceRes = await fetch(`${backendUrl}/price-check`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: mealDescription,
-          num_meals: parseInt(mealCount, 10),
-          time: time,
-        }),
+        body: JSON.stringify(data),
       });
-
-      const data = await res.json();
-      if (res.ok) {
-        setMealPlan(data); // store entire response
-        setCartMessage(""); // clear any previous cart message
-        setCartResponse(null); // reset report data
-        setLastCartPayload(null); // reset saved payload
-
-        // 🔎 Call backend /price-check to enrich ingredients with price & brand
-        const priceRes = await fetch(`${backendUrl}/price-check`, {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
+      if (priceRes.ok) {
         const priced = await priceRes.json();
-        setPricedPlan(priced); // store enriched plan
+        setPricedPlan(priced);
 
-        // Automatically expand all meals and ingredients (using priced plan)
-        const allExpanded = [];
-        const allChecked = [];
+        // 4️⃣ Rebuild expanded/checked keys for priced plan
+        const pricedExpanded = [];
+        const pricedChecked = [];
         (priced.plan || []).forEach((meal) => {
-          allExpanded.push(`meal-${meal.meal_num}`);
-          allExpanded.push(`meal-${meal.meal_num}-ingredients`);
-          allChecked.push(`meal-${meal.meal_num}`);
-          allChecked.push(`meal-${meal.meal_num}-ingredients`);
+          pricedExpanded.push(`meal-${meal.meal_num}`);
+          pricedExpanded.push(`meal-${meal.meal_num}-ingredients`);
+          pricedChecked.push(`meal-${meal.meal_num}`);
+          pricedChecked.push(`meal-${meal.meal_num}-ingredients`);
           meal.ingredients.forEach((_, idx) => {
-            allExpanded.push(`meal-${meal.meal_num}-ingredient-${idx}`);
-            allChecked.push(`meal-${meal.meal_num}-ingredient-${idx}`);
+            pricedExpanded.push(`meal-${meal.meal_num}-ingredient-${idx}`);
+            pricedChecked.push(`meal-${meal.meal_num}-ingredient-${idx}`);
           });
         });
-        setExpandedKeys(allExpanded);
-        setCheckedKeys(allChecked);
-      } else {
-        setMealPlan({ error: data.error || "Failed to generate plan." });
+        setExpandedKeys(pricedExpanded);
+        setCheckedKeys(pricedChecked);
       }
-      setLoadingPlan(false);
-    } catch (err) {
-      setMealPlan({ error: `⚠️ Error calling backend: ${err.message}` });
-      setLoadingPlan(false);
+    } catch (priceErr) {
+      console.error("Price check failed:", priceErr);
+      // fallback: leave tree showing raw plan
     }
-  };
+  } catch (err) {
+    console.error("Error generating plan:", err);
+    setMealPlan({ error: "Failed to generate plan." });
+  }
+
+  setLoadingPlan(false);
+};
+
 
   // 🛒 Handle login by redirecting to backend login endpoint
   const handleLogin = () => {
