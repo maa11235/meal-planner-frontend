@@ -68,6 +68,8 @@ function MealPlannerApp() {
   const [lastCartPayload, setLastCartPayload] = useState(null); // 🆕 store the exact payload (with instructions) sent to /cart
   const [loadingPlan, setLoadingPlan] = useState(false);
   const [loadingCart, setLoadingCart] = useState(false);
+  const [loadingPrice, setLoadingPrice] = useState(false); // 🆕 loading state for price check
+  const [pricedPlan, setPricedPlan] = useState(null); // 🆕 holds enriched plan with prices
 
   // 🆕 detect mobile
   const isMobile = useIsMobile();
@@ -187,16 +189,48 @@ function MealPlannerApp() {
         {
           key: `meal-${meal.meal_num}-ingredients`,
           title: "🛒 Ingredients",
-          children: (meal.ingredients || []).map((ing, idx) => ({
-            key: `meal-${meal.meal_num}-ingredient-${idx}`,
-            title: `${ing.amount} ${ing.name}`,
-            isLeaf: true,
-          })),
+          children: (meal.ingredients || []).map((ing, idx) => {
+            let extra = "";
+            if (ing.brand || ing.price) {
+              const brand = ing.brand ? ing.brand : "Unknown";
+              const price = ing.price ? `$${ing.price}` : "N/A";
+              extra = ` (${brand}, ${price})`;
+            }
+            return {
+              key: `meal-${meal.meal_num}-ingredient-${idx}`,
+              title: `${ing.amount} ${ing.name}${extra}`,
+              isLeaf: true,
+            };
+          }),
         },
       ],
     }));
   };
-
+  
+  // 🆕 Handle Price Check
+  const handlePriceCheck = async () => {
+    if (!mealPlan) return;
+    setLoadingPrice(true);
+    try {
+      const res = await fetch(`${backendUrl}/price-check`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(mealPlan),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setPricedPlan(data);
+        setMealPlan(data); // replace current plan with priced version
+      } else {
+        setCartMessage(`⚠️ Price check failed: ${data.error || "Unknown error"}`);
+      }
+    } catch (err) {
+      setCartMessage(`⚠️ Error fetching prices: ${err.message}`);
+    }
+    setLoadingPrice(false);
+  };
+  
   // ✨ Build JSON with only checked ingredients, but include instructions in payload
   const buildCheckedPlan = () => {
     if (!mealPlan || !mealPlan.plan) return { meals: [] };
@@ -536,10 +570,19 @@ function MealPlannerApp() {
                     </Box>
                   ))}
                 </Box>
+                    
+                <HStack mt={4} spacing={4}>
+                  <Button colorScheme="yellow" onClick={handleUploadToCart}>
+                    Upload to Cart
+                  </Button>
+                  <Button colorScheme="blue" onClick={handlePriceCheck}>
+                    Price Check
+                  </Button>
+                </HStack>
+                {loadingPrice && (
+                  <div className="spinner-row"><div className="spinner"></div><span>Checking prices...</span></div>
+                )}
 
-                <Button mt={4} colorScheme="yellow" onClick={handleUploadToCart}>
-                  Upload to Cart
-                </Button>
                 {loadingCart && (
                   <div className="spinner-row">
                     <div className="spinner"></div>
