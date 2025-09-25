@@ -336,7 +336,7 @@ function MealPlannerApp() {
                   fontFamily="sans-serif"
                 >
                   If you haven't already, create an account for Kroger, Smiths,
-                  Dillons, Fred Meyer, Food 4 Less, Metro Market, Ralph's, Jay C
+                  Dillons, Fred Meyer, Ruler, Food 4 Less, Metro Market, Ralph's, Jay C
                   Food, City Market, King Supers, Gerbes, Marianos, or QFC.{" "}
                   <Link
                     href="https://www.kroger.com"
