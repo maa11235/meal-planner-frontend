@@ -68,91 +68,55 @@ function MealPlannerApp() {
   const [lastCartPayload, setLastCartPayload] = useState(null); // 🆕 store the exact payload (with instructions) sent to /cart
   const [loadingPlan, setLoadingPlan] = useState(false);
   const [loadingCart, setLoadingCart] = useState(false);
-  const [pricedPlan, setPricedPlan] = useState(null); // 🆕 store enriched plan with prices
 
   // 🆕 detect mobile
   const isMobile = useIsMobile();
 
-const handleGeneratePlan = async () => {
-  setLoadingPlan(true);
-  setMealPlan(null);
-  setLastCartPayload(null); // reset saved payload
-  setPricedPlan(null); // reset enriched plan
-
-  try {
-    const res = await fetch(`${backendUrl}/plan-and-cart?skip_cart=true`, {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type: time }),
-    });
-    const data = await res.json();
-
-    if (!res.ok || data.error) {
-      setMealPlan({ error: data.error || "Failed to generate plan." });
-      setLoadingPlan(false);
-      return;
-    }
-
-    // 1️⃣ Save the raw GPT plan immediately
-    setMealPlan(data);
-
-    // 2️⃣ Initialize expand/checked keys from the raw plan
-    const initExpanded = [];
-    const initChecked = [];
-    (data.plan || []).forEach((meal) => {
-      initExpanded.push(`meal-${meal.meal_num}`);
-      initExpanded.push(`meal-${meal.meal_num}-ingredients`);
-      initChecked.push(`meal-${meal.meal_num}`);
-      initChecked.push(`meal-${meal.meal_num}-ingredients`);
-      meal.ingredients.forEach((_, idx) => {
-        initExpanded.push(`meal-${meal.meal_num}-ingredient-${idx}`);
-        initChecked.push(`meal-${meal.meal_num}-ingredient-${idx}`);
-      });
-    });
-    setExpandedKeys(initExpanded);
-    setCheckedKeys(initChecked);
-
-    // 3️⃣ Fetch priced/enriched plan in background
+  const handleGeneratePlan = async () => {
     try {
-      const priceRes = await fetch(`${backendUrl}/price-check`, {
+      setLoadingPlan(true);
+      const res = await fetch(`${backendUrl}/plan`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          type: mealDescription,
+          num_meals: parseInt(mealCount, 10),
+          time: time,
+        }),
       });
-      if (priceRes.ok) {
-        const priced = await priceRes.json();
-        setPricedPlan(priced);
 
-        // 4️⃣ Rebuild expanded/checked keys for priced plan
-        const pricedExpanded = [];
-        const pricedChecked = [];
-        (priced.plan || []).forEach((meal) => {
-          pricedExpanded.push(`meal-${meal.meal_num}`);
-          pricedExpanded.push(`meal-${meal.meal_num}-ingredients`);
-          pricedChecked.push(`meal-${meal.meal_num}`);
-          pricedChecked.push(`meal-${meal.meal_num}-ingredients`);
+      const data = await res.json();
+      if (res.ok) {
+        setMealPlan(data); // store entire response
+        setCartMessage(""); // clear any previous cart message
+        setCartResponse(null); // reset report data
+        setLastCartPayload(null); // reset saved payload
+
+        // Automatically expand all meals and ingredients
+        const allExpanded = [];
+        const allChecked = [];
+        (data.plan || []).forEach((meal) => {
+          allExpanded.push(`meal-${meal.meal_num}`);
+          allExpanded.push(`meal-${meal.meal_num}-ingredients`);
+          allChecked.push(`meal-${meal.meal_num}`);
+          allChecked.push(`meal-${meal.meal_num}-ingredients`);
           meal.ingredients.forEach((_, idx) => {
-            pricedExpanded.push(`meal-${meal.meal_num}-ingredient-${idx}`);
-            pricedChecked.push(`meal-${meal.meal_num}-ingredient-${idx}`);
+            allExpanded.push(`meal-${meal.meal_num}-ingredient-${idx}`);
+            allChecked.push(`meal-${meal.meal_num}-ingredient-${idx}`);
           });
         });
-        setExpandedKeys(pricedExpanded);
-        setCheckedKeys(pricedChecked);
+        setExpandedKeys(allExpanded);
+        setCheckedKeys(allChecked); // ✅ default all boxes checked
+      } else {
+        setMealPlan({ error: data.error || "Failed to generate plan." });
       }
-    } catch (priceErr) {
-      console.error("Price check failed:", priceErr);
-      // fallback: leave tree showing raw plan
+      setLoadingPlan(false);
+    } catch (err) {
+      setMealPlan({ error: `⚠️ Error calling backend: ${err.message}` });
+      setLoadingPlan(false);
     }
-  } catch (err) {
-    console.error("Error generating plan:", err);
-    setMealPlan({ error: "Failed to generate plan." });
-  }
-
-  setLoadingPlan(false);
-};
-
+  };
 
   // 🛒 Handle login by redirecting to backend login endpoint
   const handleLogin = () => {
@@ -223,15 +187,11 @@ const handleGeneratePlan = async () => {
         {
           key: `meal-${meal.meal_num}-ingredients`,
           title: "🛒 Ingredients",
-          children: (meal.ingredients || []).map((ing, idx) => {
-            const price = ing.price ? `$${ing.price}` : "N/A";
-            const brand = ing.brand || "Unknown";
-            return {
-              key: `meal-${meal.meal_num}-ingredient-${idx}`,
-              title: `${ing.amount} ${ing.name} (${brand}, ${price})`,
-              isLeaf: true,
-            };
-          }),
+          children: (meal.ingredients || []).map((ing, idx) => ({
+            key: `meal-${meal.meal_num}-ingredient-${idx}`,
+            title: `${ing.amount} ${ing.name}`,
+            isLeaf: true,
+          })),
         },
       ],
     }));
@@ -239,16 +199,15 @@ const handleGeneratePlan = async () => {
 
   // ✨ Build JSON with only checked ingredients, but include instructions in payload
   const buildCheckedPlan = () => {
-    const sourcePlan = pricedPlan || mealPlan;
-    if (!sourcePlan || !sourcePlan.plan) return { meals: [] };
-    const meals = sourcePlan.plan.map((meal) => {
+    if (!mealPlan || !mealPlan.plan) return { meals: [] };
+    const meals = mealPlan.plan.map((meal) => {
       const includedIngredients = (meal.ingredients || []).filter((_, idx) =>
         checkedKeys.includes(`meal-${meal.meal_num}-ingredient-${idx}`)
       );
       return {
         meal_num: meal.meal_num,
         name: meal.name,
-        instructions: meal.instructions,
+        instructions: meal.instructions, // ✅ include instructions in payload
         ingredients: includedIngredients,
       };
     });
@@ -547,12 +506,12 @@ const handleGeneratePlan = async () => {
             {mealPlan && !mealPlan.error && (
               <>
                 <Box
-                  w={{ base: "100%", md: "40%" }}
+                  w={{ base: "100%", md: "40%" }}   // full width on mobile, 40% on desktop
                   bg="#EBF4FA"
                   p={4}
                   borderRadius="md"
                   mt={4}
-                  alignSelf={{ base: "flex-start", md: "center" }}
+                  alignSelf={{ base: "flex-start", md: "center" }} // left align on mobile
                 >
                   <Tree
                     checkable
@@ -561,7 +520,7 @@ const handleGeneratePlan = async () => {
                     checkedKeys={checkedKeys}
                     onCheck={(keys) => setCheckedKeys(keys)}
                     onExpand={(keys) => setExpandedKeys(keys)}
-                    treeData={buildTreeNodes(pricedPlan || mealPlan)}
+                    treeData={buildTreeNodes(mealPlan)}
                     style={{ color: "black", fontSize: "16px", wordWrap: "break-word" }}
                   />
 
