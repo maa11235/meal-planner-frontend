@@ -337,7 +337,7 @@ function MealPlannerApp() {
                 >
                   If you haven't already, create an account for Kroger, Smiths,
                   Dillons, Fred Meyer, Ruler, Food 4 Less, Metro Market, Ralph's, Jay C
-                  Food, Pick N Save, City Market, King Supers, Gerbes, Marianos, or QFC.{" "}
+                  Food, Pick N Save, City Market, King Soopers, Gerbes, Marianos, or QFC.{" "}
                   <Link
                     href="https://www.kroger.com"
                     isExternal
