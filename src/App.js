@@ -68,8 +68,6 @@ function MealPlannerApp() {
   const [lastCartPayload, setLastCartPayload] = useState(null); // 🆕 store the exact payload (with instructions) sent to /cart
   const [loadingPlan, setLoadingPlan] = useState(false);
   const [loadingCart, setLoadingCart] = useState(false);
-  const [loadingPrice, setLoadingPrice] = useState(false); // 🆕 loading state for price check
-  const [pricedPlan, setPricedPlan] = useState(null); // 🆕 holds enriched plan with prices
 
   // 🆕 detect mobile
   const isMobile = useIsMobile();
@@ -212,30 +210,6 @@ function MealPlannerApp() {
          ],
        };
      });
-  };
-  
-  // 🆕 Handle Price Check
-  const handlePriceCheck = async () => {
-    if (!mealPlan) return;
-    setLoadingPrice(true);
-    try {
-      const res = await fetch(`${backendUrl}/price-check`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(mealPlan),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setPricedPlan(data);
-        setMealPlan(data); // replace current plan with priced version
-      } else {
-        setCartMessage(`⚠️ Price check failed: ${data.error || "Unknown error"}`);
-      }
-    } catch (err) {
-      setCartMessage(`⚠️ Error fetching prices: ${err.message}`);
-    }
-    setLoadingPrice(false);
   };
   
   // ✨ Build JSON with only checked ingredients, but include instructions in payload
@@ -582,13 +556,7 @@ function MealPlannerApp() {
                   <Button colorScheme="yellow" onClick={handleUploadToCart}>
                     Upload to Cart
                   </Button>
-                  <Button colorScheme="blue" onClick={handlePriceCheck}>
-                    Price Check
-                  </Button>
                 </HStack>
-                {loadingPrice && (
-                  <div className="spinner-row"><div className="spinner"></div><span>Checking prices...</span></div>
-                )}
 
                 {loadingCart && (
                   <div className="spinner-row">
