@@ -182,29 +182,36 @@ function MealPlannerApp() {
   // 🔄 Convert backend meal plan JSON into rc-tree nodes
   const buildTreeNodes = (planData) => {
     if (!planData || !planData.plan) return [];
-     return (planData.plan || []).map((meal, mealIdx) => ({
-       key: `meal-${mealIdx}`,
-       title: `Meal ${mealIdx + 1}: ${meal.name || "Unnamed Meal"}`,
-       children: [
-         {
-           key: `meal-${mealIdx}-ingredients`,
-           title: "🛒 Ingredients",
-           children: (meal.ingredients || []).map((ing, idx) => {
-             let extra = "";
-             if (ing.brand || ing.price) {
-               const brand = ing.brand ? ing.brand : "Unknown";
-               const price = ing.price ? `$${ing.price}` : "N/A";
-               extra = ` (${brand}, ${price})`;
-             }
-             return {
-               key: `meal-${mealIdx}-ingredient-${idx}`,
-               title: `${ing.amount || ""} ${ing.name || "Unnamed"}${extra}`,
-               isLeaf: true,
-             };
-           }),
-         },
-       ],
-     }));
+     return (planData.plan || []).map((meal, mealIdx) => {
+       // ✅ compute total price for the meal
+       const totalPrice = (meal.ingredients || [])
+         .reduce((sum, ing) => sum + (ing.price || 0), 0)
+         .toFixed(2);
+
+       return {
+         key: `meal-${mealIdx}`,
+         title: `Meal ${mealIdx + 1}: ${meal.name || "Unnamed Meal"} ($${totalPrice})`,
+         children: [
+           {
+             key: `meal-${mealIdx}-ingredients`,
+             title: "🛒 Ingredients",
+             children: (meal.ingredients || []).map((ing, idx) => {
+               let extra = "";
+               if (ing.brand || ing.price) {
+                 const brand = ing.brand ? ing.brand : "Unknown";
+                 const price = ing.price ? `$${ing.price}` : "N/A";
+                 extra = ` (${brand}, ${price})`;
+               }
+               return {
+                 key: `meal-${mealIdx}-ingredient-${idx}`,
+                 title: `${ing.amount || ""} ${ing.name || "Unnamed"}${extra}`,
+                 isLeaf: true,
+               };
+             }),
+           },
+         ],
+       };
+     });
   };
   
   // 🆕 Handle Price Check
