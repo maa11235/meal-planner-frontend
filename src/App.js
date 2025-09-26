@@ -177,39 +177,42 @@ function MealPlannerApp() {
     }
   }, []);
 
-  // 🔄 Convert backend meal plan JSON into rc-tree nodes
+  // 🔄 Convert backend meal plan JSON into rc-tree nodes (respecting checked state for totals)
   const buildTreeNodes = (planData) => {
     if (!planData || !planData.plan) return [];
-     return (planData.plan || []).map((meal, mealIdx) => {
-       // ✅ compute total price for the meal
-       const totalPrice = (meal.ingredients || [])
-         .reduce((sum, ing) => sum + (ing.price || 0), 0)
-         .toFixed(2);
+    return (planData.plan || []).map((meal, mealIdx) => {
+      // ✅ compute total price only from checked ingredients
+      const totalPrice = (meal.ingredients || [])
+        .reduce((sum, ing, idx) => {
+          const ingKey = `meal-${mealIdx}-ingredient-${idx}`;
+          return checkedKeys.includes(ingKey) ? sum + (ing.price || 0) : sum;
+        }, 0)
+        .toFixed(2);
 
-       return {
-         key: `meal-${mealIdx}`,
-         title: `Meal ${mealIdx + 1}: ${meal.name || "Unnamed Meal"} ($${totalPrice})`,
-         children: [
-           {
-             key: `meal-${mealIdx}-ingredients`,
-             title: "🛒 Ingredients",
-             children: (meal.ingredients || []).map((ing, idx) => {
-               let extra = "";
-               if (ing.brand || ing.price) {
-                 const brand = ing.brand ? ing.brand : "Unknown";
-                 const price = ing.price ? `$${ing.price}` : "N/A";
-                 extra = ` (${brand}, ${price})`;
-               }
-               return {
-                 key: `meal-${mealIdx}-ingredient-${idx}`,
-                 title: `${ing.amount || ""} ${ing.name || "Unnamed"}${extra}`,
-                 isLeaf: true,
-               };
-             }),
-           },
-         ],
-       };
-     });
+      return {
+        key: `meal-${mealIdx}`,
+        title: `Meal ${mealIdx + 1}: ${meal.name || "Unnamed Meal"} ($${totalPrice})`,
+        children: [
+          {
+            key: `meal-${mealIdx}-ingredients`,
+            title: "🛒 Ingredients",
+            children: (meal.ingredients || []).map((ing, idx) => {
+              let extra = "";
+              if (ing.brand || ing.price) {
+                const brand = ing.brand ? ing.brand : "Unknown";
+                const price = ing.price ? `$${ing.price}` : "N/A";
+                extra = ` (${brand}, ${price})`;
+              }
+              return {
+                key: `meal-${mealIdx}-ingredient-${idx}`,
+                title: `${ing.amount || ""} ${ing.name || "Unnamed"}${extra}`,
+                isLeaf: true,
+              };
+            }),
+          },
+        ],
+      };
+    });
   };
   
   // ✨ Build JSON with only checked ingredients, but include instructions in payload
