@@ -98,14 +98,14 @@ function MealPlannerApp() {
         // Automatically expand all meals and ingredients
         const allExpanded = [];
         const allChecked = [];
-        (data.plan || []).forEach((meal) => {
-          allExpanded.push(`meal-${meal.meal_num}`);
-          allExpanded.push(`meal-${meal.meal_num}-ingredients`);
-          allChecked.push(`meal-${meal.meal_num}`);
-          allChecked.push(`meal-${meal.meal_num}-ingredients`);
+        (data.plan || []).forEach((meal, mealIdx) => {
+          allExpanded.push(`meal-${mealIdx}`);
+          allExpanded.push(`meal-${mealIdx}-ingredients`);
+          allChecked.push(`meal-${mealIdx}`);
+          allChecked.push(`meal-${mealIdx}-ingredients`);
           meal.ingredients.forEach((_, idx) => {
-            allExpanded.push(`meal-${meal.meal_num}-ingredient-${idx}`);
-            allChecked.push(`meal-${meal.meal_num}-ingredient-${idx}`);
+            allExpanded.push(`meal-${mealIdx}-ingredient-${idx}`);
+            allChecked.push(`meal-${mealIdx}-ingredient-${idx}`);
           });
         });
         setExpandedKeys(allExpanded);
