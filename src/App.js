@@ -250,10 +250,8 @@ function MealPlannerApp() {
       } else {
         setCartResponse(data); // store response for /report
         setCartMessage(
-          "🧞✨ Thy chosen ingredients have flown, as if by magic, into thy cart! " +
-            "Rejoice, noble master, for your pantry now awaits its bounty. " +
-            "Shouldst thou desire a full scroll of these enchanted provisions, " +
-            "press the 'Create Report' button and I shall conjure a complete tome for thee."
+          "🧞✨ Your selected ingredients have been added to your cart! " +
+            "Press the 'Create Report' button to download your report."
         );
       }
       setLoadingCart(false);
