@@ -471,7 +471,7 @@ function MealPlannerApp() {
                 {loadingPlan && (
                   <div className="spinner-row">
                     <div className="spinner"></div>
-                    <span>Conjuring meals...</span>
+                    <span style={{ color: "white" }}>Conjuring meals...</span>
                   </div>
                 )}
               </Box>
