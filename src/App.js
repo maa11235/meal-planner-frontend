@@ -48,6 +48,7 @@ function useIsMobile() {
 
 function MealPlannerApp() {
   const [mealPlan, setMealPlan] = useState(null); // store JSON
+  const [showConfigAgain, setShowConfigAgain] = useState(false); // 🆕 allow going back to left panel
   const [checkedKeys, setCheckedKeys] = useState([]); // rc-tree checked state
   const [expandedKeys, setExpandedKeys] = useState([]); // rc-tree expanded state
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -304,8 +305,12 @@ function MealPlannerApp() {
   };
 
   // 🆕 determine whether to show left panel (mobile only)
-  const showLeftPanel = !isMobile || (isMobile && (!mealPlan || loadingPlan));
-  const showMainPanel = !isMobile || (isMobile && mealPlan && !loadingPlan);
+  const showLeftPanel =
+    !isMobile ||
+    (isMobile && (!mealPlan || loadingPlan || showConfigAgain));
+  const showMainPanel =
+    !isMobile ||
+    (isMobile && mealPlan && !loadingPlan && !showConfigAgain);
 
   return (
     <ChakraProvider theme={theme}>
@@ -482,6 +487,18 @@ function MealPlannerApp() {
         {/* Main Content */}
         {showMainPanel && (
           <Box flex="1" display="flex" flexDirection="column" alignItems="center" p={6} position="relative" minH="0">
+            {/* 🆕 Mobile-only Reconfigure button */}
+            {isMobile && (
+              <Button
+                size="sm"
+                colorScheme="yellow"
+                alignSelf="flex-start"
+                mb={4}
+                onClick={() => setShowConfigAgain(true)}
+              >
+                🔄 Reconfigure Meal Plan
+              </Button>
+            )}            
             <Box w="60%">
               <Text
                 fontSize="xl"
