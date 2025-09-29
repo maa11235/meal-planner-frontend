@@ -470,7 +470,12 @@ function MealPlannerApp() {
 
               {/* New Generate Meal Plan Group Box */}
               <Box bg="#003366" p={4} border="none" borderRadius="md">
-                <Button colorScheme="yellow" w="100%" onClick={handleGeneratePlan}>
+                <Button
+                  colorScheme="yellow"
+                  w="100%"
+                  onClick={handleGeneratePlan}
+                  isDisabled={loadingPlan}   // 🔒 Disable while backend call in progress
+                >
                   Generate Meal Plan
                 </Button>
                 {loadingPlan && (
