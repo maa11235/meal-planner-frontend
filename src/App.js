@@ -219,14 +219,14 @@ function MealPlannerApp() {
   // ✨ Build JSON with only checked ingredients, but include instructions in payload
   const buildCheckedPlan = () => {
     if (!mealPlan || !mealPlan.plan) return { meals: [] };
-    const meals = mealPlan.plan.map((meal) => {
+    const meals = mealPlan.plan.map((meal, mealIdx) => {
       const includedIngredients = (meal.ingredients || []).filter((_, idx) =>
-        checkedKeys.includes(`meal-${meal.meal_num}-ingredient-${idx}`)
+        checkedKeys.includes(`meal-${mealIdx}-ingredient-${idx}`)
       );
       return {
         meal_num: meal.meal_num,
         name: meal.name,
-        instructions: meal.instructions, // ✅ include instructions in payload
+        instructions: meal.instructions,
         ingredients: includedIngredients,
       };
     });
